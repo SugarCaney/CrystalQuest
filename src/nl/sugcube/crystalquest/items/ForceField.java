@@ -73,8 +73,8 @@ public class ForceField extends ItemExecutor {
         final double tz = location.getZ();
 
         // Determine velocity boost.
-        double x = 1d / (tx - sx == 0 ? 0.0001 : tx - sx);
-        double z = 1d / (tz - sz == 0 ? 0.0001 : tz - sz);
+        double x = 1d / (tx - sx == 0 ? 0.0001 : ((tx - sx) * 1.25));
+        double z = 1d / (tz - sz == 0 ? 0.0001 : ((tz - sz) * 1.25));
 
         // Apply limits.
         x = (x < 0 ? max(-FORCE_LIMIT, x) : max(FORCE_LIMIT, x)) / 1.2d;

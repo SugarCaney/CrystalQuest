@@ -74,6 +74,39 @@ public class Protection implements Listener {
         return false;
     }
 
+    /**
+     * Checks if the given location is protected. Ignores Y location.
+     *
+     * @param loc
+     *         (Location) The location to check for
+     * @return (boolean) True if within, false if not
+     */
+    public boolean isInProtectedArenaIgnoreY(Location loc) {
+        for (Arena a : am.getArenas()) {
+            if (a.getProtection() != null) {
+                if (a.getProtection()[0] != null && a.getProtection()[1] != null) {
+                    Location[] prot = a.getProtection();
+                    double p1X = prot[0].getX();
+                    double p1Z = prot[0].getZ();
+                    double p2X = prot[1].getX();
+                    double p2Z = prot[1].getZ();
+
+                    if (!prot[0].getWorld().equals(loc.getWorld())) {
+                        return false;
+                    }
+
+                    if ((loc.getX() + 1 >= p1X && loc.getX() - 1 <= p2X) || (loc.getX() - 1 <= p1X && loc.getX() + 1 >= p2X)) {
+                        if ((loc.getZ() + 1 >= p1Z && loc.getZ() - 1 <= p2Z) || (loc.getZ() - 1 <= p1Z && loc.getZ() + 1 >= p2Z)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     public boolean protectArena(Arena a) {
         if (this.pos1 == null || this.pos2 == null) {
             return false;

@@ -35,201 +35,211 @@ public class GameLoop implements Runnable {
         this.ran = new Random();
     }
 
+    private void doCountdown(Arena arena) {
+        ArenaTickEvent event = new ArenaTickEvent(arena, arena.getCountdown(), arena.getCountdown() - 1, false);
+        Bukkit.getPluginManager().callEvent(event);
+
+        for (UUID id : arena.getPlayers()) {
+            Player pl = Bukkit.getPlayer(id);
+            pl.setLevel(arena.getCountdown());
+        }
+
+        if (arena.getCountdown() == 120) {
+            for (UUID id : arena.getPlayers()) {
+                Player pl = Bukkit.getPlayer(id);
+                pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.start")
+                        .replace("%time%", "2 " + Broadcast.get("arena.minutes")));
+            }
+        }
+        else if (arena.getCountdown() == 60) {
+            for (UUID id : arena.getPlayers()) {
+                Player pl = Bukkit.getPlayer(id);
+                pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.start")
+                        .replace("%time%", "1 " + Broadcast.get("arena.minute")));
+            }
+        }
+        else if (arena.getCountdown() == 30) {
+            for (UUID id : arena.getPlayers()) {
+                Player pl = Bukkit.getPlayer(id);
+                pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.start")
+                        .replace("%time%", "30 " + Broadcast.get("arena.seconds")));
+            }
+        }
+        else if (arena.getCountdown() == 10) {
+            for (UUID id : arena.getPlayers()) {
+                Player pl = Bukkit.getPlayer(id);
+                pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.start")
+                        .replace("%time%", "10 " + Broadcast.get("arena.seconds")));
+            }
+        }
+        else if (arena.getCountdown() <= 5 && arena.getCountdown() > 0) {
+            for (UUID id : arena.getPlayers()) {
+                Player pl = Bukkit.getPlayer(id);
+                pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.start")
+                        .replace("%time%", arena.getCountdown() + " " + Broadcast.get("arena.seconds")));
+                pl.playSound(pl.getLocation(), Sound.BLOCK_COMPARATOR_CLICK, 20F, 20F);
+            }
+        }
+        else if (arena.getCountdown() <= 0) {
+            arena.setIsCounting(false);
+            arena.setCountdown(plugin.getConfig().getInt("arena.countdown") + 1);
+            arena.startGame();
+        }
+
+        arena.setCountdown(arena.getCountdown() - 1);
+    }
+
+    private void doGameLoop(Arena arena) {
+        if (arena.getTimeLeft() > 0) {
+            ArenaTickEvent event = new ArenaTickEvent(arena, arena.getTimeLeft(), arena.getTimeLeft() - 1, true);
+            Bukkit.getPluginManager().callEvent(event);
+
+            for (UUID id : arena.getPlayers()) {
+                Player player = Bukkit.getPlayer(id);
+                if (arena.getTimeLeft() % 10 == 0) {
+                    player.setFoodLevel(20);
+                    player.setSaturation(4);
+                }
+
+                // Remove items from inventory.
+                for (ItemStack is : player.getInventory().getContents()) {
+                    if (is != null) {
+                        if (is.getType() == Material.GLASS_BOTTLE) {
+                            player.getInventory().remove(is);
+                        }
+                        if (is.hasItemMeta()) {
+                            if (is.getItemMeta().hasDisplayName()) {
+                                if (is.getItemMeta().getDisplayName()
+                                        .equalsIgnoreCase(Broadcast.get("items.crystal-shard"))) {
+                                    player.getInventory().remove(is);
+                                }
+                                else if (is.getItemMeta().getDisplayName()
+                                        .equalsIgnoreCase(Broadcast.get("items.small-crystal"))) {
+                                    player.getInventory().remove(is);
+                                }
+                                else if (is.getItemMeta().getDisplayName()
+                                        .equalsIgnoreCase(Broadcast.get("items.shiny-crystal"))) {
+                                    player.getInventory().remove(is);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Check out of bounds: kill
+                if (!plugin.prot.isInProtectedArenaIgnoreY(player.getLocation())) {
+                    if (player.getHealth() > 0) {
+                        player.setHealth(0);
+                    }
+                }
+
+                // Check XP
+                if (player.getLevel() > 0) {
+                    int extraPoints = (int)Multipliers.getMultiplier("xp",
+                            plugin.economy.getLevel(player, "xp", "crystals"), false) - 1;
+
+                    arena.addScore(plugin.getArenaManager().getTeam(player), player.getLevel() + extraPoints);
+                    player.setLevel(0);
+                }
+
+                // Wands
+                for (ItemStack is : player.getInventory().getContents()) {
+                    if (plugin.wand.getWandType(is) != null) {
+                        if (is.getDurability() != 0) {
+                            double multiplier = 1;
+                            if (plugin.ab.getAbilities().containsKey(player.getUniqueId())) {
+                                if (plugin.ab.getAbilities().get(player.getUniqueId()).contains("magical_aura")) {
+                                    multiplier = 2.1;
+                                }
+                                else if (plugin.ab.getAbilities().get(player.getUniqueId()).contains("power_loss")) {
+                                    multiplier = 0.6;
+                                }
+                            }
+                            else {
+                                multiplier = 1;
+                            }
+
+                            WandType type = plugin.wand.getWandType(is);
+                            short addedDura = (short)(type.getDurability() / plugin.getConfig().getInt(type.getRegenConfig()) * multiplier);
+                            short newDura;
+                            if (is.getDurability() - addedDura < 0) {
+                                newDura = 0;
+                            }
+                            else {
+                                newDura = (short)(is.getDurability() - addedDura);
+                            }
+                            is.setDurability(newDura);
+                        }
+                    }
+                }
+            }
+
+            arena.setTimeLeft(arena.getTimeLeft() - 1);
+            arena.updateTimer();
+        }
+        else {
+            try {
+                this.winningTeam = arena.declareWinner();
+                arena.setAfterCount(plugin.getConfig().getInt("arena.after-count"));
+                arena.setEndGame(true);
+                arena.setIsCounting(false);
+                arena.setTimeLeft(plugin.getConfig().getInt("arena.game-length"));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void doEndGame(Arena arena) {
+        if (arena.getAfterCount() <= 0) {
+            arena.setEndGame(false);
+            arena.resetArena(false);
+            plugin.signHandler.updateSigns();
+        }
+        else {
+            arena.setAfterCount(arena.getAfterCount() - 1);
+
+            for (UUID id : arena.getPlayers()) {
+                Player p = Bukkit.getPlayer(id);
+                try {
+                    if (!arena.getSpectators().contains(p.getUniqueId())) {
+                        if (arena.getTeam(p) == Teams.getTeamIdFromNAME(this.winningTeam)) {
+                            Firework f = p.getLocation().getWorld().spawn(p.getLocation().add(0, 2, 0), Firework.class);
+                            FireworkMeta fm = f.getFireworkMeta();
+                            fm.setPower(1);
+                            FireworkEffect fe = FireworkEffect.builder()
+                                    .flicker(true)
+                                    .withColor(plugin.im.getTeamColour(arena.getTeam(p)))
+                                    .with(Type.STAR)
+                                    .build();
+                            fm.clearEffects();
+                            fm.addEffect(fe);
+                            f.setFireworkMeta(fm);
+                        }
+                    }
+                }
+                catch (Exception ignored) {
+                }
+            }
+        }
+    }
+
     public void run() {
+        for (Arena arena : am.arena) {
+            if (!arena.isEnabled()) {
+                continue;
+            }
 
-        for (Arena a : am.arena) {
-            if (a.isEnabled()) {
+            if (arena.isCounting()) {
+                doCountdown(arena);
+            }
+            else if (arena.isInGame() && !arena.isEndGame()) {
+                doGameLoop(arena);
+            }
 
-                if (a.isCounting()) {
-                    /*
-                     * Arena Countdown
-					 */
-                    ArenaTickEvent event = new ArenaTickEvent(a, a.getCountdown(), a.getCountdown() - 1, false);
-                    Bukkit.getPluginManager().callEvent(event);
-
-                    for (UUID id : a.getPlayers()) {
-                        Player pl = Bukkit.getPlayer(id);
-                        pl.setLevel(a.getCountdown());
-                    }
-
-                    if (a.getCountdown() == 120) {
-                        for (UUID id : a.getPlayers()) {
-                            Player pl = Bukkit.getPlayer(id);
-                            pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.start")
-                                    .replace("%time%", "2 " + Broadcast.get("arena.minutes")));
-                        }
-                    }
-                    else if (a.getCountdown() == 60) {
-                        for (UUID id : a.getPlayers()) {
-                            Player pl = Bukkit.getPlayer(id);
-                            pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.start")
-                                    .replace("%time%", "1 " + Broadcast.get("arena.minute")));
-                        }
-                    }
-                    else if (a.getCountdown() == 30) {
-                        for (UUID id : a.getPlayers()) {
-                            Player pl = Bukkit.getPlayer(id);
-                            pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.start")
-                                    .replace("%time%", "30 " + Broadcast.get("arena.seconds")));
-                        }
-                    }
-                    else if (a.getCountdown() == 10) {
-                        for (UUID id : a.getPlayers()) {
-                            Player pl = Bukkit.getPlayer(id);
-                            pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.start")
-                                    .replace("%time%", "10 " + Broadcast.get("arena.seconds")));
-                        }
-                    }
-                    else if (a.getCountdown() <= 5 && a.getCountdown() > 0) {
-                        for (UUID id : a.getPlayers()) {
-                            Player pl = Bukkit.getPlayer(id);
-                            pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.start")
-                                    .replace("%time%", a.getCountdown() + " " + Broadcast.get("arena.seconds")));
-                            pl.playSound(pl.getLocation(), Sound.BLOCK_COMPARATOR_CLICK, 20F, 20F);
-                        }
-                    }
-                    else if (a.getCountdown() <= 0) {
-                        a.setIsCounting(false);
-                        a.setCountdown(plugin.getConfig().getInt("arena.countdown") + 1);
-                        a.startGame();
-                    }
-
-                    a.setCountdown(a.getCountdown() - 1);
-                }
-                else if (a.isInGame() && !a.isEndGame()) {
-
-				/*
-                 * GAME LOOP DURING THE GAME
-				 */
-                    if (a.getTimeLeft() > 0) {
-
-                        ArenaTickEvent event = new ArenaTickEvent(a, a.getTimeLeft(), a.getTimeLeft() - 1, true);
-                        Bukkit.getPluginManager().callEvent(event);
-
-                        for (UUID id : a.getPlayers()) {
-                            Player p = Bukkit.getPlayer(id);
-                            if (a.getTimeLeft() % 10 == 0) {
-                                p.setFoodLevel(20);
-                                p.setSaturation(4);
-                            }
-
-                            for (ItemStack is : p.getInventory().getContents()) {
-                                if (is != null) {
-                                    if (is.getType() == Material.GLASS_BOTTLE) {
-                                        p.getInventory().remove(is);
-                                    }
-                                    if (is.hasItemMeta()) {
-                                        if (is.getItemMeta().hasDisplayName()) {
-                                            if (is.getItemMeta().getDisplayName()
-                                                    .equalsIgnoreCase(Broadcast.get("items.crystal-shard"))) {
-                                                p.getInventory().remove(is);
-                                            }
-                                            else if (is.getItemMeta().getDisplayName()
-                                                    .equalsIgnoreCase(Broadcast.get("items.small-crystal"))) {
-                                                p.getInventory().remove(is);
-                                            }
-                                            else if (is.getItemMeta().getDisplayName()
-                                                    .equalsIgnoreCase(Broadcast.get("items.shiny-crystal"))) {
-                                                p.getInventory().remove(is);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (p.getLevel() > 0) {
-                                int extraPoints = (int)Multipliers.getMultiplier("xp",
-                                        plugin.economy.getLevel(p, "xp", "crystals"), false) - 1;
-
-                                a.addScore(plugin.getArenaManager().getTeam(p), p.getLevel() + extraPoints);
-                                p.setLevel(0);
-                            }
-
-                            for (ItemStack is : p.getInventory().getContents()) {
-                                if (plugin.wand.getWandType(is) != null) {
-                                    if (is.getDurability() != 0) {
-                                        double multiplier = 1;
-                                        if (plugin.ab.getAbilities().containsKey(p.getUniqueId())) {
-                                            if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("magical_aura")) {
-                                                multiplier = 2.1;
-                                            }
-                                            else if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("power_loss")) {
-                                                multiplier = 0.6;
-                                            }
-                                        }
-                                        else {
-                                            multiplier = 1;
-                                        }
-
-                                        WandType type = plugin.wand.getWandType(is);
-                                        short addedDura = (short)(type.getDurability() / plugin.getConfig().getInt(type.getRegenConfig()) * multiplier);
-                                        short newDura;
-                                        if (is.getDurability() - addedDura < 0) {
-                                            newDura = 0;
-                                        }
-                                        else {
-                                            newDura = (short)(is.getDurability() - addedDura);
-                                        }
-                                        is.setDurability(newDura);
-                                    }
-                                }
-                            }
-                        }
-
-                        a.setTimeLeft(a.getTimeLeft() - 1);
-                        a.updateTimer();
-                    }
-                    else {
-                        try {
-                            this.winningTeam = a.declareWinner();
-                            a.setAfterCount(plugin.getConfig().getInt("arena.after-count"));
-                            a.setEndGame(true);
-                            a.setIsCounting(false);
-                            a.setTimeLeft(plugin.getConfig().getInt("arena.game-length"));
-                        }
-                        catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
-
-				/*
-                 * AFTER GAME
-				 */
-                if (a.isEndGame()) {
-                    if (a.getAfterCount() <= 0) {
-                        a.setEndGame(false);
-                        a.resetArena(false);
-                        plugin.signHandler.updateSigns();
-                    }
-                    else {
-                        a.setAfterCount(a.getAfterCount() - 1);
-
-                        for (UUID id : a.getPlayers()) {
-                            Player p = Bukkit.getPlayer(id);
-                            try {
-                                if (!a.getSpectators().contains(p.getUniqueId())) {
-                                    if (a.getTeam(p) == Teams.getTeamIdFromNAME(this.winningTeam)) {
-                                        Firework f = p.getLocation().getWorld().spawn(p.getLocation().add(0, 2, 0), Firework.class);
-                                        FireworkMeta fm = f.getFireworkMeta();
-                                        fm.setPower(1);
-                                        FireworkEffect fe = FireworkEffect.builder()
-                                                .flicker(true)
-                                                .withColor(plugin.im.getTeamColour(a.getTeam(p)))
-                                                .with(Type.STAR)
-                                                .build();
-                                        fm.clearEffects();
-                                        fm.addEffect(fe);
-                                        f.setFireworkMeta(fm);
-                                    }
-                                }
-                            }
-                            catch (Exception ignored) {
-                            }
-                        }
-                    }
-                }
+            if (arena.isEndGame()) {
+                doEndGame(arena);
             }
         }
     }
