@@ -1,4 +1,4 @@
-CrystalQuest Version 1.2
+CrystalQuest Version 1.3
 ====================================================
 A PvP-stylish minigame made by MrSugarCaney
 
