@@ -18,6 +18,24 @@ public class Teams {
 
     public static CrystalQuest plugin;
 
+    public static final OfflinePlayer GREEN = Bukkit.getOfflinePlayer(ChatColor.GREEN + "Team Green");
+    public static final OfflinePlayer ORANGE = Bukkit.getOfflinePlayer(ChatColor.GOLD + "Team Orange");
+    public static final OfflinePlayer YELLOW = Bukkit.getOfflinePlayer(ChatColor.YELLOW + "Team Yellow");
+    public static final OfflinePlayer RED = Bukkit.getOfflinePlayer(ChatColor.RED + "Team Red");
+    public static final OfflinePlayer BLUE = Bukkit.getOfflinePlayer(ChatColor.AQUA + "Team Blue");
+    public static final OfflinePlayer MAGENTA = Bukkit.getOfflinePlayer(ChatColor.LIGHT_PURPLE + "Team Magenta");
+    public static final OfflinePlayer WHITE = Bukkit.getOfflinePlayer(ChatColor.WHITE + "Team White");
+    public static final OfflinePlayer BLACK = Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Team Black");
+
+    public static final String GREEN_NAME = ChatColor.GREEN + "Team Green";
+    public static final String ORANGE_NAME = ChatColor.GOLD + "Team Orange";
+    public static final String YELLOW_NAME = ChatColor.YELLOW + "Team Yellow";
+    public static final String RED_NAME = ChatColor.RED + "Team Red";
+    public static final String BLUE_NAME = ChatColor.AQUA + "Team Blue";
+    public static final String MAGENTA_NAME = ChatColor.LIGHT_PURPLE + "Team Magenta";
+    public static final String WHITE_NAME = ChatColor.WHITE + "Team White";
+    public static final String BLACK_NAME = ChatColor.DARK_GRAY + "Team Black";
+
     private static final Random RANDOM = new Random();
 
     public Teams(CrystalQuest instance) {
