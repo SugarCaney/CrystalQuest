@@ -2,7 +2,7 @@ package nl.sugcube.crystalquest.listeners;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
+import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.Classes;
 import org.bukkit.ChatColor;

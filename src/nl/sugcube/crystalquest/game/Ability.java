@@ -1,7 +1,6 @@
 package nl.sugcube.crystalquest.game;
 
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import org.bukkit.*;
 import org.bukkit.entity.Arrow;

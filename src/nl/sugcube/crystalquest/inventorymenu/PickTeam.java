@@ -2,7 +2,7 @@ package nl.sugcube.crystalquest.inventorymenu;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
+import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.game.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

@@ -2,7 +2,7 @@ package nl.sugcube.crystalquest.command;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
+import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.game.Arena;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;

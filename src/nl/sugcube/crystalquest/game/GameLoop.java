@@ -2,7 +2,6 @@ package nl.sugcube.crystalquest.game;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import nl.sugcube.crystalquest.events.ArenaTickEvent;
 import nl.sugcube.crystalquest.items.WandType;
@@ -204,7 +203,7 @@ public class GameLoop implements Runnable {
                 Player p = Bukkit.getPlayer(id);
                 try {
                     if (!arena.getSpectators().contains(p.getUniqueId())) {
-                        if (arena.getTeam(p) == Teams.getTeamIdFromNAME(this.winningTeam)) {
+                        if (arena.getTeam(p) == Teams.getTeamIdFromName(this.winningTeam)) {
                             Firework f = p.getLocation().getWorld().spawn(p.getLocation().add(0, 2, 0), Firework.class);
                             FireworkMeta fm = f.getFireworkMeta();
                             fm.setPower(1);

@@ -2,7 +2,7 @@ package nl.sugcube.crystalquest.listeners;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
+import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.Update;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import nl.sugcube.crystalquest.events.PlayerEarnCrystalsEvent;
@@ -169,7 +169,7 @@ public class PlayerListener implements Listener {
     public void onTeamWinGame(TeamWinGameEvent e) {
         Team[] teams = e.getTeams();
         Arena a = e.getArena();
-        int score = a.getScore(Teams.getTeamIdFromNAME(e.getTeamName()));
+        int score = a.getScore(Teams.getTeamIdFromName(e.getTeamName()));
         int verschil = 9999999;
 
         int i = 0;

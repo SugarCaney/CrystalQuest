@@ -2,7 +2,7 @@ package nl.sugcube.crystalquest.economy;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
+import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.game.ArenaManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

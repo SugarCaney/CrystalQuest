@@ -2,7 +2,6 @@ package nl.sugcube.crystalquest.game;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
 import nl.sugcube.crystalquest.events.ArenaStartEvent;
 import nl.sugcube.crystalquest.events.PlayerJoinArenaEvent;
 import nl.sugcube.crystalquest.events.PlayerLeaveArenaEvent;
@@ -65,12 +64,12 @@ public class Arena {
     private List<Location> itemSpawns;
     private List<UUID> players;
     private List<UUID> spectators;
-    private ConcurrentHashMap<UUID, Integer> playerTeams;
-    private ConcurrentHashMap<Entity, Location> crystalLocations;
+    private Map<UUID, Integer> playerTeams;
+    private Map<Entity, Location> crystalLocations;
     private List<Block> gameBlocks;
-    private ConcurrentHashMap<Integer, List<Location>> teamSpawns;
-    private ConcurrentHashMap<Location, UUID> landmines;
-    private ConcurrentHashMap<UUID, GameMode> preSpecGamemodes;
+    private Map<Integer, List<Location>> teamSpawns;
+    private Map<Location, UUID> landmines;
+    private Map<UUID, GameMode> preSpecGamemodes;
 
     private Inventory teamMenu;
 
@@ -87,18 +86,17 @@ public class Arena {
      *         (CrystalQuest) Instance of the plugin
      * @param arenaId
      *         (int) ID of the arena
-     * @return void
      */
     public Arena(CrystalQuest instance, int arenaId) {
         this.plugin = instance;
         this.score = Bukkit.getScoreboardManager().getNewScoreboard();
-        this.playerSpawns = new ArrayList<Location>();
-        this.crystalSpawns = new ArrayList<Location>();
-        this.itemSpawns = new ArrayList<Location>();
-        this.players = new ArrayList<UUID>();
-        this.spectators = new ArrayList<UUID>();
-        this.playerTeams = new ConcurrentHashMap<UUID, Integer>();
-        this.preSpecGamemodes = new ConcurrentHashMap<UUID, GameMode>();
+        this.playerSpawns = new ArrayList<>();
+        this.crystalSpawns = new ArrayList<>();
+        this.itemSpawns = new ArrayList<>();
+        this.players = new ArrayList<>();
+        this.spectators = new ArrayList<>();
+        this.playerTeams = new ConcurrentHashMap<>();
+        this.preSpecGamemodes = new ConcurrentHashMap<>();
         this.timeLeft = plugin.getConfig().getInt("arena.game-length");
         this.count = plugin.getConfig().getInt("arena.countdown");
         this.isReady = false;
@@ -107,16 +105,16 @@ public class Arena {
         this.lobbySpawn = new Location[8];
         this.isEndGame = false;
         this.afterCount = plugin.getConfig().getInt("arena.after-count");
-        this.gameCrystals = new ArrayList<Entity>();
-        this.crystalLocations = new ConcurrentHashMap<Entity, Location>();
-        this.gameCreepers = new ArrayList<Creeper>();
-        this.gameBlocks = new ArrayList<Block>();
-        this.gameWolfs = new ArrayList<Wolf>();
+        this.gameCrystals = new ArrayList<>();
+        this.crystalLocations = new ConcurrentHashMap<>();
+        this.gameCreepers = new ArrayList<>();
+        this.gameBlocks = new ArrayList<>();
+        this.gameWolfs = new ArrayList<>();
         this.protection = new Location[2];
-        this.teamSpawns = new ConcurrentHashMap<Integer, List<Location>>();
-        this.landmines = new ConcurrentHashMap<Location, UUID>();
+        this.teamSpawns = new ConcurrentHashMap<>();
+        this.landmines = new ConcurrentHashMap<>();
         for (int i = 0; i <= 7; i++) {
-            this.teamSpawns.put(i, new ArrayList<Location>());
+            this.teamSpawns.put(i, new ArrayList<>());
         }
         this.doubleJump = false;
         initializeScoreboard();
@@ -136,7 +134,7 @@ public class Arena {
      *
      * @return (HashMap Location, Player)
      */
-    public ConcurrentHashMap<Location, UUID> getLandmines() {
+    public Map<Location, UUID> getLandmines() {
         return this.landmines;
     }
 
@@ -164,7 +162,7 @@ public class Arena {
      *
      * @return (HashMapLocationList)
      */
-    public ConcurrentHashMap<Integer, List<Location>> getTeamSpawns() {
+    public Map<Integer, List<Location>> getTeamSpawns() {
         return this.teamSpawns;
     }
 
@@ -237,7 +235,7 @@ public class Arena {
      *
      * @return (HashMapEntityLocation) EnderCrystals and Locations
      */
-    public ConcurrentHashMap<Entity, Location> getGameCrystalMap() {
+    public Map<Entity, Location> getGameCrystalMap() {
         return this.crystalLocations;
     }
 
