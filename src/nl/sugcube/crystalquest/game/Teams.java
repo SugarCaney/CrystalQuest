@@ -86,7 +86,7 @@ public class Teams {
     public static List<Player> getPlayersFromTeam(Arena arena, int teamId) {
         List<Player> players = new ArrayList<>();
 
-        for (OfflinePlayer offlinePlayer : arena.getTeams()[teamId].getPlayers()) {
+        for (OfflinePlayer offlinePlayer : arena.getScoreboardTeams()[teamId].getPlayers()) {
             Bukkit.getOnlinePlayers().stream()
                     .filter(onlinePlayer -> onlinePlayer.equals(offlinePlayer))
                     .forEach(players::add);

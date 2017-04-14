@@ -22,117 +22,262 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author SugarCaney
  */
-@SuppressWarnings("unused")
 public class Arena {
 
-    /*
-     * TEAM_ID=0: GREEN
-     * TEAM_ID=1: ORANGE
-     * TEAM_ID=2: YELLOW
-     * TEAM_ID=3: RED
-     * TEAM_ID=4: BLUE
-     * TEAM_ID=5: MAGENTA
-     * TEAM_ID=6: WHITE
-     * TEAM_ID=7: BLACK
+    /**
+     * The main plugin instance.
      */
     public CrystalQuest plugin;
+
+    /**
+     * The maximum amount of players in the arena.
+     * <p>
+     * {@code -1} when this value is not set.
+     */
     private int maxPlayers = -1;
+
+    /**
+     * The minimum amount of players in the arena.
+     * <p>
+     * {@code -1} when this value is not set.
+     */
     private int minPlayers = -1;
+
+    /**
+     * The amount of teams that participate in the arena.
+     */
     private int teams = -1;
+
+    /**
+     * The name of the arena.
+     * <p>
+     * {@code ""} when there is no name set.
+     */
     private String name = "";
+
+    /**
+     * The unique id of the arena.
+     */
     private int id;
+
+    /**
+     * Determines if the crystalquest.vip permission is required in order to play in the arena.
+     * <p>
+     * {@code true} when required, {@code false} when not required.
+     */
     private boolean vip;
-    private Location[] lobbySpawn;
-    private int count;                    //seconds
+
+    /**
+     * Array containing per team where the lobby spawn is. The value is mapped to the id of the
+     * team.
+     * <p>
+     * TODO: Convert to map.
+     */
+    private Location[] lobbySpawn = new Location[8];
+
+    /**
+     * The amount of seconds it takes before the arena starts.
+     */
+    private int count;
+
+    /**
+     * Determines whether the countdown is doing its buisiness.
+     * <p>
+     * {@code true} when the countdown is happening, {@code false} when there is no countdown.
+     */
     private boolean isCounting;
+
+    /**
+     * The scoreboard tracking the scores of the teams.
+     */
     private Scoreboard score;
+
+    /**
+     * Contains whether the arena is in game or not.
+     * <p>
+     * {@code true} when the arena is ingame, {@code false} otherwise.
+     */
     private boolean inGame;
-    private int timeLeft;                //seconds
-    private boolean isReady;
-    private boolean enabled;
+
+    /**
+     * The amount of seconds that is left in the game.
+     */
+    private int timeLeft;
+
+    /**
+     * Whether the arena is enabled or disabled.
+     * <p>
+     * {@code true} when the arena is enabled, {@code false} when disabled.
+     */
+    private boolean enabled = true;
+
+    /**
+     * The amount of seconds that is left in the resetting phase.
+     */
     private int afterCount;
-    private boolean isEndGame;
-    private Location[] protection;
-    private boolean doubleJump;
+
+    /**
+     * Whether the game is over and is resetting or not.
+     * <p>
+     * {@code true} when the arena is resetting, {@code false} otherwise.
+     */
+    private boolean isEndGame = false;
+
+    /**
+     * The two corner positions of the arena that define the protection.
+     */
+    private Location[] protection = new Location[2];
+
+    /**
+     * Whether double jump is enabled in this arena or not.
+     * <p>
+     * {@code true} when there is double jump, {@code false} when there is no double jump.
+     */
+    private boolean doubleJump = false;
+
+    /**
+     * Random object to be used by this instance.
+     */
     private Random ran = new Random();
 
-    private List<Wolf> gameWolfs;
-    private List<Creeper> gameCreepers;
-    private List<Entity> gameCrystals;
-    private List<Location> playerSpawns;
-    private List<Location> crystalSpawns;
-    private List<Location> itemSpawns;
-    private List<UUID> players;
-    private List<UUID> spectators;
-    private Map<UUID, Integer> playerTeams;
-    private Map<Entity, Location> crystalLocations;
-    private List<Block> gameBlocks;
-    private Map<Integer, List<Location>> teamSpawns;
-    private Map<Location, UUID> landmines;
-    private Map<UUID, GameMode> preSpecGamemodes;
+    /**
+     * List of all the places where players will spawn.
+     */
+    private List<Location> playerSpawns = new ArrayList<>();
 
+    /**
+     * List of all the places where crystal will spawn.
+     */
+    private List<Location> crystalSpawns = new ArrayList<>();
+
+    /**
+     * List of all the locations where items will spawn.
+     */
+    private List<Location> itemSpawns = new ArrayList<>();
+
+    /**
+     * List of all the wolfs that have been spawned in the arena.
+     */
+    private List<Wolf> gameWolfs = new ArrayList<>();
+
+    /**
+     * List of all creepers that have been spawned in the arena.
+     */
+    private List<Creeper> gameCreepers = new ArrayList<>();
+
+    /**
+     * List of all crystals that have been spawned in the arena.
+     */
+    private List<Entity> gameCrystals = new ArrayList<>();
+
+    /**
+     * List of all UUIDs of players that are in the arena.
+     */
+    private List<UUID> players = new ArrayList<>();
+
+    /**
+     * List of all UUIDs of players that are spectating the arena.
+     */
+    private List<UUID> spectators = new ArrayList<>();
+
+    /**
+     * Map that maps every player's UUID to the id of the team which they are part of.
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam}
+     */
+    private Map<UUID, Integer> playerTeams = new ConcurrentHashMap<>();
+
+    /**
+     * Map that maps every ender crystal to their location.
+     */
+    private Map<Entity, Location> crystalLocations = new ConcurrentHashMap<>();
+
+    /**
+     * List of all blocks that are placed during the game in the arena.
+     */
+    private List<Block> gameBlocks = new ArrayList<>();
+
+    /**
+     * Map that maps the team ID to a list of all locations where a team can spawn.
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam}
+     */
+    private Map<Integer, List<Location>> teamSpawns = new ConcurrentHashMap<>();
+
+    /**
+     * Map that maps all locations of placed landmines to the UUID of the player that placed it.
+     */
+    private Map<Location, UUID> landmines = new ConcurrentHashMap<>();
+
+    /**
+     * Map that maps the UUID of a player to the gamemode which they had before entering the arena.
+     */
+    private Map<UUID, GameMode> preSpecGamemodes = new ConcurrentHashMap<>();
+
+    /**
+     * The menu that shows up when players want to select a team when joining the arena.
+     */
     private Inventory teamMenu;
 
     //Scoreboard
+    /**
+     * Scoreboard: Array of teams by their team id.
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam} mapping.
+     */
     private Team[] sTeams;
+
+    /**
+     * Scoreboard: The object used to track the points earned.
+     */
     private Objective points;
+
+    /**
+     * Scoreboard: Array of scores of teams by their team id.
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam} mapping.
+     */
     private Score[] sScore;
+
+    /**
+     * Scoreboard: Team that contains all the spectators.
+     */
     private Team spectatorTeam;
 
     /**
-     * CONSTRUCTOR
-     *
      * @param instance
-     *         (CrystalQuest) Instance of the plugin
+     *         Instance of the plugin
      * @param arenaId
-     *         (int) ID of the arena
+     *         ID of the arena
      */
     public Arena(CrystalQuest instance, int arenaId) {
         this.plugin = instance;
         this.score = Bukkit.getScoreboardManager().getNewScoreboard();
-        this.playerSpawns = new ArrayList<>();
-        this.crystalSpawns = new ArrayList<>();
-        this.itemSpawns = new ArrayList<>();
-        this.players = new ArrayList<>();
-        this.spectators = new ArrayList<>();
-        this.playerTeams = new ConcurrentHashMap<>();
-        this.preSpecGamemodes = new ConcurrentHashMap<>();
         this.timeLeft = plugin.getConfig().getInt("arena.game-length");
         this.count = plugin.getConfig().getInt("arena.countdown");
-        this.isReady = false;
         this.id = arenaId;
-        this.enabled = true;
-        this.lobbySpawn = new Location[8];
-        this.isEndGame = false;
         this.afterCount = plugin.getConfig().getInt("arena.after-count");
-        this.gameCrystals = new ArrayList<>();
-        this.crystalLocations = new ConcurrentHashMap<>();
-        this.gameCreepers = new ArrayList<>();
-        this.gameBlocks = new ArrayList<>();
-        this.gameWolfs = new ArrayList<>();
-        this.protection = new Location[2];
-        this.teamSpawns = new ConcurrentHashMap<>();
-        this.landmines = new ConcurrentHashMap<>();
+
         for (int i = 0; i <= 7; i++) {
             this.teamSpawns.put(i, new ArrayList<>());
         }
-        this.doubleJump = false;
+
         initializeScoreboard();
     }
 
     /**
-     * Get a list of players who are spectating the game.
+     * Get a list of UUIDs of players who are spectating the game.
      *
-     * @return (PlayerList) A list containing the spectators
+     * @see Arena#spectators
      */
     public List<UUID> getSpectators() {
-        return this.spectators;
+        return spectators;
     }
 
     /**
-     * Get the hashmap containing the players who placed certain landmines.
+     * Get the map containing the players who placed certain landmines.
      *
-     * @return (HashMap Location, Player)
+     * @see Arena#landmines
      */
     public Map<Location, UUID> getLandmines() {
         return this.landmines;
@@ -142,7 +287,8 @@ public class Arena {
      * Sets if the arena accepts double jumps
      *
      * @param canDoubleJump
-     *         (boolean) True to accept, False to decline.
+     *         True to accept, False to decline.
+     * @see Arena#doubleJump
      */
     public void setDoubleJump(boolean canDoubleJump) {
         this.doubleJump = canDoubleJump;
@@ -151,26 +297,28 @@ public class Arena {
     /**
      * Gets if this map accepts double jumps
      *
-     * @return (boolean) True if accepted, false if not accepted.
+     * @return True if accepted, false if not accepted.
+     * @see Arena#doubleJump
      */
     public boolean canDoubleJump() {
-        return this.doubleJump;
+        return doubleJump;
     }
 
     /**
      * Gets the hashmap with the teamId bound to the list containing the spawnpoints
      *
-     * @return (HashMapLocationList)
+     * @see Arena#teamSpawns
      */
     public Map<Integer, List<Location>> getTeamSpawns() {
-        return this.teamSpawns;
+        return teamSpawns;
     }
 
     /**
      * Sets the positions of the protection of the Arena
      *
      * @param locs
-     *         (Location[]) Index 1: pos1, Index 2: pos2.
+     *         Index 0: pos1, Index 1: pos2.
+     * @see Arena#protection
      */
     public void setProtection(Location[] locs) {
         this.protection = locs;
@@ -179,177 +327,188 @@ public class Arena {
     /**
      * Gets the positions of the protection of the Arena
      *
-     * @return (Location[]) Index 1: pos1, Index 2: pos2. Null if not set.
+     * @return Index 0: pos1, Index 2: pos0. Null if not set.
+     * @see Arena#protection
      */
     public Location[] getProtection() {
-        return this.protection;
+        return protection;
     }
 
     /**
      * Checks if the arena is full
      *
-     * @return (boolean) True if full, False if not.
+     * @return True if full, False if not.
      */
     public boolean isFull() {
-        return this.getPlayers().size() >= this.getMaxPlayers();
+        return getPlayers().size() >= getMaxPlayers();
     }
 
     /**
      * Gets the Wolf-list containing all Wolfs spawned in-game
      *
-     * @return (WolfList)
+     * @see Arena#gameWolfs
      */
     public List<Wolf> getGameWolfs() {
-        return this.gameWolfs;
+        return gameWolfs;
     }
 
     /**
      * Gets the Blocks-list containing all blocks placed in-game
      *
-     * @return (BlockList) List of Blocks
+     * @see Arena#gameBlocks
      */
     public List<Block> getGameBlocks() {
-        return this.gameBlocks;
+        return gameBlocks;
     }
 
     /**
      * Gets the Creepers which are spawned in-game
      *
-     * @return (CreeperList) List containing all the creepers
+     * @return List containing all the creepers
+     * @see Arena#gameCreepers
      */
     public List<Creeper> getGameCreepers() {
-        return this.gameCreepers;
+        return gameCreepers;
     }
 
     /**
      * Gets the inventory of the Team-Menu
      *
-     * @return (Inventory) The team-menu inventory
+     * @return The team-menu inventory
+     * @see Arena#teamMenu
      */
     public Inventory getTeamMenu() {
-        return this.teamMenu;
+        return teamMenu;
     }
 
     /**
      * Get the hashmap containing the locations of the entities
      *
-     * @return (HashMapEntityLocation) EnderCrystals and Locations
+     * @return EnderCrystals and Locations
+     * @see Arena#crystalLocations
      */
-    public Map<Entity, Location> getGameCrystalMap() {
-        return this.crystalLocations;
+    public Map<Entity, Location> getCrystalLocations() {
+        return crystalLocations;
     }
 
     /**
      * Sends a custom message to all players in the arena
      *
-     * @param p
-     *         (Player) The dead player
+     * @param player
+     *         The dead player
      * @param message
-     *         (String) The verb that will show up. fe: Killed, Gibbed etc.
+     *         The verb that will show up. fe: Killed, Gibbed etc.
      */
-    public void sendDeathMessage(Player p, String message) {
-        int teamId = plugin.getArenaManager().getTeam(p);
-        ChatColor c = Teams.getTeamChatColour(teamId);
-        for (UUID id : this.getPlayers()) {
-            Player pl = Bukkit.getPlayer(id);
-            pl.sendMessage(c + p.getName() + ChatColor.GRAY + message);
+    public void sendDeathMessage(Player player, String message) {
+        int teamId = plugin.getArenaManager().getTeam(player);
+        ChatColor colour = Teams.getTeamChatColour(teamId);
+        for (UUID id : getPlayers()) {
+            Player target = Bukkit.getPlayer(id);
+            target.sendMessage(colour + player.getName() + ChatColor.GRAY + message);
         }
-        for (UUID id : this.getSpectators()) {
-            Player spec = Bukkit.getPlayer(id);
-            spec.sendMessage(c + p.getName() + ChatColor.GRAY + message);
+        for (UUID id : getSpectators()) {
+            Player target = Bukkit.getPlayer(id);
+            target.sendMessage(colour + player.getName() + ChatColor.GRAY + message);
         }
     }
 
     /**
      * Sends a death message to all players in the arena with a custom verb
      *
-     * @param p
-     *         (Player) The dead player
+     * @param dead
+     *         The dead player
      * @param killer
-     *         (Player) The player who killed p
+     *         The player who killed dead
      * @param verb
-     *         (String) The verb that will show up. fe: Killed, Gibbed etc.
+     *         The verb that will show up. fe: Killed, Gibbed etc.
      */
-    public void sendDeathMessage(Player p, Player killer, String verb) {
-        int teamId = plugin.getArenaManager().getTeam(p);
+    public void sendDeathMessage(Player dead, Player killer, String verb) {
+        int teamId = plugin.getArenaManager().getTeam(dead);
         int teamIdKiller = plugin.getArenaManager().getTeam(killer);
         ChatColor c = Teams.getTeamChatColour(teamId);
         ChatColor cK = Teams.getTeamChatColour(teamIdKiller);
-        for (UUID id : this.getPlayers()) {
-            Player pl = Bukkit.getPlayer(id);
-            pl.sendMessage(c + p.getName() + ChatColor.GRAY + " has been " + verb + " by " + cK + killer.getName());
+        for (UUID id : getPlayers()) {
+            Player player = Bukkit.getPlayer(id);
+            player.sendMessage(c + dead.getName() + ChatColor.GRAY + " has been " + verb + " by " +
+                    cK + killer.getName());
         }
-        for (UUID id : this.getSpectators()) {
-            Player spec = Bukkit.getPlayer(id);
-            spec.sendMessage(c + p.getName() + ChatColor.GRAY + " has been " + verb + " by " + cK + killer.getName());
+        for (UUID id : getSpectators()) {
+            Player spectator = Bukkit.getPlayer(id);
+            spectator.sendMessage(c + dead.getName() + ChatColor.GRAY + " has been " + verb +
+                    " by " + cK + killer.getName());
         }
     }
 
     /**
      * Sends a death message to all players in the arena
      *
-     * @param p
-     *         (Player) The dead player
+     * @param dead
+     *         The dead player
      * @param killer
-     *         (Player) The player who killed p
+     *         The player who killed dead
      */
-    public void sendDeathMessage(Player p, Player killer) {
-        int teamId = plugin.getArenaManager().getTeam(p);
+    public void sendDeathMessage(Player dead, Player killer) {
+        int teamId = plugin.getArenaManager().getTeam(dead);
         int teamIdKiller = plugin.getArenaManager().getTeam(killer);
         ChatColor c = Teams.getTeamChatColour(teamId);
         ChatColor cK = Teams.getTeamChatColour(teamIdKiller);
-        for (UUID id : this.getPlayers()) {
+        for (UUID id : getPlayers()) {
             Player pl = Bukkit.getPlayer(id);
-            pl.sendMessage(c + p.getName() + ChatColor.GRAY + " has been killed by " + cK + killer.getName());
+            pl.sendMessage(c + dead.getName() + ChatColor.GRAY + " has been killed by " + cK +
+                    killer.getName());
         }
-        for (UUID id : this.getSpectators()) {
+        for (UUID id : getSpectators()) {
             Player spec = Bukkit.getPlayer(id);
-            spec.sendMessage(c + p.getName() + ChatColor.GRAY + " has been killed by " + cK + killer.getName());
+            spec.sendMessage(c + dead.getName() + ChatColor.GRAY + " has been killed by " +
+                    cK + killer.getName());
         }
     }
 
     /**
      * Sends a death message to all players in the arena
      *
-     * @param p
-     *         (Player) The dead player
+     * @param player
+     *         The dead player
      */
-    public void sendDeathMessage(Player p) {
-        int teamId = plugin.getArenaManager().getTeam(p);
+    public void sendDeathMessage(Player player) {
+        int teamId = plugin.getArenaManager().getTeam(player);
         ChatColor c = Teams.getTeamChatColour(teamId);
-        for (UUID id : this.getPlayers()) {
+        for (UUID id : getPlayers()) {
             Player pl = Bukkit.getPlayer(id);
-            pl.sendMessage(c + p.getName() + ChatColor.GRAY + " has died");
+            pl.sendMessage(c + player.getName() + ChatColor.GRAY + " has died");
         }
-        for (UUID id : this.getSpectators()) {
+        for (UUID id : getSpectators()) {
             Player spec = Bukkit.getPlayer(id);
-            spec.sendMessage(c + p.getName() + ChatColor.GRAY + " has died");
+            spec.sendMessage(c + player.getName() + ChatColor.GRAY + " has died");
         }
     }
 
     /**
      * Get the list containing all the crystals that have spawned in the arena
      *
-     * @return (EntityList) The crystals
+     * @return The crystals
+     * @see Arena#gameCrystals
      */
     public List<Entity> getGameCrystals() {
-        return this.gameCrystals;
+        return gameCrystals;
     }
 
     /**
      * Gets the time the game waits before teleporting to the lobby, after the game ended.
      *
-     * @return (int) The amount of seconds left.
+     * @return The amount of seconds left.
+     * @see Arena#afterCount
      */
     public int getAfterCount() {
-        return this.afterCount;
+        return afterCount;
     }
 
     /**
      * Sets the time the game waits before teleporting to the lobby, after the game ended.
      *
      * @param count
-     *         (int) The amount of seconds to wait
+     *         The amount of seconds to wait
+     * @see Arena#afterCount
      */
     public void setAfterCount(int count) {
         this.afterCount = count;
@@ -358,26 +517,29 @@ public class Arena {
     /**
      * Returns true if the game has finished and is in the after-game phase.
      *
-     * @return (boolean) true if the game has ended, false if it hasn't
+     * @return true if the game has ended, false if it hasn't
+     * @see Arena#isEndGame
      */
     public boolean isEndGame() {
-        return this.isEndGame;
+        return isEndGame;
     }
 
     /**
      * Sets the the arena is in the end-game phase
      *
      * @param isEndGame
-     *         (boolean) true if end-game, false if isn't.
+     *         true if end-game, false if isn't.
+     * @see Arena#isEndGame
      */
     public void setEndGame(boolean isEndGame) {
         if (isEndGame) {
             for (Entity e : this.getGameCrystals()) {
-                this.getGameCrystalMap().remove(e);
+                getCrystalLocations().remove(e);
                 e.remove();
             }
-            this.setAfterCount(plugin.getConfig().getInt("arena.after-count"));
+            setAfterCount(plugin.getConfig().getInt("arena.after-count"));
         }
+
         this.isEndGame = isEndGame;
         plugin.signHandler.updateSigns();
     }
@@ -385,19 +547,21 @@ public class Arena {
     /**
      * Get the teams in the arena
      *
-     * @return (Team[]) The teams in the arena
+     * @return The teams in the arena
+     * @see Arena#sTeams
      */
-    public Team[] getTeams() {
-        return this.sTeams;
+    public Team[] getScoreboardTeams() {
+        return sTeams;
     }
 
     /**
      * Checks if the arena is enabled/disabled.
      *
-     * @return (boolean) If enabled true, if disabled false
+     * @return If enabled true, if disabled false
+     * @see Arena#enabled
      */
     public boolean isEnabled() {
-        return this.enabled;
+        return enabled;
     }
 
     /**
@@ -405,89 +569,64 @@ public class Arena {
      *
      * @param isEnabled
      *         "true" to enable, "false" to disable
+     * @see Arena#enabled
      */
     public void setEnabled(boolean isEnabled) {
         this.enabled = isEnabled;
 
         for (UUID id : this.getPlayers()) {
-            Player p = Bukkit.getPlayer(id);
-            p.sendMessage(Broadcast.get("arena.disabled"));
+            Player player = Bukkit.getPlayer(id);
+            player.sendMessage(Broadcast.get("arena.disabled"));
         }
 
         if (!isEnabled) {
-            this.resetArena(false);
+            resetArena(false);
         }
 
         plugin.signHandler.updateSigns();
     }
 
     /**
-     * Checks if all criteria have been configured.
-     *
-     * @return (String) Error message if not set, null if succeeded
-     */
-    public String setReady() {
-        if (this.maxPlayers <= 0) {
-            return Broadcast.get("arena.ready-1");
-        }
-        else if (this.minPlayers <= 0) {
-            return Broadcast.get("arena.ready-2");
-        }
-        else if (this.minPlayers > this.maxPlayers) {
-            return Broadcast.get("arena.ready-3");
-        }
-        else if (this.teams <= 2) {
-            return Broadcast.get("arena.ready-4");
-        }
-        else if (this.name == "") {
-            return Broadcast.get("arena.ready-5");
-        }
-        else if (this.playerSpawns.size() == 0) {
-            return Broadcast.get("arena.ready-6");
-        }
-        else if (this.crystalSpawns.size() == 0) {
-            return Broadcast.get("arena.ready-7");
-        }
-        else {
-            return null;
-        }
-    }
-
-    /**
      * Updates the time in the scoreboardname
      */
     public void updateTimer() {
-        this.points.setDisplayName(SMeth.setColours("&c" + Broadcast.get("arena.time-left") + " &f" +
-                SMeth.toTime(this.timeLeft)));
+        this.points.setDisplayName(
+                SMeth.setColours(
+                        "&c" + Broadcast.get("arena.time-left") + " &f" + SMeth.toTime(timeLeft)
+                )
+        );
     }
 
     /**
      * Sets the menu from which the players choose their teams.
      *
-     * @param inv
-     *         (Inventory) Inventory to set it to.
+     * @param teamMenu
+     *         Inventory to set it to.
+     * @see Arena#teamMenu
      */
-    public void setTeamMenu(Inventory inv) {
-        this.teamMenu = inv;
+    public void setTeamMenu(Inventory teamMenu) {
+        this.teamMenu = teamMenu;
     }
 
     /**
      * Gets the teams with the least amount of players for a fair distribution process.
+     * <p>
+     * TODO: Change to use {@link CrystalQuestTeam}.
      *
-     * @return (IntegerList) The teams with the least amount of players.
+     * @return The teams with the least amount of players.
      */
     public List<Integer> getSmallestTeams() {
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = new ArrayList<>();
 
         int least = 999999;
         for (int i = 0; i < this.getTeamCount(); i++) {
-            if (this.getTeams()[i].getPlayers().size() < least) {
-                least = this.getTeams()[i].getPlayers().size();
+            if (this.getScoreboardTeams()[i].getPlayers().size() < least) {
+                least = this.getScoreboardTeams()[i].getPlayers().size();
             }
         }
 
         int count = 0;
-        for (Team t : this.getTeams()) {
+        for (Team t : this.getScoreboardTeams()) {
             if (t.getPlayers().size() == least && count < this.getTeamCount()) {
                 list.add(count);
             }
@@ -499,61 +638,62 @@ public class Arena {
 
     /**
      * Initializes the scoreboard. This makes or updates the scoreboard.
+     * <p>
+     * TODO: Change to {@link CrystalQuestTeam} constants.
      */
     public void initializeScoreboard() {
+        score = Bukkit.getScoreboardManager().getNewScoreboard();
+        sTeams = new Team[8];
+        sScore = new Score[8];
 
-        this.score = Bukkit.getScoreboardManager().getNewScoreboard();
-        this.sTeams = new Team[8];
-        this.sScore = new Score[8];
-
-        this.spectatorTeam = this.score.registerNewTeam("Spectate");
-        this.spectatorTeam.setAllowFriendlyFire(false);
-        this.spectatorTeam.setCanSeeFriendlyInvisibles(true);
-        this.spectatorTeam.setPrefix(ChatColor.BLUE + "[Spec] ");
-        this.sTeams[0] = this.score.registerNewTeam("Green");
-        this.sTeams[0].setPrefix(ChatColor.GREEN + "");
-        this.sTeams[1] = this.score.registerNewTeam("Orange");
-        this.sTeams[1].setPrefix(ChatColor.GOLD + "");
-        this.sTeams[2] = this.score.registerNewTeam("Yellow");
-        this.sTeams[2].setPrefix(ChatColor.YELLOW + "");
-        this.sTeams[3] = this.score.registerNewTeam("Red");
-        this.sTeams[3].setPrefix(ChatColor.RED + "");
-        this.sTeams[4] = this.score.registerNewTeam("Blue");
-        this.sTeams[4].setPrefix(ChatColor.AQUA + "");
-        this.sTeams[5] = this.score.registerNewTeam("Magenta");
-        this.sTeams[5].setPrefix(ChatColor.LIGHT_PURPLE + "");
-        this.sTeams[6] = this.score.registerNewTeam("White");
-        this.sTeams[6].setPrefix(ChatColor.WHITE + "");
-        this.sTeams[7] = this.score.registerNewTeam("Black");
-        this.sTeams[7].setPrefix(ChatColor.BLACK + "");
+        spectatorTeam = score.registerNewTeam("Spectate");
+        spectatorTeam.setAllowFriendlyFire(false);
+        spectatorTeam.setCanSeeFriendlyInvisibles(true);
+        spectatorTeam.setPrefix(ChatColor.BLUE + "[Spec] ");
+        sTeams[0] = score.registerNewTeam("Green");
+        sTeams[0].setPrefix(ChatColor.GREEN + "");
+        sTeams[1] = score.registerNewTeam("Orange");
+        sTeams[1].setPrefix(ChatColor.GOLD + "");
+        sTeams[2] = score.registerNewTeam("Yellow");
+        sTeams[2].setPrefix(ChatColor.YELLOW + "");
+        sTeams[3] = score.registerNewTeam("Red");
+        sTeams[3].setPrefix(ChatColor.RED + "");
+        sTeams[4] = score.registerNewTeam("Blue");
+        sTeams[4].setPrefix(ChatColor.AQUA + "");
+        sTeams[5] = score.registerNewTeam("Magenta");
+        sTeams[5].setPrefix(ChatColor.LIGHT_PURPLE + "");
+        sTeams[6] = score.registerNewTeam("White");
+        sTeams[6].setPrefix(ChatColor.WHITE + "");
+        sTeams[7] = score.registerNewTeam("Black");
+        sTeams[7].setPrefix(ChatColor.BLACK + "");
 
         for (int i = 0; i <= 7; i++) {
-            this.sTeams[i].setAllowFriendlyFire(false);
+            sTeams[i].setAllowFriendlyFire(false);
         }
 
-        this.points = this.score.registerNewObjective("points", "dummy");
-        this.points.setDisplaySlot(DisplaySlot.SIDEBAR);
+        points = score.registerNewObjective("points", "dummy");
+        points.setDisplaySlot(DisplaySlot.SIDEBAR);
         updateTimer();
 
-        this.sScore[0] = this.points.getScore(Teams.GREEN);
-        this.sScore[1] = this.points.getScore(Teams.ORANGE);
-        if (this.teams >= 3) {
-            this.sScore[2] = this.points.getScore(Teams.YELLOW);
+        sScore[0] = points.getScore(Teams.GREEN);
+        sScore[1] = points.getScore(Teams.ORANGE);
+        if (teams >= 3) {
+            sScore[2] = points.getScore(Teams.YELLOW);
         }
         if (this.teams >= 4) {
-            this.sScore[3] = this.points.getScore(Teams.RED);
+            sScore[3] = points.getScore(Teams.RED);
         }
-        if (this.teams >= 5) {
-            this.sScore[4] = this.points.getScore(Teams.BLUE);
+        if (teams >= 5) {
+            sScore[4] = points.getScore(Teams.BLUE);
         }
-        if (this.teams >= 6) {
-            this.sScore[5] = this.points.getScore(Teams.MAGENTA);
+        if (teams >= 6) {
+            sScore[5] = points.getScore(Teams.MAGENTA);
         }
-        if (this.teams >= 7) {
-            this.sScore[6] = this.points.getScore(Teams.WHITE);
+        if (teams >= 7) {
+            sScore[6] = points.getScore(Teams.WHITE);
         }
         if (this.teams >= 8) {
-            this.sScore[7] = this.points.getScore(Teams.BLACK);
+            sScore[7] = points.getScore(Teams.BLACK);
         }
 
         for (Score s : sScore) {
@@ -565,16 +705,18 @@ public class Arena {
 
     /**
      * Gets the amount of players in a team.
+     * <p>
+     * TODO: Change to {@link CrystalQuestTeam}.
      *
      * @param teamId
-     *         (int) The ID of the team.
-     * @return (int) The amount of players.
+     *         The ID of the team.
+     * @return The amount of players.
      */
     public int getTeamPlayerCount(int teamId) {
         int ps = 0;
-        Iterator<Entry<UUID, Integer>> it = this.playerTeams.entrySet().iterator();
+        Iterator<Entry<UUID, Integer>> it = playerTeams.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry<UUID, Integer> pairs = (Map.Entry<UUID, Integer>)it.next();
+            Entry<UUID, Integer> pairs = it.next();
             if (pairs.getValue() == teamId) {
                 ps++;
             }
@@ -585,43 +727,45 @@ public class Arena {
 
     /**
      * Gets the team the player is in.
+     * <p>
+     * TODO: Change to {@link CrystalQuestTeam}.
      *
-     * @param p
-     *         (Player) The player from whose you want to know the team he/she is in.
-     * @return (int) The TeamId of the team the player is in.
+     * @param player
+     *         The player from whose you want to know the team he/she is in.
+     * @return The TeamId of the team the player is in.
      */
-    public int getTeam(Player p) {
-        return playerTeams.get(p.getUniqueId());
+    public int getTeam(Player player) {
+        return playerTeams.get(player.getUniqueId());
     }
 
     /**
      * Checks if the player is in the specific team.
      *
-     * @param p
-     *         (Player) The player you want to check for.
+     * @param player
+     *         The player you want to check for.
      * @param teamId
-     *         (int) The ID of the team.
-     * @return (boolean) true if he/she's in, false if he/she isn't.
+     *         The ID of the team.
+     * @return true if they're in, false if they aren't.
      */
-    public boolean isInTeam(Player p, int teamId) {
-        return this.playerTeams.get(p.getUniqueId()) == teamId;
+    public boolean isInTeam(Player player, int teamId) {
+        return playerTeams.get(player.getUniqueId()) == teamId;
     }
 
     /**
      * If there are players in the arena
      * Reveal the winner
      *
-     * @return (String) Winning team's name
+     * @return Winning team's name
      */
     public String declareWinner() {
-        if (!this.getPlayers().isEmpty()) {
+        if (!getPlayers().isEmpty()) {
             int highest = -99999;
             Score hScore = null;
-            for (Score s : this.sScore) {
-                if (s != null) {
-                    if (s.getScore() > highest) {
-                        highest = s.getScore();
-                        hScore = s;
+            for (Score score : this.sScore) {
+                if (score != null) {
+                    if (score.getScore() > highest) {
+                        highest = score.getScore();
+                        hScore = score;
                     }
                 }
             }
@@ -629,7 +773,7 @@ public class Arena {
             String winningTeam = "";
             int teamId = 0;
             ChatColor colour = null;
-            List<UUID> winningPlayers = new ArrayList<UUID>();
+            List<UUID> winningPlayers = new ArrayList<>();
 
             if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.GREEN_NAME)) {
                 winningTeam = Teams.GREEN_NAME;
@@ -683,8 +827,8 @@ public class Arena {
                 }
             }
 
-            Bukkit.getPluginManager().callEvent(new TeamWinGameEvent(winningPlayers, this, teamId, this.getTeamCount(),
-                    this.sTeams, winningTeam));
+            Bukkit.getPluginManager().callEvent(new TeamWinGameEvent(winningPlayers, this,
+                    teamId, getTeamCount(), sTeams, winningTeam));
 
             return winningTeam;
         }
@@ -696,18 +840,19 @@ public class Arena {
      * Chooses a random player in the arena and from another team.
      *
      * @param excluded
-     *         (Player) The player whose team cannot be chosen.
-     * @return (Player) The chosen player. Null if there are no players to choose from.
+     *         The player whose team cannot be chosen.
+     * @return The chosen player. Null if there are no players to choose from.
      */
     public Player getRandomPlayer(Player excluded) {
         int team = getTeam(excluded);
         List<Player> toChoose = new ArrayList<>();
-        for (UUID id : this.players) {
+        for (UUID id : players) {
             Player p = Bukkit.getPlayer(id);
             if (getTeam(p) != team) {
                 toChoose.add(p);
             }
         }
+
         if (toChoose.size() == 0) {
             return null;
         }
@@ -726,69 +871,72 @@ public class Arena {
      *
      * @param onEnable
      *         (boolean) If it's called in onEnable.
-     * @return void
      */
     public void resetArena(boolean onEnable) {
         if (!onEnable) {
             //Removes all potion-effects on players
-            if (this.getPlayers().size() > 0) {
-                for (UUID id : this.getPlayers()) {
-                    Player p = Bukkit.getPlayer(id);
-                    Collection<PotionEffect> eff = p.getActivePotionEffects();
-                    for (PotionEffect ef : eff) {
-                        p.removePotionEffect(ef.getType());
+            if (getPlayers().size() > 0) {
+                for (UUID id : getPlayers()) {
+                    Player player = Bukkit.getPlayer(id);
+                    Collection<PotionEffect> effects = player.getActivePotionEffects();
+                    for (PotionEffect effect : effects) {
+                        player.removePotionEffect(effect.getType());
                     }
-                    plugin.itemHandler.cursed.remove(p);
+                    plugin.itemHandler.cursed.remove(player);
                 }
             }
+
             //Removes all blocks placed in-game
-            if (this.getGameBlocks().size() > 0) {
+            if (getGameBlocks().size() > 0) {
                 List<Block> toRemove = new ArrayList<>();
-                toRemove.addAll(this.getGameBlocks());
-                for (Location loc : this.getLandmines().keySet()) {
-                    toRemove.add(loc.getBlock());
+                toRemove.addAll(getGameBlocks());
+                for (Location location : getLandmines().keySet()) {
+                    toRemove.add(location.getBlock());
                 }
-                for (Block b : toRemove) {
-                    b.setType(Material.AIR);
+                for (Block block : toRemove) {
+                    block.setType(Material.AIR);
                 }
             }
+
             //Removs all wolfs
-            if (this.getGameWolfs().size() > 0) {
-                for (Wolf w : this.getGameWolfs()) {
-                    if (w != null) {
-                        w.setHealth(0);
+            if (getGameWolfs().size() > 0) {
+                for (Wolf wolf : getGameWolfs()) {
+                    if (wolf != null) {
+                        wolf.setHealth(0);
                     }
                 }
             }
-            //Removes all items and
-            if (this.getCrystalSpawns().size() > 0) {
-                List<Entity> toRemove = new ArrayList<Entity>();
-                for (Entity e : this.getCrystalSpawns().get(0).getWorld().getEntities()) {
-                    if ((e instanceof Item || e instanceof ExperienceOrb || e instanceof Arrow || e instanceof EnderCrystal ||
-                            e instanceof LivingEntity) && !(e instanceof Player)) {
+
+            //Removes all items and crystals
+            if (getCrystalSpawns().size() > 0) {
+                List<Entity> toRemove = new ArrayList<>();
+                for (Entity e : getCrystalSpawns().get(0).getWorld().getEntities()) {
+                    if ((e instanceof Item || e instanceof ExperienceOrb || e instanceof Arrow ||
+                            e instanceof EnderCrystal || e instanceof LivingEntity) &&
+                            !(e instanceof Player)) {
                         if (plugin.prot.isInProtectedArena(e.getLocation())) {
                             toRemove.add(e);
                         }
                     }
                 }
-                for (Entity e : toRemove) {
-                    e.remove();
+                for (Entity entity : toRemove) {
+                    entity.remove();
                 }
             }
         }
 
-        this.gameCrystals.clear();
-        this.count = this.plugin.getConfig().getInt("arena.countdown");
-        this.isCounting = false;
-        this.timeLeft = this.plugin.getConfig().getInt("arena.game-length");
-        this.inGame = false;
-        this.afterCount = plugin.getConfig().getInt("arena.after-game");
-        this.isEndGame = false;
-        this.crystalLocations.clear();
-        this.gameBlocks.clear();
+        gameCrystals.clear();
+        count = plugin.getConfig().getInt("arena.countdown");
+        isCounting = false;
+        timeLeft = this.plugin.getConfig().getInt("arena.game-length");
+        inGame = false;
+        afterCount = plugin.getConfig().getInt("arena.after-game");
+        isEndGame = false;
+        crystalLocations.clear();
+        gameBlocks.clear();
         initializeScoreboard();
-        this.gameWolfs.clear();
-        this.landmines.clear();
+        gameWolfs.clear();
+        landmines.clear();
         removePlayers();
 
         plugin.signHandler.updateSigns();
@@ -797,10 +945,11 @@ public class Arena {
     /**
      * Get the scoreboard of the arena.
      *
-     * @return (Scoreboard) Scoreboard of the arena
+     * @return Scoreboard of the arena
+     * @see Arena#score
      */
     public Scoreboard getScoreboard() {
-        return this.score;
+        return score;
     }
 
     /**
@@ -808,27 +957,27 @@ public class Arena {
      * resetting his/her scoreboard and restoring his/her inventory.
      *
      * @param p
-     *         (Player) The player you want to remove from the arena.
+     *         The player you want to remove from the arena.
      */
     public void removePlayer(Player p) {
         if (!this.spectators.contains(p.getUniqueId())) {
-            for (UUID id : this.getPlayers()) {
+            for (UUID id : getPlayers()) {
                 Player player = Bukkit.getPlayer(id);
                 player.sendMessage(Broadcast.TAG + Broadcast.get("arena.leave")
-                        .replace("%player%", Teams.getTeamChatColour(this.getTeam(p)) + p.getName())
-                        .replace("%count%", "(" + (this.getPlayers().size() - 1) + "/" + this.getMaxPlayers() + ")"));
+                        .replace("%player%", Teams.getTeamChatColour(getTeam(p)) + p.getName())
+                        .replace("%count%", "(" + (getPlayers().size() - 1) + "/" + getMaxPlayers() + ")"));
             }
         }
 
         this.players.remove(p.getUniqueId());
-        for (Team t : this.sTeams) {
-            if (t.hasPlayer((OfflinePlayer)p)) {
-                t.removePlayer((OfflinePlayer)p);
+        for (Team team : sTeams) {
+            if (team.hasPlayer((OfflinePlayer)p)) {
+                team.removePlayer((OfflinePlayer)p);
             }
         }
 
-        for (PotionEffect pe : p.getActivePotionEffects()) {
-            p.removePotionEffect(pe.getType());
+        for (PotionEffect potionEffect : p.getActivePotionEffects()) {
+            p.removePotionEffect(potionEffect.getType());
         }
 
         try {
@@ -840,7 +989,7 @@ public class Arena {
 
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
         p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        this.playerTeams.remove(p.getUniqueId());
+        playerTeams.remove(p.getUniqueId());
         plugin.im.restoreInventory(p);
         plugin.im.playerClass.remove(p.getUniqueId());
         this.spectators.remove(p.getUniqueId());
@@ -853,8 +1002,8 @@ public class Arena {
         p.setFireTicks(0);
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
 
-        if (this.spectatorTeam.getPlayers().contains(p)) {
-            this.spectatorTeam.removePlayer(p);
+        if (spectatorTeam.getPlayers().contains(p)) {
+            spectatorTeam.removePlayer(p);
         }
 
         plugin.signHandler.updateSigns();
@@ -865,26 +1014,26 @@ public class Arena {
      * scoreboard and give the in-game inventory.
      *
      * @param p
-     *         (Player) The player to add
+     *         The player to add
      * @param teamId
-     *         (int) The team to put the player in
+     *         The team to put the player in
      * @param spectate
-     *         (boolean) True if the player is spectating
-     * @return (boolean) True if joined, False if not joined
+     *         True if the player is spectating
+     * @return True if joined, False if not joined
      */
     public boolean addPlayer(Player p, int teamId, boolean spectate) {
         PlayerJoinArenaEvent event = new PlayerJoinArenaEvent(p, this, spectate);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            if (!this.isFull() || plugin.getArenaManager().getArena(p.getUniqueId()).getSpectators()
+            if (!isFull() || plugin.getArenaManager().getArena(p.getUniqueId()).getSpectators()
                     .contains(p.getUniqueId())) {
-                if (this.isEnabled()) {
+                if (isEnabled()) {
                     try {
-                        this.playerTeams.put(p.getUniqueId(), spectate ? -1 : teamId);
+                        playerTeams.put(p.getUniqueId(), spectate ? -1 : teamId);
 
                         if (!spectate) {
-                            this.players.add(p.getUniqueId());
-                            this.sTeams[teamId].addPlayer((OfflinePlayer)p);
+                            players.add(p.getUniqueId());
+                            sTeams[teamId].addPlayer((OfflinePlayer)p);
                         }
                         p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                         p.setScoreboard(this.score);
@@ -894,44 +1043,44 @@ public class Arena {
                             preSpecGamemodes.put(p.getUniqueId(), p.getGameMode());
                             p.setGameMode(GameMode.SPECTATOR);
                             p.setAllowFlight(true);
-                            this.getSpectators().add(p.getUniqueId());
+                            getSpectators().add(p.getUniqueId());
                             p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 127));
                             p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE, 127));
                             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, 127));
                             p.sendMessage(Broadcast.TAG + Broadcast.get("arena.spectate")
                                     .replace("%arena%", this.getName()));
-                            this.spectatorTeam.addPlayer(p);
+                            spectatorTeam.addPlayer(p);
                         }
 
                         if (!spectate) {
                             try {
-                                if (this.getLobbySpawns()[teamId] == null) {
-                                    p.teleport(this.getLobbySpawns()[0]);
+                                if (getLobbySpawns()[teamId] == null) {
+                                    p.teleport(getLobbySpawns()[0]);
                                 }
                                 else {
-                                    p.teleport(this.getLobbySpawns()[teamId]);
+                                    p.teleport(getLobbySpawns()[teamId]);
                                 }
                             }
                             catch (Exception ignored) {
                             }
                         }
                         else {
-                            if (this.getPlayerSpawns().size() > 0) {
-                                p.teleport(this.getPlayerSpawns().get(0));
+                            if (getPlayerSpawns().size() > 0) {
+                                p.teleport(getPlayerSpawns().get(0));
                             }
                             else {
-                                p.teleport(this.getTeamSpawns().get(0).get(0));
+                                p.teleport(getTeamSpawns().get(0).get(0));
                             }
                         }
 
                         plugin.menuPT.updateMenu(this);
 
                         if (!spectate) {
-                            for (UUID id : this.getPlayers()) {
+                            for (UUID id : getPlayers()) {
                                 Player player = Bukkit.getPlayer(id);
                                 player.sendMessage(Broadcast.TAG + Broadcast.get("arena.join")
                                         .replace("%player%", Teams.getTeamChatColour(teamId) + p.getName())
-                                        .replace("%count%", "(" + this.getPlayers().size() + "/" + this.getMaxPlayers() + ")"));
+                                        .replace("%count%", "(" + getPlayers().size() + "/" + getMaxPlayers() + ")"));
                             }
                         }
 
@@ -958,13 +1107,13 @@ public class Arena {
      * Removes ALL players from the arena and resets their inventory etc.
      */
     public void removePlayers() {
-        for (UUID id : this.players) {
-            Player p = Bukkit.getPlayer(id);
+        for (UUID id : players) {
+            Player player = Bukkit.getPlayer(id);
             try {
-                p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-                plugin.im.restoreInventory(p);
+                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                plugin.im.restoreInventory(player);
                 try {
-                    p.teleport(plugin.am.getLobby());
+                    player.teleport(plugin.am.getLobby());
                 }
                 catch (Exception e) {
                     plugin.getLogger().info("Lobby-spawn not set!");
@@ -974,36 +1123,36 @@ public class Arena {
             catch (Exception ignored) {
             }
         }
-        this.players.clear();
+        players.clear();
 
-        for (UUID id : this.getSpectators()) {
-            Player p = Bukkit.getPlayer(id);
+        for (UUID id : getSpectators()) {
+            Player player = Bukkit.getPlayer(id);
             try {
-                p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-                plugin.im.restoreInventory(p);
-                p.setGameMode(preSpecGamemodes.get(p.getUniqueId()));
-                preSpecGamemodes.remove(p.getUniqueId());
+                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+                plugin.im.restoreInventory(player);
+                player.setGameMode(preSpecGamemodes.get(player.getUniqueId()));
+                preSpecGamemodes.remove(player.getUniqueId());
                 try {
-                    p.teleport(plugin.am.getLobby());
+                    player.teleport(plugin.am.getLobby());
                 }
                 catch (Exception e) {
                     plugin.getLogger().info("Lobby-spawn not set!");
                 }
                 finally {
-                    p.removePotionEffect(PotionEffectType.INVISIBILITY);
-                    p.removePotionEffect(PotionEffectType.WEAKNESS);
-                    p.removePotionEffect(PotionEffectType.SLOW_DIGGING);
+                    player.removePotionEffect(PotionEffectType.INVISIBILITY);
+                    player.removePotionEffect(PotionEffectType.WEAKNESS);
+                    player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
                 }
 
             }
             catch (Exception ignored) {
             }
         }
-        this.spectators.clear();
+        spectators.clear();
 
-        for (Team t : this.sTeams) {
-            for (OfflinePlayer op : t.getPlayers()) {
-                t.removePlayer(op);
+        for (Team team : sTeams) {
+            for (OfflinePlayer op : team.getPlayers()) {
+                team.removePlayer(op);
             }
         }
     }
@@ -1011,162 +1160,175 @@ public class Arena {
     /**
      * Gets a list of all players currently in the arena.
      *
-     * @return (PlayerList) The players in the arena
+     * @return The players in the arena
+     * @see Arena#players
      */
     public List<UUID> getPlayers() {
-        return this.players;
+        return players;
     }
 
     /**
      * Removes all possible Item-spawnpoints from the arena
      */
     public void clearItemSpawns() {
-        this.itemSpawns.clear();
+        itemSpawns.clear();
     }
 
     /**
      * Removes a specific Item-spawnpoint from the arena
      *
      * @param loc
-     *         (Location) The spawnpoint-location you'd like to remove
+     *         The spawnpoint-location you'd like to remove
      */
     public void removeItemSpawn(Location loc) {
-        this.itemSpawns.remove(loc);
+        itemSpawns.remove(loc);
     }
 
     /**
      * Removes a specific Item-spawnpoint from the arena
      *
      * @param index
-     *         (int) The spawnpoint-index you'd like to remove
+     *         The spawnpoint-index you'd like to remove
      */
     public void removeItemSpawn(int index) {
-        this.itemSpawns.remove(index);
+        itemSpawns.remove(index);
     }
 
     /**
      * Adds an Item-spawnpoint to the arena
      *
      * @param loc
-     *         (Location) The spawnpoint-location you'd like to add
+     *         The spawnpoint-location you'd like to add
      */
     public void addItemSpawn(Location loc) {
-        this.itemSpawns.add(loc);
+        itemSpawns.add(loc);
     }
 
     /**
      * Sets all the Item-spawns for this arena
      *
      * @param spawns
-     *         (LocationList) All spawn-locations
+     *         All spawn-locations
      */
     public void setItemSpawns(List<Location> spawns) {
-        this.itemSpawns = spawns;
+        itemSpawns = spawns;
     }
 
     /**
      * Sets all the Item-spawns for this arena
      *
      * @param spawns
-     *         (Location[]) All spawn-locations
+     *         All spawn-locations
      */
     public void setItemSpawns(Location[] spawns) {
-        this.itemSpawns.clear();
-        Collections.addAll(this.itemSpawns, spawns);
+        itemSpawns.clear();
+        Collections.addAll(itemSpawns, spawns);
     }
 
     /**
      * Get a list containing all the Item-spawn locations
      *
-     * @return (LocationList) All the item-spawn locations
+     * @return All the item-spawn locations
+     * @see Arena#itemSpawns
      */
     public List<Location> getItemSpawns() {
-        return this.itemSpawns;
+        return itemSpawns;
     }
 
     /**
      * Removes all crystal-spawns from the arena
+     *
+     * @see Arena#crystalSpawns
      */
     public void clearCrystalSpawns() {
-        this.crystalSpawns.clear();
+        crystalSpawns.clear();
     }
 
     /**
      * Remove a specific crystal-spawn location
      *
      * @param loc
-     *         (Location) The location you'd like to remove
+     *         The location you'd like to remove
+     * @see Arena#crystalSpawns
      */
     public void removeCrystalSpawn(Location loc) {
-        this.crystalSpawns.remove(loc);
+        crystalSpawns.remove(loc);
     }
 
     /**
      * Remove a specific crystal-spawn location
      *
      * @param index
-     *         (int) The index in the location-list
+     *         The index in the location-list
+     * @see Arena#crystalSpawns
      */
     public void removeCrystalSpawn(int index) {
-        this.crystalSpawns.remove(index);
+        crystalSpawns.remove(index);
     }
 
     /**
      * Add a crystal spawn.
      *
      * @param loc
-     *         (Location) The location you want to add
+     *         The location you want to add
+     * @see Arena#crystalSpawns
      */
     public void addCrystalSpawn(Location loc) {
-        this.crystalSpawns.add(loc);
+        crystalSpawns.add(loc);
     }
 
     /**
      * Set the crystal Spawns from a list
      *
      * @param spawns
-     *         (LocationList) List containing all the spawnpoints
+     *         List containing all the spawnpoints
+     * @see Arena#crystalSpawns
      */
     public void setCrystalSpawns(List<Location> spawns) {
-        this.crystalSpawns = spawns;
+        crystalSpawns = spawns;
     }
 
     /**
      * Set the crystal Spawns from an array
      *
      * @param spawns
-     *         (Location[]) Array containing all the spawnpoints
+     *         Array containing all the spawnpoints
+     * @see Arena#crystalSpawns
      */
     public void setCrystalSpawns(Location[] spawns) {
-        this.crystalSpawns.clear();
-        Collections.addAll(this.crystalSpawns, spawns);
+        crystalSpawns.clear();
+        Collections.addAll(crystalSpawns, spawns);
     }
 
     /**
      * Get the crystal spawns.
      *
-     * @return (LocationList) List containing all the crystal-spawn locations
+     * @return List containing all the crystal-spawn locations
+     * @see Arena#crystalSpawns
      */
     public List<Location> getCrystalSpawns() {
-        return this.crystalSpawns;
+        return crystalSpawns;
     }
 
     /**
      * Clear playerSpawns.
+     *
+     * @see Arena#playerSpawns
      */
     public void clearPlayerSpawns() {
-        this.playerSpawns.clear();
+        playerSpawns.clear();
     }
 
     /**
      * Remove a player spawn.
      *
      * @param loc
-     *         (Location) Location to remove.
+     *         Location to remove.
+     * @see Arena#playerSpawns
      */
     public void removePlayerSpawn(Location loc) {
-        if (this.playerSpawns.contains(loc)) {
-            this.playerSpawns.remove(loc);
+        if (playerSpawns.contains(loc)) {
+            playerSpawns.remove(loc);
         }
     }
 
@@ -1174,85 +1336,92 @@ public class Arena {
      * Remove a player spawn.
      *
      * @param index
-     *         (int) Location to remove (index).
+     *         Location to remove (index).
+     * @see Arena#playerSpawns
      */
     public void removePlayerSpawn(int index) {
-        this.playerSpawns.remove(index);
+        playerSpawns.remove(index);
     }
 
     /**
      * Add a player spawn.
      *
      * @param loc
-     *         (Location) A new Player-spawnpoint
+     *         A new Player-spawnpoint
+     * @see Arena#playerSpawns
      */
     public void addPlayerSpawn(Location loc) {
-        this.playerSpawns.add(loc);
+        playerSpawns.add(loc);
     }
 
     /**
      * Set the player Spawns
      *
      * @param spawns
-     *         (LocationList) A list containing all the player-spawns.
+     *         A list containing all the player-spawns.
+     * @see Arena#playerSpawns
      */
     public void setPlayerSpawns(List<Location> spawns) {
-        this.playerSpawns = spawns;
+        playerSpawns = spawns;
     }
 
     /**
      * Set the player Spawns
      *
      * @param spawns
-     *         (Location[]) An array containing all the player-spawns.
+     *         An array containing all the player-spawns.
+     * @see Arena#playerSpawns
      */
     public void setPlayerSpawns(Location[] spawns) {
-        this.playerSpawns.clear();
-        Collections.addAll(this.playerSpawns, spawns);
+        playerSpawns.clear();
+        Collections.addAll(playerSpawns, spawns);
     }
 
     /**
      * Get the player spawns.
      *
-     * @return (LocationList) A list containing all the player-spawnpoints
+     * @return A list containing all the player-spawnpoints
+     * @see Arena#playerSpawns
      */
     public List<Location> getPlayerSpawns() {
-        return this.playerSpawns;
+        return playerSpawns;
     }
 
     /**
      * Set the time left in the game.
      *
      * @param timeInSeconds
-     *         (int) The time in seconds the game will last
+     *         The time in seconds the game will last
+     * @see Arena#timeLeft
      */
     public void setTimeLeft(int timeInSeconds) {
-        this.timeLeft = timeInSeconds;
+        timeLeft = timeInSeconds;
     }
 
     /**
      * Get the time left in the arena.
      *
-     * @return (int) The time left in seconds
+     * @return The time left in seconds
+     * @see Arena#timeLeft
      */
     public int getTimeLeft() {
-        return this.timeLeft;
+        return timeLeft;
     }
 
     /**
      * Checks if the arena is in-game.
      *
-     * @return (boolean) true if in-game, false if not in-game.
+     * @return true if in-game, false if not in-game.
+     * @see Arena#inGame
      */
     public boolean isInGame() {
-        return this.inGame;
+        return inGame;
     }
 
     /**
      * Set the in-game status of the game.
      *
-     * @param inGame
-     *         (boolean) True/False
+     * @see Arena#inGame
      */
     public void setInGame(boolean inGame) {
         this.inGame = inGame;
@@ -1262,20 +1431,20 @@ public class Arena {
     /**
      * Get if the countdown is happening.
      *
-     * @return (boolean) True if the countdown has started. False if not.
+     * @return True if the countdown has started. False if not.
+     * @see Arena#isCounting
      */
     public boolean isCounting() {
-        return this.isCounting;
+        return isCounting;
     }
 
     /**
      * Set if countdown is happening.
      *
-     * @param isCountingB
-     *         (boolean)
+     * @see Arena#isCounting
      */
     public void setIsCounting(boolean isCountingB) {
-        this.isCounting = isCountingB;
+        isCounting = isCountingB;
         plugin.signHandler.updateSigns();
     }
 
@@ -1283,7 +1452,8 @@ public class Arena {
      * Set the countdown.
      *
      * @param seconds
-     *         (int) The amount of seconds to set the countdown to (-1 for default countdown).
+     *         The amount of seconds to set the countdown to (-1 for default countdown).
+     * @see Arena#count
      */
     public void setCountdown(int seconds) {
         this.count = seconds;
@@ -1292,18 +1462,22 @@ public class Arena {
     /**
      * Get the amount of seconds left.
      *
-     * @return (int) Seconds left.
+     * @return Seconds left.
+     * @see Arena#count
      */
     public int getCountdown() {
-        return this.count;
+        return count;
     }
 
     /**
      * Sets the lobby spawns of the teams.
      * The team-id (0, 1, 2, 3, 4, 5, 6, 7) represents the spawn of the specific team.
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam}.
      *
      * @param locations
-     *         (Location[]) The locations.
+     *         The locations.
+     * @see Arena#lobbySpawn
      */
     public void setLobbySpawns(Location[] locations) {
         this.lobbySpawn = locations;
@@ -1312,18 +1486,22 @@ public class Arena {
     /**
      * Gets the team-lobby spawns of the arena.
      * The team-id (0, 1, 2, 3, 4, 5, 6, 7) represents the spawn of the specific team.
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam}
      *
-     * @return (Location[]) The lobbyspawn-array
+     * @return The lobbyspawn-array
+     * @see Arena#lobbySpawn
      */
     public Location[] getLobbySpawns() {
-        return this.lobbySpawn;
+        return lobbySpawn;
     }
 
     /**
      * Toggles the crystalquest.vip requirement on the arena.
      *
      * @param isVip
-     *         (boolean) True if VIP is needed. False if VIP is not needed.
+     *         True if VIP is needed. False if VIP is not needed.
+     * @see Arena#vip
      */
     public void setVip(boolean isVip) {
         this.vip = isVip;
@@ -1332,41 +1510,46 @@ public class Arena {
     /**
      * Checks if it is an arena only for people with the crystalquest.vip node.
      *
-     * @return (boolean) True if it is VIP-only, False if it isn't
+     * @return True if it is VIP-only, False if it isn't
+     * @see Arena#vip
      */
     public boolean isVip() {
-        return this.vip;
+        return vip;
     }
 
     /**
      * Gets the arena ID.
      *
-     * @return (int) The arena ID
+     * @return The arena ID
+     * @see Arena#id
      */
     public int getId() {
-        return this.id;
+        return id;
     }
 
     /**
      * Gets the name of the arena.
      *
-     * @return (String) Arena-name
+     * @return Arena-name
+     * @see Arena#name
      */
     public String getName() {
-        return this.name;
+        return name;
     }
 
     /**
      * Sets the name of the arena.
      *
      * @param name
-     *         (String) The new arena-name.
-     * @return (boolean) true when the name is succesfully applied, false when the name already
-     * exists.
+     *         The new arena-name.
+     * @return true when the name is succesfully applied, false when the name already exists.
+     * @see Arena#name
      */
     public boolean setName(String name) {
+        // Lol. I didn't bother to use regex.
+        // You gotta admire young people's resourcefulness.
         try {
-            int nn = Integer.parseInt(name);
+            Integer.parseInt(name);
             return false;
         }
         catch (Exception ignored) {
@@ -1379,70 +1562,78 @@ public class Arena {
             plugin.signHandler.updateSigns();
             return true;
         }
-        else {
-            return false;
-        }
+
+        return false;
     }
 
     /**
      * Sets the amount of teams available for the arena.
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam}.
      *
      * @param amountOfTeams
-     *         (int) The amount of teams used to play this arena.
-     * @return (boolean) true if applied succesful, false if amountOfTeams is greater than 6.
+     *         The amount of teams used to play this arena.
+     * @return true if applied succesful, false if amountOfTeams is greater than 6.
      */
     public boolean setTeams(int amountOfTeams) {
         if (amountOfTeams > 8) {
             return false;
         }
-        else {
-            this.teams = amountOfTeams;
-            return true;
-        }
+
+        this.teams = amountOfTeams;
+        return true;
     }
 
     /**
      * Returns the amount of teams available for the arena.
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam}.
      *
-     * @return (int) The amount of teams of the arena.
+     * @return The amount of teams of the arena.
+     * @see Arena#teams
      */
     public int getTeamCount() {
-        return this.teams;
+        return teams;
     }
 
     /**
      * Get the minimum amount of players for an arena to start.
      *
-     * @return (int) The minimum amount of players to start.
+     * @return The minimum amount of players to start.
+     * @see Arena#minPlayers
      */
     public int getMinPlayers() {
-        return this.minPlayers;
+        return minPlayers;
     }
 
     /**
      * Set the minimum amount of players for an arena to start.
      *
      * @param minPlayers
-     *         (int) The minimum amount of players.
+     *         The minimum amount of players.
+     * @see Arena#minPlayers
      */
     public void setMinPlayers(int minPlayers) {
         this.minPlayers = minPlayers;
+        plugin.signHandler.updateSigns();
     }
 
     /**
      * Get the maximum amount of players for an arena to start.
      *
-     * @return (int) The maximum amount of players to start.
+     * @return The maximum amount of players to start.
+     * @see Arena#maxPlayers
      */
     public int getMaxPlayers() {
-        return this.maxPlayers;
+        return maxPlayers;
     }
 
     /**
      * Set the maximum amount of players for an arena to start.
      *
      * @param maxPlayers
-     *         (int) The maximum amount of players.
+     *         The maximum amount of players.
+     * @see Arena#maxPlayers
      */
     public void setMaxPlayers(int maxPlayers) {
         this.maxPlayers = maxPlayers;
@@ -1457,34 +1648,34 @@ public class Arena {
         Bukkit.getPluginManager().callEvent(e);
 
         if (!e.isCancelled()) {
-            for (UUID id : this.getPlayers()) {
-                Player pl = Bukkit.getPlayer(id);
-                plugin.im.setClassInventory(pl);
-                pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.started"));
-                pl.playSound(pl.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20F, 20F);
-                pl.sendMessage(Broadcast.TAG + Broadcast.get("arena.using-class")
+            for (UUID id : getPlayers()) {
+                Player player = Bukkit.getPlayer(id);
+                plugin.im.setClassInventory(player);
+                player.sendMessage(Broadcast.TAG + Broadcast.get("arena.started"));
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20F, 20F);
+                player.sendMessage(Broadcast.TAG + Broadcast.get("arena.using-class")
                         .replace("%class%", SMeth.setColours(plugin.getConfig().getString(
-                                "kit." + plugin.im.playerClass.get(pl.getUniqueId()) + ".name"))));
+                                "kit." + plugin.im.playerClass.get(player.getUniqueId()) + ".name"))));
             }
 
-            this.setInGame(true);
+            setInGame(true);
 
             Random ran = new Random();
 
-            for (UUID id : this.getPlayers()) {
-                Player p = Bukkit.getPlayer(id);
+            for (UUID id : getPlayers()) {
+                Player player = Bukkit.getPlayer(id);
                 boolean isTeamSpawns = false;
-                for (int i = 0; i < this.getTeamCount(); i++) {
-                    if (this.getTeamSpawns().get(i).size() > 0) {
+                for (int i = 0; i < getTeamCount(); i++) {
+                    if (getTeamSpawns().get(i).size() > 0) {
                         isTeamSpawns = true;
                     }
                 }
                 if (isTeamSpawns) {
-                    int team = this.getTeam(p);
-                    p.teleport(getTeamSpawns().get(team).get(ran.nextInt(getTeamSpawns().get(team).size())));
+                    int team = getTeam(player);
+                    player.teleport(getTeamSpawns().get(team).get(ran.nextInt(getTeamSpawns().get(team).size())));
                 }
                 else {
-                    p.teleport((this.getPlayerSpawns().get(ran.nextInt(this.getPlayerSpawns().size()))));
+                    player.teleport((getPlayerSpawns().get(ran.nextInt(getPlayerSpawns().size()))));
                 }
             }
 
@@ -1495,41 +1686,46 @@ public class Arena {
 
     /**
      * Adds points to a team
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam}.
      *
      * @param teamId
-     *         (int) The team-ID of the team.
+     *         The team-ID of the team.
      * @param score
-     *         (int) The points to add.
+     *         The points to add.
      */
     public void addScore(int teamId, int score) {
-        this.sScore[teamId].setScore(this.sScore[teamId].getScore() + score);
+        sScore[teamId].setScore(sScore[teamId].getScore() + score);
     }
 
     /**
      * Sets the score of a team
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam}.
      *
      * @param teamId
-     *         (int) The team-ID of the team.
+     *         The team-ID of the team.
      * @param score
-     *         (int) The new score.
+     *         The new score.
      */
     public void setScore(int teamId, int score) {
-        this.sScore[teamId].setScore(score);
+        sScore[teamId].setScore(score);
     }
 
     /**
      * Gets the score of a team
+     * <p>
+     * TODO: Replace by {@link CrystalQuestTeam}.
      *
      * @param teamId
-     *         (int) The team-ID of the team.
-     * @return (int) The score
+     *         The team-ID of the team.
+     * @return The score
      */
     public int getScore(int teamId) {
         if (this.sScore == null) {
-            return -1;
+            return Integer.MIN_VALUE;
         }
-        else {
-            return this.sScore[teamId].getScore();
-        }
+
+        return this.sScore[teamId].getScore();
     }
 }

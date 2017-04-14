@@ -79,7 +79,7 @@ public class Ability implements Listener {
                                 plugin.economy.getLevel(p, "debuff", "upgrade"), false);
                         int duration = (int)(218 * multiplier);
 
-                        for (OfflinePlayer olTarget : a.getTeams()[targetTeam].getPlayers()) {
+                        for (OfflinePlayer olTarget : a.getScoreboardTeams()[targetTeam].getPlayers()) {
                             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                                 if (onlinePlayer == olTarget) {
                                     if (lightning > 0) {

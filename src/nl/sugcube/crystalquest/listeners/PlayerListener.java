@@ -369,7 +369,7 @@ public class PlayerListener implements Listener {
         }
 
         if (a.isInGame()) {
-            for (Team t : a.getTeams()) {
+            for (Team t : a.getScoreboardTeams()) {
                 if (t.getPlayers().size() == a.getPlayers().size()) {
                     a.declareWinner();
                     a.setEndGame(true);

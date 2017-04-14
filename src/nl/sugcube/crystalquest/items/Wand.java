@@ -139,7 +139,7 @@ public class Wand implements Listener {
                     else if (getWandType(p.getInventory().getItemInMainHand()) == WandType.HEAL) {
                         if (p.getInventory().getItemInMainHand().getDurability() == (short)0) {
                             int team = plugin.getArenaManager().getTeam(p);
-                            for (OfflinePlayer pl : plugin.getArenaManager().getArena(p.getUniqueId()).getTeams()[team].getPlayers()) {
+                            for (OfflinePlayer pl : plugin.getArenaManager().getArena(p.getUniqueId()).getScoreboardTeams()[team].getPlayers()) {
                                 Player player = Bukkit.getPlayer(pl.getName());
 
                                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 8, 5));

@@ -196,7 +196,7 @@ public class EntityListener implements Listener {
                 if (e.getDamager() instanceof Player) {
                     Player pl = (Player)e.getDamager();
                     plugin.getArenaManager().getArena(pl.getUniqueId()).getGameCrystals().remove(e.getEntity());
-                    plugin.getArenaManager().getArena(pl.getUniqueId()).getGameCrystalMap().remove(e.getEntity());
+                    plugin.getArenaManager().getArena(pl.getUniqueId()).getCrystalLocations().remove(e.getEntity());
 
                     if (isValid) {
                         if (isOwnTeamCrystal((EnderCrystal)e.getEntity(), pl)) {

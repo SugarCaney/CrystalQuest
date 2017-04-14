@@ -32,7 +32,7 @@ public class ArenaListener implements Listener {
     @EventHandler
     public void onArenaStart(ArenaStartEvent e) {
         Arena a = e.getArena();
-        for (Team t : a.getTeams()) {
+        for (Team t : a.getScoreboardTeams()) {
             if (t.getPlayers().size() == a.getPlayers().size()) {
                 for (UUID id : a.getPlayers()) {
                     Player p = Bukkit.getPlayer(id);
