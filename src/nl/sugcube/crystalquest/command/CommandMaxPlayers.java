@@ -37,13 +37,13 @@ public class CommandMaxPlayers extends CrystalQuestCommand {
                 return;
             }
 
-            arena.setMinPlayers(Integer.parseInt(arguments[1]));
+            arena.setMaxPlayers(Integer.parseInt(arguments[1]));
             sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.maxplayers-set")
                     .replace("%arena%", arguments[0])
                     .replace("%amount%", arguments[1]));
         }
         catch (Exception e) {
-            sender.sendMessage(Broadcast.get("commands.minplayers-error"));
+            sender.sendMessage(Broadcast.get("commands.maxplayers-error"));
         }
     }
 

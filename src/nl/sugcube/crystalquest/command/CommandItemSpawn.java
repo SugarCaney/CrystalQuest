@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 public class CommandItemSpawn extends CrystalQuestCommand {
 
     public CommandItemSpawn() {
-        super("itemspawn", "commands.crystalspawn-usage", 1);
+        super("itemspawn", "commands.itemspawn-usage", 1);
 
         addPermissions(
                 "crystalquest.admin"
@@ -56,7 +56,7 @@ public class CommandItemSpawn extends CrystalQuestCommand {
             try {
                 arena.addItemSpawn(((Player)sender).getLocation().add(0, 1, 0));
                 sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.itemspawn-added")
-                        .replace("%no%", Integer.toString(arena.getCrystalSpawns().size()))
+                        .replace("%no%", Integer.toString(arena.getItemSpawns().size()))
                         .replace("%arena%", arguments[0]));
             }
             catch (Exception e) {

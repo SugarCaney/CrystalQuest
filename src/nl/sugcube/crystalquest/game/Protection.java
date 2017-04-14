@@ -95,8 +95,8 @@ public class Protection implements Listener {
                         return false;
                     }
 
-                    if ((loc.getX() + 1 >= p1X && loc.getX() - 1 <= p2X) || (loc.getX() - 1 <= p1X && loc.getX() + 1 >= p2X)) {
-                        if ((loc.getZ() + 1 >= p1Z && loc.getZ() - 1 <= p2Z) || (loc.getZ() - 1 <= p1Z && loc.getZ() + 1 >= p2Z)) {
+                    if ((loc.getX() + 2 >= p1X && loc.getX() - 2 <= p2X) || (loc.getX() - 2 <= p1X && loc.getX() + 2 >= p2X)) {
+                        if ((loc.getZ() + 2 >= p1Z && loc.getZ() - 2 <= p2Z) || (loc.getZ() - 2 <= p1Z && loc.getZ() + 2 >= p2Z)) {
                             return true;
                         }
                     }
