@@ -12,6 +12,7 @@ import nl.sugcube.crystalquest.events.TeamWinGameEvent;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.ArenaManager;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -118,6 +119,24 @@ public class PlayerListener implements Listener {
                 p.updateInventory();
             }
         }
+    }
+
+    @EventHandler
+    public void onCropsTrampled(PlayerInteractEvent event) {
+        if (event.getAction() != Action.PHYSICAL) {
+            return;
+        }
+
+        Block block = event.getClickedBlock();
+        if (!plugin.prot.isInProtectedArena(block.getLocation())) {
+            return;
+        }
+
+        if (block.getType() != Material.SOIL) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
     @EventHandler
