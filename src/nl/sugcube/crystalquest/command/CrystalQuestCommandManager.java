@@ -109,7 +109,7 @@ public class CrystalQuestCommandManager implements CommandExecutor, TabCompleter
                             pw.close();
                             plugin.reloadData();
                             plugin.getLogger().info("All data has been destructed!");
-                            plugin.am.arena.clear();
+                            plugin.am.arenas.clear();
                         }
                         catch (FileNotFoundException e) {
                             plugin.getLogger().info("Could not destroy data!");

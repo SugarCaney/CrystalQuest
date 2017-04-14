@@ -21,6 +21,9 @@ public final class SMeth {
      */
     public static Location toLocation(String locationString) {
         String[] s = locationString.split("%");
+        if (s.length < 3) {
+            return null;
+        }
 
         Location loc = new Location(Bukkit.getWorld(s[0]), Double.parseDouble(s[1]), Double.parseDouble(s[2]),
                 Double.parseDouble(s[3]));
@@ -56,6 +59,10 @@ public final class SMeth {
      * @return (String) The string that represents the location.
      */
     public static String toLocationString(Location loc) {
+        if (loc == null) {
+            return "null";
+        }
+
         return loc.getWorld().getName() + "%" + loc.getX() + "%" + loc.getY() + "%" + loc.getZ() + "%" +
                 loc.getPitch() + "%" + loc.getYaw();
     }

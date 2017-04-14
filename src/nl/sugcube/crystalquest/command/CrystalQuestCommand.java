@@ -9,7 +9,7 @@ import java.util.*;
 /**
  * A crystal quest command is a subcommand of the /cq command. Confusing? Don't think so.
  * <p>
- * For example "spectate [arena]" is a CrystalQuest command.
+ * For example "spectate [arenas]" is a CrystalQuest command.
  *
  * @author SugarCaney
  */

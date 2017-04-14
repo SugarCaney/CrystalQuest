@@ -75,13 +75,13 @@ public class Teams {
     }
 
     /**
-     * Gets all the players from an arena in a certain team.
+     * Gets all the players from an arenas in a certain team.
      *
      * @param arena
-     *         The arena to get the players from.
+     *         The arenas to get the players from.
      * @param teamId
      *         The teamId of the team to get the playres of.
-     * @return A list containing all the players in a given team in a given arena.
+     * @return A list containing all the players in a given team in a given arenas.
      */
     public static List<Player> getPlayersFromTeam(Arena arena, int teamId) {
         List<Player> players = new ArrayList<>();
@@ -96,16 +96,16 @@ public class Teams {
     }
 
     /**
-     * Gets the team-id matching the wool colour.
+     * Gets the team matching the wool colour.
      *
      * @param dataValue
      *         The datavalue of the wool.
-     * @return The ID of the corresponding team.
+     * @return The corresponding team.
      * @throws IllegalArgumentException
      *         When there is no team for the given data value.
      */
-    public static int getTeamFromDataValue(short dataValue) throws IllegalArgumentException {
-        return CrystalQuestTeam.valueOf(dataValue).getId();
+    public static CrystalQuestTeam getTeamFromDataValue(short dataValue) throws IllegalArgumentException {
+        return CrystalQuestTeam.valueOf(dataValue);
     }
 
     /**
@@ -117,8 +117,8 @@ public class Teams {
      * @throws IllegalArgumentException
      *         When there is no team with the given colour.
      */
-    public static int getDyeColourTeam(DyeColor colour) throws IllegalArgumentException {
-        return CrystalQuestTeam.valueOf(colour).getId();
+    public static CrystalQuestTeam getDyeColourTeam(DyeColor colour) throws IllegalArgumentException {
+        return CrystalQuestTeam.valueOf(colour);
     }
 
     /**
@@ -172,7 +172,7 @@ public class Teams {
      *         When there is no team with the given name.
      */
     public static int getTeamId(String name) throws IllegalArgumentException {
-        return CrystalQuestTeam.valueOf(name).getId();
+        return CrystalQuestTeam.valueOfName(name).getId();
     }
 
     /**

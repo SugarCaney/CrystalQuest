@@ -1,6 +1,7 @@
 package nl.sugcube.crystalquest.events;
 
 import nl.sugcube.crystalquest.game.Arena;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scoreboard.Team;
@@ -17,60 +18,61 @@ public class TeamWinGameEvent extends Event {
 
     private List<UUID> player;
     private Arena arena;
-    private int team;
+    private CrystalQuestTeam team;
     private int teamCount;
     private Team[] teams;
     private String teamName;
 
+    public TeamWinGameEvent(List<UUID> player, Arena arena, CrystalQuestTeam team, int teamCount,
+                            Team[] teams, String teamName) {
+        this.player = player;
+        this.arena = arena;
+        this.team = team;
+        this.teamCount = teamCount;
+        this.teams = teams;
+        this.teamName = teamName;
+    }
+
     /**
-     * @return (String) The name of the team who won.
+     * @return The name of the team who won.
      */
     public String getTeamName() {
-        return this.teamName;
+        return teamName;
     }
 
     /**
-     * @return (Team[]) The teams that were in the game.
+     * @return The teams that were in the game.
      */
     public Team[] getTeams() {
-        return this.teams;
+        return teams;
     }
 
     /**
-     * @return (int) The amount of teams that played the game.
+     * @return The amount of teams that played the game.
      */
     public int getTeamCount() {
-        return this.teamCount;
+        return teamCount;
     }
 
     /**
-     * @return (int) ID of the team the winning players is in
+     * @return The team that won.
      */
-    public int getTeam() {
-        return this.team;
+    public CrystalQuestTeam getTeam() {
+        return team;
     }
 
     /**
-     * @return (Arena) Get the arena the players won in
+     * @return Get the arenas the players won in
      */
     public Arena getArena() {
-        return this.arena;
+        return arena;
     }
 
     /**
      * @return (PlayerList) The players who won the game
      */
     public List<UUID> getPlayers() {
-        return this.player;
-    }
-
-    public TeamWinGameEvent(List<UUID> p, Arena a, int teamId, int tc, Team[] tms, String tn) {
-        this.player = p;
-        this.arena = a;
-        this.team = teamId;
-        this.teamCount = tc;
-        this.teams = tms;
-        this.teamName = tn;
+        return player;
     }
 
     public HandlerList getHandlers() {

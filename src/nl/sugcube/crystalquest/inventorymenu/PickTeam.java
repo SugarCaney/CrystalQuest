@@ -2,8 +2,8 @@ package nl.sugcube.crystalquest.inventorymenu;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.game.Arena;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -44,31 +44,32 @@ public class PickTeam {
     /**
      * Updates the menu to the new amount of available teams.
      *
-     * @param a
-     *         (Arena) The arena the menu is used for.
+     * @param arena
+     *         The arenas the menu is used for.
      */
-    @SuppressWarnings("deprecation")
-    public void updateMenu(Arena a) {
-        Inventory inv = a.getTeamMenu();
+    public void updateMenu(Arena arena) {
+        Inventory inv = arena.getTeamMenu();
         if (inv == null) {
             return;
         }
 
         inv.clear();
 
+        // Force even teams.
         if (plugin.getConfig().getBoolean("arena.force-even-teams")) {
-            for (int i : a.getSmallestTeams()) {
-                inv.addItem(this.getWool(i));
+            for (CrystalQuestTeam team : arena.getSmallestTeams()) {
+                inv.addItem(getWool(team));
             }
         }
+        // Pick between all teams.
         else {
-            for (int i = 0; i < a.getTeamCount(); i++) {
-                inv.addItem(this.getWool(i));
+            for (CrystalQuestTeam team : arena.getTeams()) {
+                inv.addItem(getWool(team));
             }
         }
 
         ItemStack[] contents = inv.getContents();
-        contents[8] = getRandom(a.getId());
+        contents[8] = getRandom();
         inv.setContents(contents);
 
         for (HumanEntity hem : inv.getViewers()) {
@@ -82,7 +83,7 @@ public class PickTeam {
      * @param player
      *         (Player) The target player.
      * @param a
-     *         (int) The arena
+     *         (int) The arenas
      */
     public void showMenu(Player player, Arena a) {
         player.openInventory(a.getTeamMenu());
@@ -91,11 +92,9 @@ public class PickTeam {
     /**
      * Get the item representing the Choose Random Team-item
      *
-     * @param arenaId
-     *         (int) The ID of the arena.
-     * @return (ItemStack) The Random-team item
+     * @return The Random-team item
      */
-    public ItemStack getRandom(int arenaId) {
+    public ItemStack getRandom() {
         ItemStack is = new ItemStack(Material.REDSTONE, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("menu.random-team"));
@@ -104,74 +103,18 @@ public class PickTeam {
     }
 
     /**
-     * Gets the team-selection wool
+     * Gets the team-selection wool.
      *
-     * @param teamId
-     *         (int) The ID of the team's wool.
-     * @return (ItemStack) The wool beloning to the given team.
+     * @param team
+     *         The team to get a wool block of.
+     * @return The wool beloning to the given team.
      */
-    public ItemStack getWool(int teamId) {
-        short damageValue = 0;
-
-        switch (teamId) {
-            case 0:
-                damageValue = 5;
-                break;
-            case 1:
-                damageValue = 1;
-                break;
-            case 2:
-                damageValue = 4;
-                break;
-            case 3:
-                damageValue = 14;
-                break;
-            case 4:
-                damageValue = 3;
-                break;
-            case 5:
-                damageValue = 2;
-                break;
-            case 6:
-                damageValue = 0;
-                break;
-            case 7:
-                damageValue = 15;
-                break;
-        }
-
+    public ItemStack getWool(CrystalQuestTeam team) {
+        short damageValue = team.getDataValueWool();
         ItemStack is = new ItemStack(Material.WOOL, 1, damageValue);
         ItemMeta im = is.getItemMeta();
-
-        switch (damageValue) {
-            case 5:
-                im.setDisplayName(Broadcast.get("menu.join") + Teams.GREEN_NAME);
-                break;
-            case 1:
-                im.setDisplayName(Broadcast.get("menu.join") + Teams.ORANGE_NAME);
-                break;
-            case 4:
-                im.setDisplayName(Broadcast.get("menu.join") + Teams.YELLOW_NAME);
-                break;
-            case 14:
-                im.setDisplayName(Broadcast.get("menu.join") + Teams.RED_NAME);
-                break;
-            case 3:
-                im.setDisplayName(Broadcast.get("menu.join") + Teams.BLUE_NAME);
-                break;
-            case 2:
-                im.setDisplayName(Broadcast.get("menu.join") + Teams.MAGENTA_NAME);
-                break;
-            case 0:
-                im.setDisplayName(Broadcast.get("menu.join") + Teams.WHITE_NAME);
-                break;
-            case 15:
-                im.setDisplayName(Broadcast.get("menu.join") + Teams.BLACK_NAME);
-                break;
-        }
-
+        im.setDisplayName(Broadcast.get("menu.join") + team.toString());
         is.setItemMeta(im);
-
         return is;
     }
 

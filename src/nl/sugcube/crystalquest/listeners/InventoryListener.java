@@ -2,6 +2,7 @@ package nl.sugcube.crystalquest.listeners;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.Classes;
@@ -39,7 +40,7 @@ public class InventoryListener implements Listener {
                         player.closeInventory();
 
                         Arena a = plugin.am.getArena(e.getInventory().getName().replace("Pick Team: ", ""));
-                        int teamId = 0;
+                        CrystalQuestTeam team = null;
                         String displayName = "";
 
                         if (e.getCurrentItem().hasItemMeta()) {
@@ -49,28 +50,28 @@ public class InventoryListener implements Listener {
                         }
 
                         if (displayName.contains(Teams.GREEN_NAME)) {
-                            teamId = 0;
+                            team = CrystalQuestTeam.GREEN;
                         }
                         else if (displayName.contains(Teams.ORANGE_NAME)) {
-                            teamId = 1;
+                            team = CrystalQuestTeam.ORANGE;
                         }
                         else if (displayName.contains(Teams.YELLOW_NAME)) {
-                            teamId = 2;
+                            team = CrystalQuestTeam.YELLOW;
                         }
                         else if (displayName.contains(Teams.RED_NAME)) {
-                            teamId = 3;
+                            team = CrystalQuestTeam.RED;
                         }
                         else if (displayName.contains(Teams.BLUE_NAME)) {
-                            teamId = 4;
+                            team = CrystalQuestTeam.BLUE;
                         }
                         else if (displayName.contains(Teams.MAGENTA_NAME)) {
-                            teamId = 5;
+                            team = CrystalQuestTeam.MAGENTA;
                         }
                         else if (displayName.contains(Teams.WHITE_NAME)) {
-                            teamId = 6;
+                            team = CrystalQuestTeam.WHITE;
                         }
                         else if (displayName.contains(Teams.BLACK_NAME)) {
-                            teamId = 7;
+                            team = CrystalQuestTeam.BLACK;
                         }
                         else if (displayName.contains("Random Team")) {
                             try {
@@ -78,8 +79,8 @@ public class InventoryListener implements Listener {
                                     Random ran = new Random();
                                     boolean isNotOk = true;
                                     while (isNotOk) {
-                                        teamId = a.getSmallestTeams().get(ran.nextInt(a.getSmallestTeams().size()));
-                                        if (a.getSmallestTeams().contains(teamId)) {
+                                        team = a.getSmallestTeams().get(ran.nextInt(a.getSmallestTeams().size()));
+                                        if (a.getSmallestTeams().contains(team)) {
                                             isNotOk = false;
                                         }
                                     }
@@ -90,7 +91,7 @@ public class InventoryListener implements Listener {
                             }
                         }
 
-                        a.addPlayer(player, teamId, false);
+                        a.addPlayer(player, team, false);
                         plugin.menuPT.updateMenus();
                     }
                     catch (Exception exeption) {
@@ -128,7 +129,7 @@ public class InventoryListener implements Listener {
                 }
             }
         }
-        else if (e.getInventory().getName().equalsIgnoreCase("Spectate an arena")) {
+        else if (e.getInventory().getName().equalsIgnoreCase("Spectate an arenas")) {
             if (e.getCurrentItem() != null) {
                 e.setCancelled(true);
 
@@ -141,7 +142,7 @@ public class InventoryListener implements Listener {
                         try {
                             a = plugin.am.getArena(e.getCurrentItem().getItemMeta().getDisplayName()
                                     .replace(ChatColor.AQUA + "Spectate ", ""));
-                            a.addPlayer((Player)e.getWhoClicked(), 0, true);
+                            a.addPlayer((Player)e.getWhoClicked(), CrystalQuestTeam.SPECTATOR, true);
                         }
                         catch (Exception ignored) {
                         }

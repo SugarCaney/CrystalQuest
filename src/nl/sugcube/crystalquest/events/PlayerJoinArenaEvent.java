@@ -26,14 +26,14 @@ public class PlayerJoinArenaEvent extends Event implements Cancellable {
     }
 
     /**
-     * @return Get the arena the player joined
+     * @return Get the arenas the player joined
      */
     public Arena getArena() {
         return this.arena;
     }
 
     /**
-     * @return The player who joined the arena
+     * @return The player who joined the arenas
      */
     public Player getPlayer() {
         return this.player;

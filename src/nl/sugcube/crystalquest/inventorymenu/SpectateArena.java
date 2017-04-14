@@ -45,7 +45,7 @@ public class SpectateArena {
         int arenas = am.getArenas().size();
 
         if (menu == null) {
-            menu = Bukkit.createInventory(null, 9, "Spectate an arena");
+            menu = Bukkit.createInventory(null, 9, "Spectate an arenas");
         }
 
         if (arenas > menu.getSize()) {
@@ -58,11 +58,11 @@ public class SpectateArena {
 
             if (menu != null) {
                 if (menu.getSize() < arenas) {
-                    menu = Bukkit.createInventory(null, invSize, "Spectate an arena");
+                    menu = Bukkit.createInventory(null, invSize, "Spectate an arenas");
                 }
             }
             else {
-                menu = Bukkit.createInventory(null, invSize, "Spectate an arena");
+                menu = Bukkit.createInventory(null, invSize, "Spectate an arenas");
             }
         }
 
@@ -75,11 +75,11 @@ public class SpectateArena {
     }
 
     /**
-     * Gives you the item stack representing the arena.
+     * Gives you the item stack representing the arenas.
      *
      * @param a
-     *         (Arena) The arena to retrieve the data from.
-     * @return (ItemStack) The wool representing the arena.
+     *         (Arena) The arenas to retrieve the data from.
+     * @return (ItemStack) The wool representing the arenas.
      */
     public ItemStack getItem(Arena a) {
         ItemStack is;

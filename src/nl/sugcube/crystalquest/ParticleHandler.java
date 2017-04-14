@@ -28,12 +28,8 @@ public class ParticleHandler implements Runnable {
     public void run() {
         try {
             for (Snowball ball : balls) {
-                FireworkEffect fe = FireworkEffect
-                        .builder()
-                        .withColor(
-                                plugin.im.getTeamColour(plugin
-                                        .getArenaManager().getTeam(
-                                                (Player)ball.getShooter())))
+                FireworkEffect fe = FireworkEffect.builder()
+                        .withColor(plugin.getArenaManager().getTeam((Player)ball.getShooter()).getColour())
                         .with(Type.BURST).build();
                 try {
                     playFirework(ball.getLocation(), fe);
@@ -43,7 +39,7 @@ public class ParticleHandler implements Runnable {
                 }
             }
         }
-        catch (Exception e) {
+        catch (Exception ignored) {
         }
     }
 

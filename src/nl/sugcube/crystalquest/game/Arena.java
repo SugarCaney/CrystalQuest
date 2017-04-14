@@ -16,8 +16,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.*;
 
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author SugarCaney
@@ -30,53 +30,50 @@ public class Arena {
     public CrystalQuest plugin;
 
     /**
-     * The maximum amount of players in the arena.
+     * The maximum amount of players in the arenas.
      * <p>
      * {@code -1} when this value is not set.
      */
     private int maxPlayers = -1;
 
     /**
-     * The minimum amount of players in the arena.
+     * The minimum amount of players in the arenas.
      * <p>
      * {@code -1} when this value is not set.
      */
     private int minPlayers = -1;
 
     /**
-     * The amount of teams that participate in the arena.
+     * The amount of teams that participate in the arenas.
      */
     private int teams = -1;
 
     /**
-     * The name of the arena.
+     * The name of the arenas.
      * <p>
      * {@code ""} when there is no name set.
      */
     private String name = "";
 
     /**
-     * The unique id of the arena.
+     * The unique id of the arenas.
      */
     private int id;
 
     /**
-     * Determines if the crystalquest.vip permission is required in order to play in the arena.
+     * Determines if the crystalquest.vip permission is required in order to play in the arenas.
      * <p>
      * {@code true} when required, {@code false} when not required.
      */
     private boolean vip;
 
     /**
-     * Array containing per team where the lobby spawn is. The value is mapped to the id of the
-     * team.
-     * <p>
-     * TODO: Convert to map.
+     * Map that stores per team what the spawn location is for the lobby.
      */
-    private Location[] lobbySpawn = new Location[8];
+    private Map<CrystalQuestTeam, Location> lobbySpawns = new HashMap<>();
 
     /**
-     * The amount of seconds it takes before the arena starts.
+     * The amount of seconds it takes before the arenas starts.
      */
     private int count;
 
@@ -93,9 +90,9 @@ public class Arena {
     private Scoreboard score;
 
     /**
-     * Contains whether the arena is in game or not.
+     * Contains whether the arenas is in game or not.
      * <p>
-     * {@code true} when the arena is ingame, {@code false} otherwise.
+     * {@code true} when the arenas is ingame, {@code false} otherwise.
      */
     private boolean inGame;
 
@@ -105,9 +102,9 @@ public class Arena {
     private int timeLeft;
 
     /**
-     * Whether the arena is enabled or disabled.
+     * Whether the arenas is enabled or disabled.
      * <p>
-     * {@code true} when the arena is enabled, {@code false} when disabled.
+     * {@code true} when the arenas is enabled, {@code false} when disabled.
      */
     private boolean enabled = true;
 
@@ -119,17 +116,17 @@ public class Arena {
     /**
      * Whether the game is over and is resetting or not.
      * <p>
-     * {@code true} when the arena is resetting, {@code false} otherwise.
+     * {@code true} when the arenas is resetting, {@code false} otherwise.
      */
     private boolean isEndGame = false;
 
     /**
-     * The two corner positions of the arena that define the protection.
+     * The two corner positions of the arenas that define the protection.
      */
     private Location[] protection = new Location[2];
 
     /**
-     * Whether double jump is enabled in this arena or not.
+     * Whether double jump is enabled in this arenas or not.
      * <p>
      * {@code true} when there is double jump, {@code false} when there is no double jump.
      */
@@ -156,36 +153,34 @@ public class Arena {
     private List<Location> itemSpawns = new ArrayList<>();
 
     /**
-     * List of all the wolfs that have been spawned in the arena.
+     * List of all the wolfs that have been spawned in the arenas.
      */
     private List<Wolf> gameWolfs = new ArrayList<>();
 
     /**
-     * List of all creepers that have been spawned in the arena.
+     * List of all creepers that have been spawned in the arenas.
      */
     private List<Creeper> gameCreepers = new ArrayList<>();
 
     /**
-     * List of all crystals that have been spawned in the arena.
+     * List of all crystals that have been spawned in the arenas.
      */
     private List<Entity> gameCrystals = new ArrayList<>();
 
     /**
-     * List of all UUIDs of players that are in the arena.
+     * List of all UUIDs of players that are in the arenas.
      */
     private List<UUID> players = new ArrayList<>();
 
     /**
-     * List of all UUIDs of players that are spectating the arena.
+     * List of all UUIDs of players that are spectating the arenas.
      */
     private List<UUID> spectators = new ArrayList<>();
 
     /**
-     * Map that maps every player's UUID to the id of the team which they are part of.
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam}
+     * Map that maps every player's UUID to the team which they are part of.
      */
-    private Map<UUID, Integer> playerTeams = new ConcurrentHashMap<>();
+    private Map<UUID, CrystalQuestTeam> playerTeams = new ConcurrentHashMap<>();
 
     /**
      * Map that maps every ender crystal to their location.
@@ -193,16 +188,14 @@ public class Arena {
     private Map<Entity, Location> crystalLocations = new ConcurrentHashMap<>();
 
     /**
-     * List of all blocks that are placed during the game in the arena.
+     * List of all blocks that are placed during the game in the arenas.
      */
     private List<Block> gameBlocks = new ArrayList<>();
 
     /**
-     * Map that maps the team ID to a list of all locations where a team can spawn.
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam}
+     * Map that maps the team to a list of all locations where their players can spawn.
      */
-    private Map<Integer, List<Location>> teamSpawns = new ConcurrentHashMap<>();
+    private Map<CrystalQuestTeam, List<Location>> teamSpawns = new ConcurrentHashMap<>();
 
     /**
      * Map that maps all locations of placed landmines to the UUID of the player that placed it.
@@ -210,12 +203,12 @@ public class Arena {
     private Map<Location, UUID> landmines = new ConcurrentHashMap<>();
 
     /**
-     * Map that maps the UUID of a player to the gamemode which they had before entering the arena.
+     * Map that maps the UUID of a player to the gamemode which they had before entering the arenas.
      */
     private Map<UUID, GameMode> preSpecGamemodes = new ConcurrentHashMap<>();
 
     /**
-     * The menu that shows up when players want to select a team when joining the arena.
+     * The menu that shows up when players want to select a team when joining the arenas.
      */
     private Inventory teamMenu;
 
@@ -248,7 +241,7 @@ public class Arena {
      * @param instance
      *         Instance of the plugin
      * @param arenaId
-     *         ID of the arena
+     *         ID of the arenas
      */
     public Arena(CrystalQuest instance, int arenaId) {
         this.plugin = instance;
@@ -258,8 +251,8 @@ public class Arena {
         this.id = arenaId;
         this.afterCount = plugin.getConfig().getInt("arena.after-count");
 
-        for (int i = 0; i <= 7; i++) {
-            this.teamSpawns.put(i, new ArrayList<>());
+        for (CrystalQuestTeam team : CrystalQuestTeam.getTeams()) {
+            teamSpawns.put(team, new ArrayList<>());
         }
 
         initializeScoreboard();
@@ -284,7 +277,7 @@ public class Arena {
     }
 
     /**
-     * Sets if the arena accepts double jumps
+     * Sets if the arenas accepts double jumps
      *
      * @param canDoubleJump
      *         True to accept, False to decline.
@@ -305,12 +298,23 @@ public class Arena {
     }
 
     /**
-     * Gets the hashmap with the teamId bound to the list containing the spawnpoints
+     * Gets the hashmap with the crystalquest team mapped to the list containing the spawnpoints
      *
      * @see Arena#teamSpawns
      */
-    public Map<Integer, List<Location>> getTeamSpawns() {
+    public Map<CrystalQuestTeam, List<Location>> getTeamSpawns() {
         return teamSpawns;
+    }
+
+    /**
+     * Get all the teamspawns of a given team.
+     *
+     * @param team
+     *         The team to get the spawns of.
+     * @return The teamspawns, or {@code null} when there are no team spawns.
+     */
+    public List<Location> getTeamSpawns(CrystalQuestTeam team) {
+        return teamSpawns.get(team);
     }
 
     /**
@@ -335,7 +339,7 @@ public class Arena {
     }
 
     /**
-     * Checks if the arena is full
+     * Checks if the arenas is full
      *
      * @return True if full, False if not.
      */
@@ -392,7 +396,29 @@ public class Arena {
     }
 
     /**
-     * Sends a custom message to all players in the arena
+     * Checks whether a player with the given id is player or spectator in the arenas.
+     *
+     * @param uuid
+     *         The uuid of the player.
+     * @return {@code true} when the player is in the arenas, {@code false} otherwise.
+     */
+    public boolean isInArena(UUID uuid) {
+        return players.contains(uuid) || spectators.contains(uuid);
+    }
+
+    /**
+     * Checks whether a player is in the arenas (spectator or playing).
+     *
+     * @param player
+     *         The player to check for.
+     * @return {@code true} when the player is in the arenas, {@code false} otherwise.
+     */
+    public boolean isInArena(Player player) {
+        return isInArena(player.getUniqueId());
+    }
+
+    /**
+     * Sends a custom message to all players in the arenas
      *
      * @param player
      *         The dead player
@@ -400,12 +426,14 @@ public class Arena {
      *         The verb that will show up. fe: Killed, Gibbed etc.
      */
     public void sendDeathMessage(Player player, String message) {
-        int teamId = plugin.getArenaManager().getTeam(player);
-        ChatColor colour = Teams.getTeamChatColour(teamId);
+        CrystalQuestTeam team = plugin.getArenaManager().getTeam(player);
+        ChatColor colour = team.getChatColour();
+
         for (UUID id : getPlayers()) {
             Player target = Bukkit.getPlayer(id);
             target.sendMessage(colour + player.getName() + ChatColor.GRAY + message);
         }
+
         for (UUID id : getSpectators()) {
             Player target = Bukkit.getPlayer(id);
             target.sendMessage(colour + player.getName() + ChatColor.GRAY + message);
@@ -413,7 +441,7 @@ public class Arena {
     }
 
     /**
-     * Sends a death message to all players in the arena with a custom verb
+     * Sends a death message to all players in the arenas with a custom verb
      *
      * @param dead
      *         The dead player
@@ -423,15 +451,18 @@ public class Arena {
      *         The verb that will show up. fe: Killed, Gibbed etc.
      */
     public void sendDeathMessage(Player dead, Player killer, String verb) {
-        int teamId = plugin.getArenaManager().getTeam(dead);
-        int teamIdKiller = plugin.getArenaManager().getTeam(killer);
-        ChatColor c = Teams.getTeamChatColour(teamId);
-        ChatColor cK = Teams.getTeamChatColour(teamIdKiller);
+        CrystalQuestTeam team = plugin.getArenaManager().getTeam(dead);
+        CrystalQuestTeam teamKiller = plugin.getArenaManager().getTeam(killer);
+
+        ChatColor c = team.getChatColour();
+        ChatColor cK = teamKiller.getChatColour();
+
         for (UUID id : getPlayers()) {
             Player player = Bukkit.getPlayer(id);
             player.sendMessage(c + dead.getName() + ChatColor.GRAY + " has been " + verb + " by " +
                     cK + killer.getName());
         }
+
         for (UUID id : getSpectators()) {
             Player spectator = Bukkit.getPlayer(id);
             spectator.sendMessage(c + dead.getName() + ChatColor.GRAY + " has been " + verb +
@@ -440,7 +471,7 @@ public class Arena {
     }
 
     /**
-     * Sends a death message to all players in the arena
+     * Sends a death message to all players in the arenas
      *
      * @param dead
      *         The dead player
@@ -448,15 +479,18 @@ public class Arena {
      *         The player who killed dead
      */
     public void sendDeathMessage(Player dead, Player killer) {
-        int teamId = plugin.getArenaManager().getTeam(dead);
-        int teamIdKiller = plugin.getArenaManager().getTeam(killer);
-        ChatColor c = Teams.getTeamChatColour(teamId);
-        ChatColor cK = Teams.getTeamChatColour(teamIdKiller);
+        CrystalQuestTeam team = plugin.getArenaManager().getTeam(dead);
+        CrystalQuestTeam teamKiller = plugin.getArenaManager().getTeam(killer);
+
+        ChatColor c = team.getChatColour();
+        ChatColor cK = teamKiller.getChatColour();
+
         for (UUID id : getPlayers()) {
             Player pl = Bukkit.getPlayer(id);
             pl.sendMessage(c + dead.getName() + ChatColor.GRAY + " has been killed by " + cK +
                     killer.getName());
         }
+
         for (UUID id : getSpectators()) {
             Player spec = Bukkit.getPlayer(id);
             spec.sendMessage(c + dead.getName() + ChatColor.GRAY + " has been killed by " +
@@ -465,18 +499,20 @@ public class Arena {
     }
 
     /**
-     * Sends a death message to all players in the arena
+     * Sends a death message to all players in the arenas
      *
      * @param player
      *         The dead player
      */
     public void sendDeathMessage(Player player) {
-        int teamId = plugin.getArenaManager().getTeam(player);
-        ChatColor c = Teams.getTeamChatColour(teamId);
+        CrystalQuestTeam team = plugin.getArenaManager().getTeam(player);
+        ChatColor c = team.getChatColour();
+
         for (UUID id : getPlayers()) {
             Player pl = Bukkit.getPlayer(id);
             pl.sendMessage(c + player.getName() + ChatColor.GRAY + " has died");
         }
+
         for (UUID id : getSpectators()) {
             Player spec = Bukkit.getPlayer(id);
             spec.sendMessage(c + player.getName() + ChatColor.GRAY + " has died");
@@ -484,7 +520,7 @@ public class Arena {
     }
 
     /**
-     * Get the list containing all the crystals that have spawned in the arena
+     * Get the list containing all the crystals that have spawned in the arenas
      *
      * @return The crystals
      * @see Arena#gameCrystals
@@ -525,7 +561,7 @@ public class Arena {
     }
 
     /**
-     * Sets the the arena is in the end-game phase
+     * Sets the the arenas is in the end-game phase
      *
      * @param isEndGame
      *         true if end-game, false if isn't.
@@ -545,9 +581,9 @@ public class Arena {
     }
 
     /**
-     * Get the teams in the arena
+     * Get the teams in the arenas
      *
-     * @return The teams in the arena
+     * @return The teams in the arenas
      * @see Arena#sTeams
      */
     public Team[] getScoreboardTeams() {
@@ -555,7 +591,7 @@ public class Arena {
     }
 
     /**
-     * Checks if the arena is enabled/disabled.
+     * Checks if the arenas is enabled/disabled.
      *
      * @return If enabled true, if disabled false
      * @see Arena#enabled
@@ -565,7 +601,7 @@ public class Arena {
     }
 
     /**
-     * Sets the state of the arena.
+     * Sets the state of the arenas.
      *
      * @param isEnabled
      *         "true" to enable, "false" to disable
@@ -610,25 +646,23 @@ public class Arena {
 
     /**
      * Gets the teams with the least amount of players for a fair distribution process.
-     * <p>
-     * TODO: Change to use {@link CrystalQuestTeam}.
      *
      * @return The teams with the least amount of players.
      */
-    public List<Integer> getSmallestTeams() {
-        List<Integer> list = new ArrayList<>();
+    public List<CrystalQuestTeam> getSmallestTeams() {
+        List<CrystalQuestTeam> list = new ArrayList<>();
 
-        int least = 999999;
-        for (int i = 0; i < this.getTeamCount(); i++) {
-            if (this.getScoreboardTeams()[i].getPlayers().size() < least) {
-                least = this.getScoreboardTeams()[i].getPlayers().size();
+        int least = Integer.MAX_VALUE;
+        for (int i = 0; i < getTeamCount(); i++) {
+            if (getScoreboardTeams()[i].getPlayers().size() < least) {
+                least = getScoreboardTeams()[i].getPlayers().size();
             }
         }
 
         int count = 0;
-        for (Team t : this.getScoreboardTeams()) {
-            if (t.getPlayers().size() == least && count < this.getTeamCount()) {
-                list.add(count);
+        for (Team team : getScoreboardTeams()) {
+            if (team.getPlayers().size() == least && count < getTeamCount()) {
+                list.add(CrystalQuestTeam.valueOf(count));
             }
             count++;
         }
@@ -705,37 +739,53 @@ public class Arena {
 
     /**
      * Gets the amount of players in a team.
-     * <p>
-     * TODO: Change to {@link CrystalQuestTeam}.
      *
-     * @param teamId
-     *         The ID of the team.
+     * @param team
+     *         The team to get the amount of players from.
      * @return The amount of players.
      */
-    public int getTeamPlayerCount(int teamId) {
-        int ps = 0;
-        Iterator<Entry<UUID, Integer>> it = playerTeams.entrySet().iterator();
-        while (it.hasNext()) {
-            Entry<UUID, Integer> pairs = it.next();
-            if (pairs.getValue() == teamId) {
-                ps++;
-            }
-            it.remove();
-        }
-        return ps;
+    public int getTeamPlayerCount(CrystalQuestTeam team) {
+        return (int)playerTeams.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(team))
+                .count();
     }
 
     /**
      * Gets the team the player is in.
-     * <p>
-     * TODO: Change to {@link CrystalQuestTeam}.
      *
      * @param player
      *         The player from whose you want to know the team he/she is in.
-     * @return The TeamId of the team the player is in.
+     * @return The team the player is in.
      */
-    public int getTeam(Player player) {
+    public CrystalQuestTeam getTeam(Player player) {
         return playerTeams.get(player.getUniqueId());
+    }
+
+    /**
+     * Get an unmodifiable collection containing all the teams that are present in the arena.
+     * <p>
+     * TODO: Replace by new team system.
+     */
+    public Collection<CrystalQuestTeam> getTeams() {
+        List<CrystalQuestTeam> teams = new ArrayList<>();
+
+        Iterator<CrystalQuestTeam> it = CrystalQuestTeam.getTeams().iterator();
+        for (int i = 0; it.hasNext() && i < this.teams; i++) {
+            teams.add(it.next());
+        }
+
+        return Collections.unmodifiableList(teams);
+    }
+
+    /**
+     * Checks if the given team participates in the arena.
+     *
+     * @param team
+     *         The team to check for.
+     * @return {@code true} if the team participates, {@code false} otherwise.
+     */
+    public boolean hasTeam(CrystalQuestTeam team) {
+        return team.getId() < teams;
     }
 
     /**
@@ -743,21 +793,21 @@ public class Arena {
      *
      * @param player
      *         The player you want to check for.
-     * @param teamId
-     *         The ID of the team.
+     * @param team
+     *         The team constant.
      * @return true if they're in, false if they aren't.
      */
-    public boolean isInTeam(Player player, int teamId) {
-        return playerTeams.get(player.getUniqueId()) == teamId;
+    public boolean isInTeam(Player player, CrystalQuestTeam team) {
+        return team.equals(playerTeams.get(player.getUniqueId()));
     }
 
     /**
-     * If there are players in the arena
+     * If there are players in the arenas
      * Reveal the winner
      *
-     * @return Winning team's name
+     * @return The winning team, or {@code null} when something went wrong.
      */
-    public String declareWinner() {
+    public CrystalQuestTeam declareWinner() {
         if (!getPlayers().isEmpty()) {
             int highest = -99999;
             Score hScore = null;
@@ -771,49 +821,49 @@ public class Arena {
             }
 
             String winningTeam = "";
-            int teamId = 0;
+            CrystalQuestTeam team = null;
             ChatColor colour = null;
             List<UUID> winningPlayers = new ArrayList<>();
 
             if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.GREEN_NAME)) {
                 winningTeam = Teams.GREEN_NAME;
                 colour = ChatColor.GREEN;
-                teamId = 0;
+                team = CrystalQuestTeam.GREEN;
             }
             else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.ORANGE_NAME)) {
                 winningTeam = Teams.ORANGE_NAME;
                 colour = ChatColor.GOLD;
-                teamId = 1;
+                team = CrystalQuestTeam.ORANGE;
             }
             else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.YELLOW_NAME)) {
                 winningTeam = Teams.YELLOW_NAME;
                 colour = ChatColor.YELLOW;
-                teamId = 2;
+                team = CrystalQuestTeam.YELLOW;
             }
             else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.RED_NAME)) {
                 winningTeam = Teams.RED_NAME;
                 colour = ChatColor.RED;
-                teamId = 3;
+                team = CrystalQuestTeam.RED;
             }
             else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.BLUE_NAME)) {
                 winningTeam = Teams.BLUE_NAME;
                 colour = ChatColor.AQUA;
-                teamId = 4;
+                team = CrystalQuestTeam.BLUE;
             }
             else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.MAGENTA_NAME)) {
                 winningTeam = Teams.MAGENTA_NAME;
                 colour = ChatColor.LIGHT_PURPLE;
-                teamId = 5;
+                team = CrystalQuestTeam.MAGENTA;
             }
             else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.WHITE_NAME)) {
                 winningTeam = Teams.WHITE_NAME;
                 colour = ChatColor.WHITE;
-                teamId = 6;
+                team = CrystalQuestTeam.WHITE;
             }
             else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.BLACK_NAME)) {
                 winningTeam = Teams.BLACK_NAME;
                 colour = ChatColor.DARK_GRAY;
-                teamId = 7;
+                team = CrystalQuestTeam.BLACK;
             }
 
             for (UUID id : this.getPlayers()) {
@@ -822,43 +872,51 @@ public class Arena {
                 p.sendMessage("    " + winningTeam + " " + Broadcast.get("arena.won"));
                 p.sendMessage(colour + "<>---------------------------<>");
 
-                if (plugin.am.getTeam(p) == teamId) {
+                if (plugin.am.getTeam(p).equals(team)) {
                     winningPlayers.add(p.getUniqueId());
                 }
             }
 
-            Bukkit.getPluginManager().callEvent(new TeamWinGameEvent(winningPlayers, this,
-                    teamId, getTeamCount(), sTeams, winningTeam));
+            Bukkit.getPluginManager().callEvent(
+                    new TeamWinGameEvent(
+                            winningPlayers,
+                            this,
+                            team,
+                            getTeamCount(),
+                            sTeams,
+                            winningTeam
+                    )
+            );
 
-            return winningTeam;
+            return team;
         }
 
-        return "";
+        return null;
     }
 
     /**
-     * Chooses a random player in the arena and from another team.
+     * Chooses a random player in the arenas and from another team.
      *
      * @param excluded
      *         The player whose team cannot be chosen.
      * @return The chosen player. Null if there are no players to choose from.
      */
     public Player getRandomPlayer(Player excluded) {
-        int team = getTeam(excluded);
+        CrystalQuestTeam team = getTeam(excluded);
+
         List<Player> toChoose = new ArrayList<>();
         for (UUID id : players) {
-            Player p = Bukkit.getPlayer(id);
-            if (getTeam(p) != team) {
-                toChoose.add(p);
+            Player player = Bukkit.getPlayer(id);
+            if (!getTeam(player).equals(team)) {
+                toChoose.add(player);
             }
         }
 
         if (toChoose.size() == 0) {
             return null;
         }
-        else {
-            return toChoose.get(ran.nextInt(toChoose.size()));
-        }
+
+        return toChoose.get(ran.nextInt(toChoose.size()));
     }
 
     /**
@@ -943,9 +1001,9 @@ public class Arena {
     }
 
     /**
-     * Get the scoreboard of the arena.
+     * Get the scoreboard of the arenas.
      *
-     * @return Scoreboard of the arena
+     * @return Scoreboard of the arenas
      * @see Arena#score
      */
     public Scoreboard getScoreboard() {
@@ -953,23 +1011,23 @@ public class Arena {
     }
 
     /**
-     * Removes a player from the arena including removal from the team,
+     * Removes a player from the arenas including removal from the team,
      * resetting his/her scoreboard and restoring his/her inventory.
      *
      * @param p
-     *         The player you want to remove from the arena.
+     *         The player you want to remove from the arenas.
      */
     public void removePlayer(Player p) {
-        if (!this.spectators.contains(p.getUniqueId())) {
+        if (!spectators.contains(p.getUniqueId())) {
             for (UUID id : getPlayers()) {
                 Player player = Bukkit.getPlayer(id);
                 player.sendMessage(Broadcast.TAG + Broadcast.get("arena.leave")
-                        .replace("%player%", Teams.getTeamChatColour(getTeam(p)) + p.getName())
+                        .replace("%player%", getTeam(p).getChatColour() + p.getName())
                         .replace("%count%", "(" + (getPlayers().size() - 1) + "/" + getMaxPlayers() + ")"));
             }
         }
 
-        this.players.remove(p.getUniqueId());
+        players.remove(p.getUniqueId());
         for (Team team : sTeams) {
             if (team.hasPlayer((OfflinePlayer)p)) {
                 team.removePlayer((OfflinePlayer)p);
@@ -992,7 +1050,7 @@ public class Arena {
         playerTeams.remove(p.getUniqueId());
         plugin.im.restoreInventory(p);
         plugin.im.playerClass.remove(p.getUniqueId());
-        this.spectators.remove(p.getUniqueId());
+        spectators.remove(p.getUniqueId());
 
         if (p.getGameMode() != GameMode.CREATIVE) {
             p.setAllowFlight(false);
@@ -1010,18 +1068,18 @@ public class Arena {
     }
 
     /**
-     * Adds a player to the arena including putting into a team, set the
+     * Adds a player to the arenas including putting into a team, set the
      * scoreboard and give the in-game inventory.
      *
      * @param p
      *         The player to add
-     * @param teamId
+     * @param team
      *         The team to put the player in
      * @param spectate
      *         True if the player is spectating
      * @return True if joined, False if not joined
      */
-    public boolean addPlayer(Player p, int teamId, boolean spectate) {
+    public boolean addPlayer(Player p, CrystalQuestTeam team, boolean spectate) {
         PlayerJoinArenaEvent event = new PlayerJoinArenaEvent(p, this, spectate);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
@@ -1029,11 +1087,13 @@ public class Arena {
                     .contains(p.getUniqueId())) {
                 if (isEnabled()) {
                     try {
-                        playerTeams.put(p.getUniqueId(), spectate ? -1 : teamId);
+                        if (!spectate) {
+                            playerTeams.put(p.getUniqueId(), team);
+                        }
 
                         if (!spectate) {
                             players.add(p.getUniqueId());
-                            sTeams[teamId].addPlayer((OfflinePlayer)p);
+                            sTeams[team.getId()].addPlayer((OfflinePlayer)p);
                         }
                         p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                         p.setScoreboard(this.score);
@@ -1053,15 +1113,12 @@ public class Arena {
                         }
 
                         if (!spectate) {
-                            try {
-                                if (getLobbySpawns()[teamId] == null) {
-                                    p.teleport(getLobbySpawns()[0]);
-                                }
-                                else {
-                                    p.teleport(getLobbySpawns()[teamId]);
-                                }
+                            Location lobby = getLobbySpawn(team);
+                            if (lobby == null) {
+                                p.teleport(lobbySpawns.values().iterator().next());
                             }
-                            catch (Exception ignored) {
+                            else {
+                                p.teleport(lobby);
                             }
                         }
                         else {
@@ -1069,7 +1126,7 @@ public class Arena {
                                 p.teleport(getPlayerSpawns().get(0));
                             }
                             else {
-                                p.teleport(getTeamSpawns().get(0).get(0));
+                                p.teleport(getTeamSpawns().values().iterator().next().get(0));
                             }
                         }
 
@@ -1079,7 +1136,7 @@ public class Arena {
                             for (UUID id : getPlayers()) {
                                 Player player = Bukkit.getPlayer(id);
                                 player.sendMessage(Broadcast.TAG + Broadcast.get("arena.join")
-                                        .replace("%player%", Teams.getTeamChatColour(teamId) + p.getName())
+                                        .replace("%player%", team.getChatColour() + p.getName())
                                         .replace("%count%", "(" + getPlayers().size() + "/" + getMaxPlayers() + ")"));
                             }
                         }
@@ -1104,7 +1161,7 @@ public class Arena {
     }
 
     /**
-     * Removes ALL players from the arena and resets their inventory etc.
+     * Removes ALL players from the arenas and resets their inventory etc.
      */
     public void removePlayers() {
         for (UUID id : players) {
@@ -1158,9 +1215,9 @@ public class Arena {
     }
 
     /**
-     * Gets a list of all players currently in the arena.
+     * Gets a list of all players currently in the arenas.
      *
-     * @return The players in the arena
+     * @return The players in the arenas
      * @see Arena#players
      */
     public List<UUID> getPlayers() {
@@ -1168,14 +1225,14 @@ public class Arena {
     }
 
     /**
-     * Removes all possible Item-spawnpoints from the arena
+     * Removes all possible Item-spawnpoints from the arenas
      */
     public void clearItemSpawns() {
         itemSpawns.clear();
     }
 
     /**
-     * Removes a specific Item-spawnpoint from the arena
+     * Removes a specific Item-spawnpoint from the arenas
      *
      * @param loc
      *         The spawnpoint-location you'd like to remove
@@ -1185,7 +1242,7 @@ public class Arena {
     }
 
     /**
-     * Removes a specific Item-spawnpoint from the arena
+     * Removes a specific Item-spawnpoint from the arenas
      *
      * @param index
      *         The spawnpoint-index you'd like to remove
@@ -1195,7 +1252,7 @@ public class Arena {
     }
 
     /**
-     * Adds an Item-spawnpoint to the arena
+     * Adds an Item-spawnpoint to the arenas
      *
      * @param loc
      *         The spawnpoint-location you'd like to add
@@ -1205,7 +1262,7 @@ public class Arena {
     }
 
     /**
-     * Sets all the Item-spawns for this arena
+     * Sets all the Item-spawns for this arenas
      *
      * @param spawns
      *         All spawn-locations
@@ -1215,7 +1272,7 @@ public class Arena {
     }
 
     /**
-     * Sets all the Item-spawns for this arena
+     * Sets all the Item-spawns for this arenas
      *
      * @param spawns
      *         All spawn-locations
@@ -1236,7 +1293,7 @@ public class Arena {
     }
 
     /**
-     * Removes all crystal-spawns from the arena
+     * Removes all crystal-spawns from the arenas
      *
      * @see Arena#crystalSpawns
      */
@@ -1399,7 +1456,7 @@ public class Arena {
     }
 
     /**
-     * Get the time left in the arena.
+     * Get the time left in the arenas.
      *
      * @return The time left in seconds
      * @see Arena#timeLeft
@@ -1409,7 +1466,7 @@ public class Arena {
     }
 
     /**
-     * Checks if the arena is in-game.
+     * Checks if the arenas is in-game.
      *
      * @return true if in-game, false if not in-game.
      * @see Arena#inGame
@@ -1470,34 +1527,52 @@ public class Arena {
     }
 
     /**
-     * Sets the lobby spawns of the teams.
-     * The team-id (0, 1, 2, 3, 4, 5, 6, 7) represents the spawn of the specific team.
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam}.
+     * Set where the lobbyspawn is of a certain team.
      *
-     * @param locations
-     *         The locations.
-     * @see Arena#lobbySpawn
+     * @param team
+     *         The team to set the lobby spawn of.
+     * @param location
+     *         The location of the lobby spawn.
      */
-    public void setLobbySpawns(Location[] locations) {
-        this.lobbySpawn = locations;
+    public void setLobbySpawn(CrystalQuestTeam team, Location location) {
+        if (location == null) {
+            lobbySpawns.remove(team);
+        }
+
+        lobbySpawns.put(team, location);
     }
 
     /**
-     * Gets the team-lobby spawns of the arena.
-     * The team-id (0, 1, 2, 3, 4, 5, 6, 7) represents the spawn of the specific team.
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam}
+     * Gets the team-lobby spawn of a certain team.
      *
-     * @return The lobbyspawn-array
-     * @see Arena#lobbySpawn
+     * @param team
+     *         The team to get the lobby spawn of.
+     * @return The lobby spawn of the team, or {@code null} when it's not set for the given team.
+     * @see Arena#lobbySpawns
      */
-    public Location[] getLobbySpawns() {
-        return lobbySpawn;
+    public Location getLobbySpawn(CrystalQuestTeam team) {
+        return lobbySpawns.get(team);
     }
 
     /**
-     * Toggles the crystalquest.vip requirement on the arena.
+     * Checks if the lobbyspawns for all arenas are set.
+     *
+     * @return {@code true} when all team lobby spawns are set, {@code false} when at least one team
+     * lobby is not setup correctly.
+     */
+    public boolean areLobbySpawnsSet() {
+        for (CrystalQuestTeam team : getTeams()) {
+            Location lobbyspawn = getLobbySpawn(team);
+            if (lobbyspawn == null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Toggles the crystalquest.vip requirement on the arenas.
      *
      * @param isVip
      *         True if VIP is needed. False if VIP is not needed.
@@ -1508,7 +1583,7 @@ public class Arena {
     }
 
     /**
-     * Checks if it is an arena only for people with the crystalquest.vip node.
+     * Checks if it is an arenas only for people with the crystalquest.vip node.
      *
      * @return True if it is VIP-only, False if it isn't
      * @see Arena#vip
@@ -1518,9 +1593,9 @@ public class Arena {
     }
 
     /**
-     * Gets the arena ID.
+     * Gets the arenas ID.
      *
-     * @return The arena ID
+     * @return The arenas ID
      * @see Arena#id
      */
     public int getId() {
@@ -1528,7 +1603,7 @@ public class Arena {
     }
 
     /**
-     * Gets the name of the arena.
+     * Gets the name of the arenas.
      *
      * @return Arena-name
      * @see Arena#name
@@ -1538,10 +1613,10 @@ public class Arena {
     }
 
     /**
-     * Sets the name of the arena.
+     * Sets the name of the arenas.
      *
      * @param name
-     *         The new arena-name.
+     *         The new arenas-name.
      * @return true when the name is succesfully applied, false when the name already exists.
      * @see Arena#name
      */
@@ -1567,12 +1642,12 @@ public class Arena {
     }
 
     /**
-     * Sets the amount of teams available for the arena.
+     * Sets the amount of teams available for the arenas.
      * <p>
      * TODO: Replace by {@link CrystalQuestTeam}.
      *
      * @param amountOfTeams
-     *         The amount of teams used to play this arena.
+     *         The amount of teams used to play this arenas.
      * @return true if applied succesful, false if amountOfTeams is greater than 6.
      */
     public boolean setTeams(int amountOfTeams) {
@@ -1585,11 +1660,11 @@ public class Arena {
     }
 
     /**
-     * Returns the amount of teams available for the arena.
+     * Returns the amount of teams available for the arenas.
      * <p>
      * TODO: Replace by {@link CrystalQuestTeam}.
      *
-     * @return The amount of teams of the arena.
+     * @return The amount of teams of the arenas.
      * @see Arena#teams
      */
     public int getTeamCount() {
@@ -1597,7 +1672,7 @@ public class Arena {
     }
 
     /**
-     * Get the minimum amount of players for an arena to start.
+     * Get the minimum amount of players for an arenas to start.
      *
      * @return The minimum amount of players to start.
      * @see Arena#minPlayers
@@ -1607,7 +1682,7 @@ public class Arena {
     }
 
     /**
-     * Set the minimum amount of players for an arena to start.
+     * Set the minimum amount of players for an arenas to start.
      *
      * @param minPlayers
      *         The minimum amount of players.
@@ -1619,7 +1694,7 @@ public class Arena {
     }
 
     /**
-     * Get the maximum amount of players for an arena to start.
+     * Get the maximum amount of players for an arenas to start.
      *
      * @return The maximum amount of players to start.
      * @see Arena#maxPlayers
@@ -1629,7 +1704,7 @@ public class Arena {
     }
 
     /**
-     * Set the maximum amount of players for an arena to start.
+     * Set the maximum amount of players for an arenas to start.
      *
      * @param maxPlayers
      *         The maximum amount of players.
@@ -1666,12 +1741,12 @@ public class Arena {
                 Player player = Bukkit.getPlayer(id);
                 boolean isTeamSpawns = false;
                 for (int i = 0; i < getTeamCount(); i++) {
-                    if (getTeamSpawns().get(i).size() > 0) {
+                    if (getTeamSpawns().get(CrystalQuestTeam.valueOf(i)).size() > 0) {
                         isTeamSpawns = true;
                     }
                 }
                 if (isTeamSpawns) {
-                    int team = getTeam(player);
+                    CrystalQuestTeam team = getTeam(player);
                     player.teleport(getTeamSpawns().get(team).get(ran.nextInt(getTeamSpawns().get(team).size())));
                 }
                 else {
@@ -1685,47 +1760,65 @@ public class Arena {
     }
 
     /**
-     * Adds points to a team
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam}.
+     * Get the score of the given team.
      *
-     * @param teamId
-     *         The team-ID of the team.
-     * @param score
-     *         The points to add.
+     * @param team
+     *         The team to get the score of.
+     * @return The score of the given team.
      */
-    public void addScore(int teamId, int score) {
-        sScore[teamId].setScore(sScore[teamId].getScore() + score);
+    private Score getScoreObject(CrystalQuestTeam team) {
+        return sScore[team.getId()];
     }
 
     /**
-     * Sets the score of a team
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam}.
+     * Adds points to a team
      *
-     * @param teamId
-     *         The team-ID of the team.
-     * @param score
+     * @param team
+     *         The team to add the score to.
+     * @param scoreToAdd
+     *         The points to add.
+     */
+    public void addScore(CrystalQuestTeam team, int scoreToAdd) {
+        Score score = getScoreObject(team);
+        score.setScore(score.getScore() + scoreToAdd);
+    }
+
+    /**
+     * Sets the score of a team.
+     *
+     * @param team
+     *         The team to get the score of.
+     * @param newScore
      *         The new score.
      */
-    public void setScore(int teamId, int score) {
-        sScore[teamId].setScore(score);
+    public void setScore(CrystalQuestTeam team, int newScore) {
+        Score score = getScoreObject(team);
+        score.setScore(newScore);
     }
 
     /**
      * Gets the score of a team
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam}.
      *
-     * @param teamId
-     *         The team-ID of the team.
-     * @return The score
+     * @param team
+     *         The team to get the score of.
+     * @return The score of the given team.
      */
-    public int getScore(int teamId) {
-        if (this.sScore == null) {
+    public int getScore(CrystalQuestTeam team) {
+        if (sScore == null) {
             return Integer.MIN_VALUE;
         }
 
-        return this.sScore[teamId].getScore();
+        Score score = getScoreObject(team);
+        return score.getScore();
+    }
+
+    /**
+     * @deprecated Uses the old team system. There is no alternative however.
+     */
+    @Deprecated
+    public List<Location> getLobbySpawns() {
+        return getTeams().stream()
+                .map(this::getLobbySpawn)
+                .collect(Collectors.toList());
     }
 }

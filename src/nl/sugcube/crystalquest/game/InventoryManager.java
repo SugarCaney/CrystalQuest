@@ -2,7 +2,6 @@ package nl.sugcube.crystalquest.game;
 
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.sba.SItem;
-import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -263,45 +262,15 @@ public class InventoryManager {
      * Returns coloured leather armour (ItemStack)
      *
      * @param leatherArmour
-     *         (ItemStack) The armour to dye.
-     * @param teamId
-     *         (int) The ID of the player's team.
-     * @return (ItemStack) The coloured leather armour.
+     *         The armour to dye.
+     * @param team
+     *         The player's team.
+     * @return The coloured leather armour.
      */
-    public ItemStack getColourLeather(ItemStack leatherArmour, int teamId) {
+    public ItemStack getColourLeather(ItemStack leatherArmour, CrystalQuestTeam team) {
         LeatherArmorMeta im = (LeatherArmorMeta)leatherArmour.getItemMeta();
-        im.setColor(getTeamColour(teamId));
+        im.setColor(team.getColour());
         leatherArmour.setItemMeta(im);
         return leatherArmour;
-    }
-
-    /**
-     * Returns the colour of the TeamID
-     *
-     * @param teamId
-     *         (int) The ID of the team.
-     * @return (Color) The colour of the team.
-     */
-    public Color getTeamColour(int teamId) {
-        switch (teamId) {
-            case 0:
-                return Color.fromRGB(0, 255, 0);
-            case 1:
-                return Color.fromRGB(255, 140, 0);
-            case 2:
-                return Color.fromRGB(255, 255, 0);
-            case 3:
-                return Color.fromRGB(255, 0, 0);
-            case 4:
-                return Color.fromRGB(0, 255, 255);
-            case 5:
-                return Color.fromRGB(255, 0, 255);
-            case 6:
-                return Color.WHITE;
-            case 7:
-                return Color.BLACK;
-            default:
-                return null;
-        }
     }
 }

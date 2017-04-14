@@ -2,8 +2,8 @@ package nl.sugcube.crystalquest.command;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.game.Arena;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,22 +31,23 @@ public class CommandTeamLobby extends CrystalQuestCommand {
             try {
                 arena = plugin.am.getArena(Integer.parseInt(arguments[0]) - 1);
             }
-            catch (Exception e) {
+            catch (NumberFormatException nfe) {
                 arena = plugin.am.getArena(arguments[0]);
             }
 
-            Location[] spawns = arena.getLobbySpawns();
-            int teamId = Teams.getTeamId(arguments[1]);
-            if (teamId < arena.getTeamCount()) {
-                spawns[teamId] = ((Player)sender).getLocation();
-                arena.setLobbySpawns(spawns);
-                sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.teamlobby-set")
-                        .replace("%team%", arguments[1])
-                        .replace("%arena%", arguments[0]));
-            }
-            else {
+            CrystalQuestTeam team = CrystalQuestTeam.valueOfName(arguments[1]);
+            if (!arena.hasTeam(team)) {
                 sender.sendMessage(Broadcast.get("commands.team-not-exist"));
+                return;
             }
+
+            Player player = (Player)sender;
+            Location location = player.getLocation();
+            arena.setLobbySpawn(team, location);
+
+            player.sendMessage(Broadcast.TAG + Broadcast.get("commands.teamlobby-set")
+                    .replace("%team%", arguments[1])
+                    .replace("%arena%", arguments[0]));
         }
         catch (Exception e) {
             sender.sendMessage(Broadcast.get("commands.teamlobby-error"));

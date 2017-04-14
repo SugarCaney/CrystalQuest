@@ -13,7 +13,7 @@ import java.util.List;
 public enum AutoCompleteArgument {
 
     /**
-     * Autocompletes with the arena name, or the ID when the name is not supported.
+     * Autocompletes with the arenas name, or the ID when the name is not supported.
      */
     ARENA {
         @Override

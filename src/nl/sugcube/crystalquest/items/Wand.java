@@ -2,6 +2,7 @@ package nl.sugcube.crystalquest.items;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.*;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ import java.util.UUID;
  */
 public class Wand implements Listener {
 
-    public static CrystalQuest plugin;
+    public CrystalQuest plugin;
 
     public Wand(CrystalQuest instance) {
         plugin = instance;
@@ -102,7 +103,7 @@ public class Wand implements Listener {
                         }
                     }
                     /*
-					 * WAND: TELEPORT
+                     * WAND: TELEPORT
 					 */
                     else if (getWandType(p.getInventory().getItemInMainHand()) == WandType.TELEPORT) {
                         if (p.getInventory().getItemInMainHand().getDurability() == (short)0) {
@@ -133,13 +134,14 @@ public class Wand implements Listener {
                             }
                         }
                     }
-					/*
+                    /*
 					 * WAND: HEAL
 					 */
                     else if (getWandType(p.getInventory().getItemInMainHand()) == WandType.HEAL) {
                         if (p.getInventory().getItemInMainHand().getDurability() == (short)0) {
-                            int team = plugin.getArenaManager().getTeam(p);
-                            for (OfflinePlayer pl : plugin.getArenaManager().getArena(p.getUniqueId()).getScoreboardTeams()[team].getPlayers()) {
+                            CrystalQuestTeam team = plugin.getArenaManager().getTeam(p);
+                            for (OfflinePlayer pl : plugin.getArenaManager().getArena(p
+                                    .getUniqueId()).getScoreboardTeams()[team.getId()].getPlayers()) {
                                 Player player = Bukkit.getPlayer(pl.getName());
 
                                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 8, 5));

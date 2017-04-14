@@ -40,7 +40,7 @@ public class ArenaTickEvent extends Event {
     }
 
     /**
-     * @return (Arena) The arena which is counting down
+     * @return (Arena) The arenas which is counting down
      */
     public Arena getArena() {
         return this.arena;
@@ -50,13 +50,13 @@ public class ArenaTickEvent extends Event {
      * Constructor.
      *
      * @param a
-     *         (Arena) The current arena
+     *         (Arena) The current arenas
      * @param o
      *         (int) The clock before the tick
      * @param n
      *         (int) The clock after the tick
      * @param ig
-     *         (boolean) True if it is a result in-game, false if the arena is pre-game.
+     *         (boolean) True if it is a result in-game, false if the arenas is pre-game.
      */
     public ArenaTickEvent(Arena a, int o, int n, boolean ig) {
         this.arena = a;

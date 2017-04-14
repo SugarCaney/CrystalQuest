@@ -3,6 +3,7 @@ package nl.sugcube.crystalquest.items;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.ArenaManager;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,7 +33,7 @@ public class ForceField extends ItemExecutor {
         final Location source = player.getLocation();
         final ArenaManager arenaManager = plugin.getArenaManager();
         final Arena arena = arenaManager.getArena(player.getUniqueId());
-        final int teamId = arena.getTeam(player);
+        final CrystalQuestTeam teamId = arena.getTeam(player);
 
         world.getEntities().stream()
                 .filter(ent -> {

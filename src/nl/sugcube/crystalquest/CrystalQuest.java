@@ -241,7 +241,7 @@ public class CrystalQuest extends JavaPlugin {
 		/*
 		 * Kicks players from game on reload.
 		 */
-        for (Arena a : am.arena) {
+        for (Arena a : am.arenas) {
             a.removePlayers();
         }
 		
@@ -373,7 +373,7 @@ public class CrystalQuest extends JavaPlugin {
     /**
      * Gets the ArenaManager of the plugin
      *
-     * @return (ArenaManager) The plugin's arena manager.
+     * @return (ArenaManager) The plugin's arenas manager.
      */
     public ArenaManager getArenaManager() {
         return this.am;

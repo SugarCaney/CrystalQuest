@@ -32,7 +32,7 @@ public class CommandSpectate extends CrystalQuestCommand {
             catch (Exception e) {
                 arena = plugin.am.getArena(arguments[0]);
             }
-            arena.addPlayer(player, 0, true);
+            arena.addPlayer(player, null, true);
         }
         catch (Exception e) {
             sender.sendMessage(Broadcast.get("commands.spectate-error"));

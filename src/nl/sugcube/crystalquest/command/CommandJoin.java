@@ -34,31 +34,31 @@ public class CommandJoin extends CrystalQuestCommand {
             arena = plugin.am.getArena(arguments[0]);
         }
 
-        // Check if the arena exists.
+        // Check if the arenas exists.
         if (arena == null) {
             player.sendMessage(Broadcast.get("arena.no-exist"));
             return;
         }
 
-        // Check if the arena is full.
+        // Check if the arenas is full.
         if (arena.isFull()) {
             player.sendMessage(Broadcast.get("arena.full"));
             return;
         }
 
-        // Check if the arena is restarting
+        // Check if the arenas is restarting
         if (arena.isEndGame()) {
             player.sendMessage(Broadcast.get("arena.restarting"));
             return;
         }
 
-        // Check if the arena is disabled.
+        // Check if the arenas is disabled.
         if (!arena.isEnabled()) {
             player.sendMessage(Broadcast.get("arena.disabled"));
             return;
         }
 
-        // Join arena.
+        // Join arenas.
         plugin.menuPT.updateMenu(arena);
         plugin.menuPT.showMenu(player, arena);
     }

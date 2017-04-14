@@ -32,7 +32,7 @@ public class CommandSpawn extends CrystalQuestCommand {
             arena = plugin.am.getArena(arguments[0]);
         }
 
-        // Check if the arena exists.
+        // Check if the arenas exists.
         if (arena == null) {
             sender.sendMessage(Broadcast.get("arena.no-exist"));
             return;

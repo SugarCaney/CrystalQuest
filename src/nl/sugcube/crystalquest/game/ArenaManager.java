@@ -14,17 +14,26 @@ import java.util.UUID;
  */
 public class ArenaManager {
 
-    public static CrystalQuest plugin;
-    public List<Arena> arena = new ArrayList<Arena>();
+    /**
+     * Main plugin instance.
+     */
+    public final CrystalQuest plugin;
 
+    /**
+     * List containing all the registered arenas.
+     */
+    public final List<Arena> arenas = new ArrayList<>();
+
+    /**
+     * Location of the lobby.
+     */
     private Location lobbyspawn;
 
     /**
-     * CONSTRUCTOR
      * Passes through the instance of the plugin.
      *
      * @param instance
-     *         (CrystalQuest) The instance of the plugin.
+     *         The instance of the plugin.
      */
     public ArenaManager(CrystalQuest instance) {
         plugin = instance;
@@ -33,162 +42,159 @@ public class ArenaManager {
     /**
      * Checks wether the player is in spectate-mode
      *
-     * @param p
-     *         (Player) The player to check for
-     * @return (boolean) True if the player is a spectator. False if not.
+     * @param player
+     *         The player to check for
+     * @return True if the player is a spectator. False if not.
      */
-    public boolean isSpectator(Player p) {
-        for (Arena a : this.arena) {
-            for (UUID id : a.getPlayers()) {
-                Player pl = Bukkit.getPlayer(id);
-                if (a.getSpectators().contains(pl.getUniqueId())) {
-                    return true;
-                }
+    public boolean isSpectator(Player player) {
+        for (Arena a : arenas) {
+            if (a.getSpectators().contains(player.getUniqueId())) {
+                return true;
             }
         }
+
         return false;
     }
 
     /**
      * Gets the location of the Lobbyspawn
      *
-     * @return (Location) The Lobbyspawn
+     * @return The Lobbyspawn
      */
     public Location getLobby() {
-        return this.lobbyspawn;
+        return lobbyspawn;
     }
 
     /**
      * Sets the spawn of the main lobby
      *
-     * @param loc
-     *         (Location) The spawnpoint of the lobby
+     * @param lobbyspawn
+     *         The spawnpoint of the lobby
      */
-    public void setLobby(Location loc) {
-        this.lobbyspawn = loc;
+    public void setLobby(Location lobbyspawn) {
+        this.lobbyspawn = lobbyspawn;
     }
 
     /**
      * Starts the runnable managing the spawning of the items
      */
     public void registerItemSpawningSequence() {
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new ItemSpawner(plugin), 2L, 2L);
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(
+                plugin,
+                new ItemSpawner(plugin),
+                2L,
+                2L
+        );
     }
 
     /**
      * Starts the runnable managing the spawning of the crystals
      */
     public void registerCrystalSpawningSequence() {
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new CrystalSpawner(plugin), 2L, 2L);
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(
+                plugin,
+                new CrystalSpawner(plugin),
+                2L,
+                2L
+        );
     }
 
     /**
      * Starts the GameLoop
      */
     public void registerGameLoop() {
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new GameLoop(plugin, this), 20L, 20L);
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(
+                plugin,
+                new GameLoop(plugin, this),
+                20L,
+                20L
+        );
     }
 
     /**
-     * Gets the team the player is in. (ID)
+     * Gets the team the player is in.
      *
-     * @param p
-     *         (Player) The player to check for.
-     * @return (int) The teamId from the team the player is in.
+     * @param player
+     *         The player to check for.
+     * @return The team the player is in.
+     * @throws IllegalStateException
+     *         When the player is not in any team.
      */
-    public int getTeam(Player p) {
-        Arena a = getArena(p.getUniqueId());
-        if (a != null) {
-            return a.getTeam(p);
+    public CrystalQuestTeam getTeam(Player player) throws IllegalStateException {
+        Arena arena = getArena(player.getUniqueId());
+        if (arena == null) {
+            throw new IllegalStateException("Player " + player + " is not in an arenas!");
         }
-        else {
-            return -1;
-        }
+
+        return arena.getTeam(player);
     }
 
     /**
-     * Gets the arena the player is in
+     * Gets the arenas the player is in
      *
-     * @param pId
-     *         (UUID) The UUID of the player to look for.
-     * @return (Arena) The arena the player is in.
+     * @param id
+     *         The UUID of the player to look for.
+     * @return The arenas the player is in or {@code null} when no such arenas exists.
      */
-    public Arena getArena(UUID pId) {
-        for (Arena a : arena) {
-            for (UUID id : a.getPlayers()) {
-                if (pId.equals(id)) {
-                    return a;
-                }
-            }
-            for (UUID id : a.getSpectators()) {
-                if (pId.equals(id)) {
-                    return a;
-                }
-            }
-        }
-        return null;
+    public Arena getArena(UUID id) {
+        return arenas.stream()
+                .filter(arena -> arena.isInArena(id))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
      * Checks if the player is in game.
      *
-     * @param p
-     *         (Player) The player to check for.
-     * @return (boolean) True if the player is in an arena. False if the player isn't.
+     * @param player
+     *         The player to check for.
+     * @return True if the player is in an arenas. False if the player isn't.
      */
-    public boolean isInGame(Player p) {
-        for (Arena a : arena) {
-            if (a.getPlayers().contains(p.getUniqueId()) || a.getSpectators().contains(p.getUniqueId())) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isInGame(Player player) {
+        return arenas.stream().anyMatch(arena -> arena.isInArena(player));
     }
 
     /**
-     * Get an arena using the name.
+     * Get an arenas using the name.
      *
-     * @param s
-     *         (String) The arena's name.
-     * @return (Arena) The arena with the given name or null if there is no arena with such name.
+     * @param string
+     *         The arenas's name.
+     * @return The arenas with the given name or null if there is no arenas with such name.
      */
-    public Arena getArena(String s) {
+    public Arena getArena(String string) {
         try {
-            int id = Integer.parseInt(s);
-            return this.getArena(id);
+            int id = Integer.parseInt(string);
+            return getArena(id);
         }
-        catch (Exception ignored) {
-        }
-
-        if (this.arena.size() > 0) {
-            for (Arena a : this.arena) {
-                if (a.getName().equalsIgnoreCase(s)) {
-                    return a;
-                }
-            }
+        catch (NumberFormatException ignored) {
         }
 
-        return null;
+        if (arenas.isEmpty()) {
+            return null;
+        }
+
+        return arenas.stream()
+                .filter(arena -> arena.getName().equalsIgnoreCase(string))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
-     * Get an arena using the id.
+     * Get an arenas using the id.
      *
      * @param arenaId
-     *         (int) The ID of the arena.
-     * @return (Arena) The arena with the given ID or null if there is no arena with such ID.
+     *         The ID of the arenas.
+     * @return The arenas with the given ID or null if there is no arenas with such ID.
      */
     public Arena getArena(int arenaId) {
-        for (Arena a : this.arena) {
-            if (a.getId() == arenaId) {
-                return a;
-            }
-        }
-        return null;
+        return arenas.stream()
+                .filter(arena -> arena.getId() == arenaId)
+                .findFirst()
+                .orElse(null);
     }
 
     /**
-     * Creates an arena with an ID of highestId + 1.
+     * Creates an arenas with an ID of highestId + 1.
      *
      * @return (int) The arenaId
      */
@@ -202,16 +208,16 @@ public class ArenaManager {
             i++;
         }
         int arenaId = i - 1;
-        arena.add(new Arena(plugin, arenaId));
+        arenas.add(new Arena(plugin, arenaId));
         return arenaId;
     }
 
     /**
      * Get all arenas.
      *
-     * @return (ArenaList) List of all arena's.
+     * @return List of all arenas's.
      */
     public List<Arena> getArenas() {
-        return this.arena;
+        return arenas;
     }
 }
