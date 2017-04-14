@@ -479,9 +479,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoinArena(PlayerJoinArenaEvent e) {
-        if (e.getPlayer().hasPermission("crystalquest.arenas." + e.getArena().getName()) ||
-                e.getPlayer().hasPermission("crystalquest.arenas." + e.getArena().getId()) ||
-                e.getPlayer().hasPermission("crystalquest.arenas.*") ||
+        if (e.getPlayer().hasPermission("crystalquest.arena." + e.getArena().getName()) ||
+                e.getPlayer().hasPermission("crystalquest.arena." + e.getArena().getId()) ||
+                e.getPlayer().hasPermission("crystalquest.arena.*") ||
                 e.getPlayer().hasPermission("crystalquest.staff") ||
                 e.getPlayer().hasPermission("crystalquest.admin")) {
             if (e.getArena().getPlayers().size() == e.getArena().getMaxPlayers() && !e.isSpectating()) {
