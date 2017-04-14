@@ -1,6 +1,6 @@
 name: CrystalQuest
 main: nl.sugcube.crystalquest.CrystalQuest
-version: 'v1.3'
+version: 'v1.4'
 authors: [SugarCaney]
 softdepend: [Multiverse-Core]
 description: >
