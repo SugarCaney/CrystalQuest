@@ -2,10 +2,9 @@ package nl.sugcube.crystalquest.listeners;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.game.CrystalQuestTeam;
-import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.Classes;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,8 +39,8 @@ public class InventoryListener implements Listener {
                         player.closeInventory();
 
                         Arena a = plugin.am.getArena(e.getInventory().getName().replace("Pick Team: ", ""));
-                        CrystalQuestTeam team = null;
                         String displayName = "";
+                        CrystalQuestTeam team = null;
 
                         if (e.getCurrentItem().hasItemMeta()) {
                             if (e.getCurrentItem().getItemMeta().hasDisplayName()) {
@@ -49,31 +48,7 @@ public class InventoryListener implements Listener {
                             }
                         }
 
-                        if (displayName.contains(Teams.GREEN_NAME)) {
-                            team = CrystalQuestTeam.GREEN;
-                        }
-                        else if (displayName.contains(Teams.ORANGE_NAME)) {
-                            team = CrystalQuestTeam.ORANGE;
-                        }
-                        else if (displayName.contains(Teams.YELLOW_NAME)) {
-                            team = CrystalQuestTeam.YELLOW;
-                        }
-                        else if (displayName.contains(Teams.RED_NAME)) {
-                            team = CrystalQuestTeam.RED;
-                        }
-                        else if (displayName.contains(Teams.BLUE_NAME)) {
-                            team = CrystalQuestTeam.BLUE;
-                        }
-                        else if (displayName.contains(Teams.MAGENTA_NAME)) {
-                            team = CrystalQuestTeam.MAGENTA;
-                        }
-                        else if (displayName.contains(Teams.WHITE_NAME)) {
-                            team = CrystalQuestTeam.WHITE;
-                        }
-                        else if (displayName.contains(Teams.BLACK_NAME)) {
-                            team = CrystalQuestTeam.BLACK;
-                        }
-                        else if (displayName.contains("Random Team")) {
+                        if (displayName.contains("Random Team")) {
                             try {
                                 if (a.getSmallestTeams().size() > 0) {
                                     Random ran = new Random();
@@ -89,6 +64,9 @@ public class InventoryListener implements Listener {
                             catch (Exception exep) {
                                 exep.printStackTrace();
                             }
+                        }
+                        else {
+                            team = CrystalQuestTeam.valueOfName(displayName.replace("Join ", ""));
                         }
 
                         a.addPlayer(player, team, false);

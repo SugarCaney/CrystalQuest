@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @author SugarCaney
@@ -60,7 +61,7 @@ public class LoadData {
             String pfx = "arena." + id + ".";
 
             arena.setName(data.getString(pfx + "name"));
-            arena.setTeams(data.getInt(pfx + "teams"));
+            arena.setTeams(parseTeams(data, pfx + "teams"));
             arena.setMinPlayers(data.getInt(pfx + "min-players"));
             arena.setMaxPlayers(data.getInt(pfx + "max-players"));
             arena.setDoubleJump(data.getBoolean(pfx + "double-jump"));
@@ -127,4 +128,23 @@ public class LoadData {
         }
     }
 
+    /**
+     * Parses the team list, also takes legacy formats (before v1.3) into account.
+     */
+    private static List<CrystalQuestTeam> parseTeams(FileConfiguration data, String node) {
+        int integerValue = data.getInt(node);
+
+        // When there is no integer value: parse as if it's a list.
+        if (integerValue == 0) {
+            return data.getStringList(node).stream()
+                    .map(CrystalQuestTeam::valueOfTeamName)
+                    .collect(Collectors.toList());
+        }
+
+        // Pre v1.3
+        // Otherwise do legacy stuff.
+        return IntStream.range(0, integerValue)
+                .mapToObj(CrystalQuestTeam::valueOf)
+                .collect(Collectors.toList());
+    }
 }

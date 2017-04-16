@@ -6,6 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scoreboard.Team;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,30 +21,28 @@ public class TeamWinGameEvent extends Event {
     private Arena arena;
     private CrystalQuestTeam team;
     private int teamCount;
-    private Team[] teams;
-    private String teamName;
+    private Collection<Team> teams;
 
     public TeamWinGameEvent(List<UUID> player, Arena arena, CrystalQuestTeam team, int teamCount,
-                            Team[] teams, String teamName) {
+                            Collection<Team> teams) {
         this.player = player;
         this.arena = arena;
         this.team = team;
         this.teamCount = teamCount;
         this.teams = teams;
-        this.teamName = teamName;
     }
 
     /**
      * @return The name of the team who won.
      */
     public String getTeamName() {
-        return teamName;
+        return team.toString();
     }
 
     /**
      * @return The teams that were in the game.
      */
-    public Team[] getTeams() {
+    public Collection<Team> getTeams() {
         return teams;
     }
 

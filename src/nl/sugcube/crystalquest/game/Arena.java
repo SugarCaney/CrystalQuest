@@ -44,11 +44,6 @@ public class Arena {
     private int minPlayers = -1;
 
     /**
-     * The amount of teams that participate in the arenas.
-     */
-    private int teams = -1;
-
-    /**
      * The name of the arenas.
      * <p>
      * {@code ""} when there is no name set.
@@ -212,13 +207,16 @@ public class Arena {
      */
     private Inventory teamMenu;
 
+    /**
+     * List containing all the teams that are available for the arena.
+     */
+    private List<CrystalQuestTeam> teams = new ArrayList<>();
+
     //Scoreboard
     /**
-     * Scoreboard: Array of teams by their team id.
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam} mapping.
+     * Scoreboard: Maps each CrystalQuest team to a respective scoreboard team.
      */
-    private Team[] sTeams;
+    private Map<CrystalQuestTeam, Team> scoreboardTeams = new ConcurrentHashMap<>();
 
     /**
      * Scoreboard: The object used to track the points earned.
@@ -226,11 +224,9 @@ public class Arena {
     private Objective points;
 
     /**
-     * Scoreboard: Array of scores of teams by their team id.
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam} mapping.
+     * Scoreboard: Maps CrystalQuest teams to their respective scoreboard scores.
      */
-    private Score[] sScore;
+    private Map<CrystalQuestTeam, Score> scoreboardScores = new ConcurrentHashMap<>();
 
     /**
      * Scoreboard: Team that contains all the spectators.
@@ -581,13 +577,12 @@ public class Arena {
     }
 
     /**
-     * Get the teams in the arenas
+     * Get the teams (scoreboard) in the arenas
      *
      * @return The teams in the arenas
-     * @see Arena#sTeams
      */
-    public Team[] getScoreboardTeams() {
-        return sTeams;
+    public Collection<Team> getScoreboardTeams() {
+        return scoreboardTeams.values();
     }
 
     /**
@@ -650,90 +645,49 @@ public class Arena {
      * @return The teams with the least amount of players.
      */
     public List<CrystalQuestTeam> getSmallestTeams() {
-        List<CrystalQuestTeam> list = new ArrayList<>();
-
-        int least = Integer.MAX_VALUE;
-        for (int i = 0; i < getTeamCount(); i++) {
-            if (getScoreboardTeams()[i].getPlayers().size() < least) {
-                least = getScoreboardTeams()[i].getPlayers().size();
-            }
+        if (getScoreboardTeams().isEmpty()) {
+            return new ArrayList<>();
         }
 
-        int count = 0;
-        for (Team team : getScoreboardTeams()) {
-            if (team.getPlayers().size() == least && count < getTeamCount()) {
-                list.add(CrystalQuestTeam.valueOf(count));
-            }
-            count++;
-        }
+        int leastAmount = getScoreboardTeams().stream()
+                .min((t, u) -> Integer.valueOf(t.getSize()).compareTo(u.getSize()))
+                .map(Team::getSize)
+                .orElseThrow(() -> new IllegalStateException("There is no minimum"));
 
-        return list;
+        return scoreboardTeams.entrySet().stream()
+                .filter(entry -> entry.getValue().getEntries().size() <= leastAmount)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
     /**
      * Initializes the scoreboard. This makes or updates the scoreboard.
-     * <p>
-     * TODO: Change to {@link CrystalQuestTeam} constants.
      */
     public void initializeScoreboard() {
         score = Bukkit.getScoreboardManager().getNewScoreboard();
-        sTeams = new Team[8];
-        sScore = new Score[8];
+        scoreboardTeams.clear();
+        scoreboardScores.clear();
 
         spectatorTeam = score.registerNewTeam("Spectate");
         spectatorTeam.setAllowFriendlyFire(false);
         spectatorTeam.setCanSeeFriendlyInvisibles(true);
         spectatorTeam.setPrefix(ChatColor.BLUE + "[Spec] ");
-        sTeams[0] = score.registerNewTeam("Green");
-        sTeams[0].setPrefix(ChatColor.GREEN + "");
-        sTeams[1] = score.registerNewTeam("Orange");
-        sTeams[1].setPrefix(ChatColor.GOLD + "");
-        sTeams[2] = score.registerNewTeam("Yellow");
-        sTeams[2].setPrefix(ChatColor.YELLOW + "");
-        sTeams[3] = score.registerNewTeam("Red");
-        sTeams[3].setPrefix(ChatColor.RED + "");
-        sTeams[4] = score.registerNewTeam("Blue");
-        sTeams[4].setPrefix(ChatColor.AQUA + "");
-        sTeams[5] = score.registerNewTeam("Magenta");
-        sTeams[5].setPrefix(ChatColor.LIGHT_PURPLE + "");
-        sTeams[6] = score.registerNewTeam("White");
-        sTeams[6].setPrefix(ChatColor.WHITE + "");
-        sTeams[7] = score.registerNewTeam("Black");
-        sTeams[7].setPrefix(ChatColor.BLACK + "");
 
-        for (int i = 0; i <= 7; i++) {
-            sTeams[i].setAllowFriendlyFire(false);
+        for (CrystalQuestTeam cqTeam : getTeams()) {
+            Team team = score.registerNewTeam(cqTeam.getName());
+            team.setPrefix(cqTeam.getChatColour().toString());
+            team.setAllowFriendlyFire(false);
+            scoreboardTeams.put(cqTeam, team);
         }
 
         points = score.registerNewObjective("points", "dummy");
         points.setDisplaySlot(DisplaySlot.SIDEBAR);
         updateTimer();
 
-        sScore[0] = points.getScore(Teams.GREEN);
-        sScore[1] = points.getScore(Teams.ORANGE);
-        if (teams >= 3) {
-            sScore[2] = points.getScore(Teams.YELLOW);
-        }
-        if (this.teams >= 4) {
-            sScore[3] = points.getScore(Teams.RED);
-        }
-        if (teams >= 5) {
-            sScore[4] = points.getScore(Teams.BLUE);
-        }
-        if (teams >= 6) {
-            sScore[5] = points.getScore(Teams.MAGENTA);
-        }
-        if (teams >= 7) {
-            sScore[6] = points.getScore(Teams.WHITE);
-        }
-        if (this.teams >= 8) {
-            sScore[7] = points.getScore(Teams.BLACK);
-        }
-
-        for (Score s : sScore) {
-            if (s != null) {
-                s.setScore(0);
-            }
+        for (CrystalQuestTeam cqTeam : getTeams()) {
+            Score score = points.getScore(cqTeam.toString());
+            score.setScore(0);
+            scoreboardScores.put(cqTeam, score);
         }
     }
 
@@ -763,17 +717,8 @@ public class Arena {
 
     /**
      * Get an unmodifiable collection containing all the teams that are present in the arena.
-     * <p>
-     * TODO: Replace by new team system.
      */
     public Collection<CrystalQuestTeam> getTeams() {
-        List<CrystalQuestTeam> teams = new ArrayList<>();
-
-        Iterator<CrystalQuestTeam> it = CrystalQuestTeam.getTeams().iterator();
-        for (int i = 0; it.hasNext() && i < this.teams; i++) {
-            teams.add(it.next());
-        }
-
         return Collections.unmodifiableList(teams);
     }
 
@@ -785,7 +730,7 @@ public class Arena {
      * @return {@code true} if the team participates, {@code false} otherwise.
      */
     public boolean hasTeam(CrystalQuestTeam team) {
-        return team.getId() < teams;
+        return teams.contains(team);
     }
 
     /**
@@ -808,90 +753,51 @@ public class Arena {
      * @return The winning team, or {@code null} when something went wrong.
      */
     public CrystalQuestTeam declareWinner() {
-        if (!getPlayers().isEmpty()) {
-            int highest = -99999;
-            Score hScore = null;
-            for (Score score : this.sScore) {
-                if (score != null) {
-                    if (score.getScore() > highest) {
-                        highest = score.getScore();
-                        hScore = score;
-                    }
-                }
-            }
-
-            String winningTeam = "";
-            CrystalQuestTeam team = null;
-            ChatColor colour = null;
-            List<UUID> winningPlayers = new ArrayList<>();
-
-            if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.GREEN_NAME)) {
-                winningTeam = Teams.GREEN_NAME;
-                colour = ChatColor.GREEN;
-                team = CrystalQuestTeam.GREEN;
-            }
-            else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.ORANGE_NAME)) {
-                winningTeam = Teams.ORANGE_NAME;
-                colour = ChatColor.GOLD;
-                team = CrystalQuestTeam.ORANGE;
-            }
-            else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.YELLOW_NAME)) {
-                winningTeam = Teams.YELLOW_NAME;
-                colour = ChatColor.YELLOW;
-                team = CrystalQuestTeam.YELLOW;
-            }
-            else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.RED_NAME)) {
-                winningTeam = Teams.RED_NAME;
-                colour = ChatColor.RED;
-                team = CrystalQuestTeam.RED;
-            }
-            else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.BLUE_NAME)) {
-                winningTeam = Teams.BLUE_NAME;
-                colour = ChatColor.AQUA;
-                team = CrystalQuestTeam.BLUE;
-            }
-            else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.MAGENTA_NAME)) {
-                winningTeam = Teams.MAGENTA_NAME;
-                colour = ChatColor.LIGHT_PURPLE;
-                team = CrystalQuestTeam.MAGENTA;
-            }
-            else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.WHITE_NAME)) {
-                winningTeam = Teams.WHITE_NAME;
-                colour = ChatColor.WHITE;
-                team = CrystalQuestTeam.WHITE;
-            }
-            else if (hScore.getPlayer().getName().equalsIgnoreCase(Teams.BLACK_NAME)) {
-                winningTeam = Teams.BLACK_NAME;
-                colour = ChatColor.DARK_GRAY;
-                team = CrystalQuestTeam.BLACK;
-            }
-
-            for (UUID id : this.getPlayers()) {
-                Player p = Bukkit.getPlayer(id);
-                p.sendMessage(colour + "<>---------------------------<>");
-                p.sendMessage("    " + winningTeam + " " + Broadcast.get("arena.won"));
-                p.sendMessage(colour + "<>---------------------------<>");
-
-                if (plugin.am.getTeam(p).equals(team)) {
-                    winningPlayers.add(p.getUniqueId());
-                }
-            }
-
-            Bukkit.getPluginManager().callEvent(
-                    new TeamWinGameEvent(
-                            winningPlayers,
-                            this,
-                            team,
-                            getTeamCount(),
-                            sTeams,
-                            winningTeam
-                    )
-            );
-
-            return team;
+        if (getPlayers().isEmpty()) {
+            return null;
         }
 
-        return null;
+        Score hScore = scoreboardScores.values().stream()
+                .max((s, t) -> Integer.valueOf(s.getScore()).compareTo(t.getScore()))
+                .orElseThrow(() -> new AssertionError("Should not happen!"));
+
+        CrystalQuestTeam winningTeam = null;
+        List<UUID> winningPlayers = new ArrayList<>();
+
+        for (CrystalQuestTeam cqTeam : getTeams()) {
+            if (hScore.getPlayer().getName().equalsIgnoreCase(cqTeam.toString())) {
+                winningTeam = cqTeam;
+            }
+        }
+
+        if (winningTeam == null) {
+            throw new IllegalStateException("Winning team could not be found!");
+        }
+
+        ChatColor colour = winningTeam.getChatColour();
+
+        for (UUID id : getPlayers()) {
+            Player p = Bukkit.getPlayer(id);
+            p.sendMessage(colour + "<>---------------------------<>");
+            p.sendMessage("    " + winningTeam + " " + Broadcast.get("arena.won"));
+            p.sendMessage(colour + "<>---------------------------<>");
+
+            if (plugin.am.getTeam(p).equals(winningTeam)) {
+                winningPlayers.add(p.getUniqueId());
+            }
+        }
+
+        Bukkit.getPluginManager().callEvent(
+                new TeamWinGameEvent(
+                        winningPlayers,
+                        this,
+                        winningTeam,
+                        getTeamCount(),
+                        scoreboardTeams.values()
+                )
+        );
+
+        return winningTeam;
     }
 
     /**
@@ -1028,7 +934,7 @@ public class Arena {
         }
 
         players.remove(p.getUniqueId());
-        for (Team team : sTeams) {
+        for (Team team : scoreboardTeams.values()) {
             if (team.hasPlayer((OfflinePlayer)p)) {
                 team.removePlayer((OfflinePlayer)p);
             }
@@ -1093,7 +999,7 @@ public class Arena {
 
                         if (!spectate) {
                             players.add(p.getUniqueId());
-                            sTeams[team.getId()].addPlayer((OfflinePlayer)p);
+                            getTeamObject(team).addPlayer((OfflinePlayer)p);
                         }
                         p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                         p.setScoreboard(this.score);
@@ -1207,7 +1113,7 @@ public class Arena {
         }
         spectators.clear();
 
-        for (Team team : sTeams) {
+        for (Team team : scoreboardTeams.values()) {
             for (OfflinePlayer op : team.getPlayers()) {
                 team.removePlayer(op);
             }
@@ -1642,33 +1548,63 @@ public class Arena {
     }
 
     /**
-     * Sets the amount of teams available for the arenas.
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam}.
+     * Set the teams that can be joined in this arena.
      *
-     * @param amountOfTeams
-     *         The amount of teams used to play this arenas.
-     * @return true if applied succesful, false if amountOfTeams is greater than 6.
+     * @param teams
+     *         Collection containing all the team possibilities for the arena. Can be at most 8
+     *         teams and must contain at least 2 teams.
+     * @throws IllegalArgumentException
+     *         When you entered more than 8 teams, or fewer than 2.
      */
-    public boolean setTeams(int amountOfTeams) {
-        if (amountOfTeams > 8) {
-            return false;
+    public void setTeams(Collection<CrystalQuestTeam> teams) throws IllegalArgumentException {
+        if (teams.size() > 8) {
+            throw new IllegalArgumentException("You can only have 8 teams per arena!");
         }
 
-        this.teams = amountOfTeams;
-        return true;
+        if (teams.size() < 2) {
+            throw new IllegalArgumentException("The arena must have at least 2 teams.");
+        }
+
+        this.teams.clear();
+        this.teams.addAll(teams);
+
+        initializeScoreboard();
+    }
+
+    /**
+     * Set the teams that can be joined in this arena.
+     *
+     * @param team1
+     *         The first team.
+     * @param team2
+     *         The second team.
+     * @param other
+     *         All the other teams, must be at most 6.
+     * @throws IllegalArgumentException
+     *         When you entered more than 8 teams.
+     */
+    public void setTeams(CrystalQuestTeam team1, CrystalQuestTeam team2,
+                         CrystalQuestTeam... other) throws IllegalArgumentException {
+        if (other.length > 6) {
+            throw new IllegalArgumentException("Amount of teams must be at most 8!");
+        }
+
+        this.teams.clear();
+        this.teams.add(team1);
+        this.teams.add(team2);
+        Collections.addAll(this.teams, other);
+
+        initializeScoreboard();
     }
 
     /**
      * Returns the amount of teams available for the arenas.
-     * <p>
-     * TODO: Replace by {@link CrystalQuestTeam}.
      *
      * @return The amount of teams of the arenas.
      * @see Arena#teams
      */
     public int getTeamCount() {
-        return teams;
+        return teams.size();
     }
 
     /**
@@ -1722,41 +1658,49 @@ public class Arena {
         ArenaStartEvent e = new ArenaStartEvent(this);
         Bukkit.getPluginManager().callEvent(e);
 
-        if (!e.isCancelled()) {
-            for (UUID id : getPlayers()) {
-                Player player = Bukkit.getPlayer(id);
-                plugin.im.setClassInventory(player);
-                player.sendMessage(Broadcast.TAG + Broadcast.get("arena.started"));
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20F, 20F);
-                player.sendMessage(Broadcast.TAG + Broadcast.get("arena.using-class")
-                        .replace("%class%", SMeth.setColours(plugin.getConfig().getString(
-                                "kit." + plugin.im.playerClass.get(player.getUniqueId()) + ".name"))));
-            }
-
-            setInGame(true);
-
-            Random ran = new Random();
-
-            for (UUID id : getPlayers()) {
-                Player player = Bukkit.getPlayer(id);
-                boolean isTeamSpawns = false;
-                for (int i = 0; i < getTeamCount(); i++) {
-                    if (getTeamSpawns().get(CrystalQuestTeam.valueOf(i)).size() > 0) {
-                        isTeamSpawns = true;
-                    }
-                }
-                if (isTeamSpawns) {
-                    CrystalQuestTeam team = getTeam(player);
-                    player.teleport(getTeamSpawns().get(team).get(ran.nextInt(getTeamSpawns().get(team).size())));
-                }
-                else {
-                    player.teleport((getPlayerSpawns().get(ran.nextInt(getPlayerSpawns().size()))));
-                }
-            }
-
-            plugin.signHandler.updateSigns();
+        if (e.isCancelled()) {
+            return;
         }
 
+        for (UUID id : getPlayers()) {
+            Player player = Bukkit.getPlayer(id);
+            plugin.im.setClassInventory(player);
+            player.sendMessage(Broadcast.TAG + Broadcast.get("arena.started"));
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20F, 20F);
+            player.sendMessage(Broadcast.TAG + Broadcast.get("arena.using-class")
+                    .replace("%class%", SMeth.setColours(plugin.getConfig().getString(
+                            "kit." + plugin.im.playerClass.get(player.getUniqueId()) + ".name"))));
+        }
+
+        setInGame(true);
+
+        Random ran = new Random();
+
+        for (UUID id : getPlayers()) {
+            Player player = Bukkit.getPlayer(id);
+            boolean isTeamSpawns = false;
+            for (int i = 0; i < getTeamCount(); i++) {
+                if (getTeamSpawns().get(CrystalQuestTeam.valueOf(i)).size() > 0) {
+                    isTeamSpawns = true;
+                }
+            }
+            if (isTeamSpawns) {
+                CrystalQuestTeam team = getTeam(player);
+                player.teleport(getTeamSpawns().get(team).get(ran.nextInt(getTeamSpawns().get(team).size())));
+            }
+            else {
+                player.teleport((getPlayerSpawns().get(ran.nextInt(getPlayerSpawns().size()))));
+            }
+        }
+
+        plugin.signHandler.updateSigns();
+
+        Collection<CrystalQuestTeam> allPresentTeams = playerTeams.values();
+        for (CrystalQuestTeam team : getTeams()) {
+            if (!allPresentTeams.contains(team)) {
+                points.getScoreboard().resetScores(team.toString());
+            }
+        }
     }
 
     /**
@@ -1765,9 +1709,34 @@ public class Arena {
      * @param team
      *         The team to get the score of.
      * @return The score of the given team.
+     * @throws IllegalStateException
+     *         When the given team is not present in the arena.
      */
-    private Score getScoreObject(CrystalQuestTeam team) {
-        return sScore[team.getId()];
+    public Score getScoreObject(CrystalQuestTeam team) throws IllegalStateException {
+        if (!hasTeam(team)) {
+            throw new IllegalStateException("CrystalQuestTeam " + team.getName() + " is not " +
+                    "present in the arena.");
+        }
+
+        return scoreboardScores.get(team);
+    }
+
+    /**
+     * Get the team object (scoreboard) of a given team.
+     *
+     * @param team
+     *         The team to get the scoreboard score of.
+     * @return The scoreboard Team corresponding to the given CrystalQuest Team.
+     * @throws IllegalStateException
+     *         When the given team is not present in the arena.
+     */
+    public Team getTeamObject(CrystalQuestTeam team) throws IllegalStateException {
+        if (!hasTeam(team)) {
+            throw new IllegalStateException("CrystalQuestTeam " + team.getName() + " is not " +
+                    "present in the arena.");
+        }
+
+        return scoreboardTeams.get(team);
     }
 
     /**
@@ -1804,7 +1773,7 @@ public class Arena {
      * @return The score of the given team.
      */
     public int getScore(CrystalQuestTeam team) {
-        if (sScore == null) {
+        if (getScoreboardTeams() == null) {
             return Integer.MIN_VALUE;
         }
 

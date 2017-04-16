@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author SugarCaney
@@ -47,14 +49,14 @@ public class Teams {
      * being the team of the player passed as argument.
      *
      * @param player
-     *         (Player) The player from whose team cannot be hit.
-     * @return (int) The TeamID of the hit team.
+     *         The player from whose team cannot be hit.
+     * @return The team that has been randomly chosen, or {@code null} when there is no other team.
      */
-    public static int getRandomTeamToHit(Player player) {
+    public static CrystalQuestTeam getRandomTeamToHit(Player player) {
         Arena arena = plugin.getArenaManager().getArena(player.getUniqueId());
-        List<Integer> teams = new ArrayList<>();
+        List<CrystalQuestTeam> teams = new ArrayList<>();
 
-        for (int team = 0; team < arena.getTeamCount(); team++) {
+        for (CrystalQuestTeam team : arena.getTeams()) {
             List<Player> teamPlayers = getPlayersFromTeam(arena, team);
             if (teamPlayers.contains(player)) {
                 continue;
@@ -68,7 +70,7 @@ public class Teams {
         }
 
         if (teams.size() == 0) {
-            return 0;
+            return null;
         }
 
         return teams.get(RANDOM.nextInt(teams.size()));
@@ -79,20 +81,15 @@ public class Teams {
      *
      * @param arena
      *         The arenas to get the players from.
-     * @param teamId
-     *         The teamId of the team to get the playres of.
+     * @param team
+     *         The team to get the players from.
      * @return A list containing all the players in a given team in a given arenas.
      */
-    public static List<Player> getPlayersFromTeam(Arena arena, int teamId) {
-        List<Player> players = new ArrayList<>();
-
-        for (OfflinePlayer offlinePlayer : arena.getScoreboardTeams()[teamId].getPlayers()) {
-            Bukkit.getOnlinePlayers().stream()
-                    .filter(onlinePlayer -> onlinePlayer.equals(offlinePlayer))
-                    .forEach(players::add);
-        }
-
-        return players;
+    public static List<Player> getPlayersFromTeam(Arena arena, CrystalQuestTeam team) {
+        Set<OfflinePlayer> offlinePlayers = arena.getTeamObject(team).getPlayers();
+        return Bukkit.getOnlinePlayers().stream()
+                .filter(offlinePlayers::contains)
+                .collect(Collectors.toList());
     }
 
     /**

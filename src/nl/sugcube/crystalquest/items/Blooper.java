@@ -2,6 +2,7 @@ package nl.sugcube.crystalquest.items;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import nl.sugcube.crystalquest.game.Arena;
@@ -35,7 +36,7 @@ public class Blooper extends ItemExecutor {
         PotionEffect effect2 = new PotionEffect(PotionEffectType.SPEED, duration, 0);
 
         Arena arena = plugin.getArenaManager().getArena(player.getUniqueId());
-        int targetTeam = Teams.getRandomTeamToHit(player);
+        CrystalQuestTeam targetTeam = Teams.getRandomTeamToHit(player);
 
         if (arena.getPlayers().size() <= 1) {
             return true;
@@ -52,7 +53,7 @@ public class Blooper extends ItemExecutor {
 
         // Send confirmation message
         player.sendMessage(Broadcast.get("item-use.blooper")
-                .replace("%team%", Teams.getTeamNameById(targetTeam)));
+                .replace("%team%", targetTeam.toString()));
 
         return true;
     }

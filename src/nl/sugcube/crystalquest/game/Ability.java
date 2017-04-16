@@ -69,7 +69,7 @@ public class Ability implements Listener {
             if (plugin.ab.getAbilities().containsKey(p.getUniqueId())) {
                 if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("last_revenge")) {
                     Arena a = plugin.getArenaManager().getArena(p.getUniqueId());
-                    int targetTeam = Teams.getRandomTeamToHit(p);
+                    CrystalQuestTeam targetTeam = Teams.getRandomTeamToHit(p);
 
                     if (a.getPlayers().size() > 1) {
                         double lightning = Multipliers.getMultiplier("lightning",
@@ -79,7 +79,7 @@ public class Ability implements Listener {
                                 plugin.economy.getLevel(p, "debuff", "upgrade"), false);
                         int duration = (int)(218 * multiplier);
 
-                        for (OfflinePlayer olTarget : a.getScoreboardTeams()[targetTeam].getPlayers()) {
+                        for (OfflinePlayer olTarget : a.getTeamObject(targetTeam).getPlayers()) {
                             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                                 if (onlinePlayer == olTarget) {
                                     if (lightning > 0) {

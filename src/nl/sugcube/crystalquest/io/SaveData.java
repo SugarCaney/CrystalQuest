@@ -55,7 +55,9 @@ public class SaveData {
         for (Arena arena : plugin.am.arenas) {
             String pfx = "arena." + arena.getId() + ".";
             data.set(pfx + "name", arena.getName());
-            data.set(pfx + "teams", arena.getTeamCount());
+            data.set(pfx + "teams", arena.getTeams().stream()
+                    .map(CrystalQuestTeam::getName)
+                    .collect(Collectors.toList()));
             data.set(pfx + "min-players", arena.getMinPlayers());
             data.set(pfx + "max-players", arena.getMaxPlayers());
             data.set(pfx + "team-lobby", toStringList(arena.getLobbySpawns()));

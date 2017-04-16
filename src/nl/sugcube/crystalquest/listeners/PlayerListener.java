@@ -33,6 +33,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -169,7 +170,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onTeamWinGame(TeamWinGameEvent event) {
         CrystalQuestTeam winningTeam = event.getTeam();
-        Team[] teams = event.getTeams();
+        Collection<Team> teams = event.getTeams();
         Arena arena = event.getArena();
         int score = arena.getScore(winningTeam);
         int delta = 9999999;

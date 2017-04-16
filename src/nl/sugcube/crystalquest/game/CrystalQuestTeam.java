@@ -28,7 +28,7 @@ public enum CrystalQuestTeam {
 
     WHITE("white", ChatColor.WHITE, DyeColor.WHITE, (short)0, Color.WHITE),
 
-    BLACK("black", ChatColor.BLACK, DyeColor.BLACK, (short)15, Color.BLACK);
+    BLACK("black", ChatColor.DARK_GRAY, DyeColor.BLACK, (short)15, Color.BLACK);
 
     private final String name;
     private final ChatColor chatColour;
