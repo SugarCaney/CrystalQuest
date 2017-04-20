@@ -121,7 +121,6 @@ commands:
   teamlobby-usage: "&c[!!] Usage: /cq teamlobby <arena> <team>"
   forcestart-succeed: "Started Arena &7%arena%&e."
   forcestart-error: "&c[!!] Could not start the arena!"
-  forcestart-usage: "&c[!!] Usage: /cq forcestart <arena>"
   wrong-name: "&c[!!] Wrong name!"
   setname-succeed: "Arena &7%arena%&e's name is now &7%name%&e."
   setname-failed: "&c[!!] Could not name the arena!"

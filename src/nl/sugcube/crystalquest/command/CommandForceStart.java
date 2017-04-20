@@ -4,6 +4,7 @@ import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * @author SugarCaney
@@ -11,7 +12,7 @@ import org.bukkit.command.CommandSender;
 public class CommandForceStart extends CrystalQuestCommand {
 
     public CommandForceStart() {
-        super("forcestart", "commands.forcestart-usage", 1);
+        super("forcestart", "commands.forcestart-usage", 0);
 
         addPermissions(
                 "crystalquest.admin",
@@ -24,6 +25,20 @@ public class CommandForceStart extends CrystalQuestCommand {
 
     @Override
     protected void executeImpl(CrystalQuest plugin, CommandSender sender, String... arguments) {
+        // Force start current arena.
+        if (arguments.length == 0) {
+            if (sender instanceof Player) {
+                Player player = (Player)sender;
+                Arena arena = plugin.getArenaManager().getArena(player);
+                if (arena != null) {
+                    arena.setIsCounting(true);
+                    sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.forcestart-succeed")
+                            .replace("%arena%", arena.getName()));
+                    return;
+                }
+            }
+        }
+
         try {
             Arena arena;
             try {

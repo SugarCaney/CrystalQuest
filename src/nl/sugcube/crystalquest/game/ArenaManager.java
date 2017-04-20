@@ -130,7 +130,7 @@ public class ArenaManager {
     }
 
     /**
-     * Gets the arenas the player is in
+     * Gets the arena the entity with the given id is in
      *
      * @param id
      *         The UUID of the player to look for.
@@ -141,6 +141,17 @@ public class ArenaManager {
                 .filter(arena -> arena.isInArena(id))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Gets the arena the player is in
+     *
+     * @param player
+     *         The player to look for.
+     * @return The arenas the player is in or {@code null} when no such arenas exists.
+     */
+    public Arena getArena(Player player) {
+        return getArena(player.getUniqueId());
     }
 
     /**
