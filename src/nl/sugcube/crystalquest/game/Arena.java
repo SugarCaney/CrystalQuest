@@ -952,7 +952,14 @@ public class Arena {
         }
 
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
-        p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+
+        try {
+            p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        }
+        catch (IllegalArgumentException ignored) {
+            // Somehow, p.isInvalid() does not work on this. This will do :/
+        }
+
         playerTeams.remove(p.getUniqueId());
         plugin.im.restoreInventory(p);
         plugin.im.playerClass.remove(p.getUniqueId());
