@@ -4,6 +4,7 @@ import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import nl.sugcube.crystalquest.game.Arena;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import nl.sugcube.crystalquest.listeners.DeathMessages;
 import nl.sugcube.crystalquest.util.ChangeMarker;
 import org.bukkit.Bukkit;
@@ -35,11 +36,9 @@ public class ItemListener implements Listener {
 
     public static CrystalQuest plugin;
 
-    private Random ran;
-
     public ItemListener(CrystalQuest instance) {
         plugin = instance;
-        ran = new Random();
+        Random ran = new Random();
     }
 
     @EventHandler
@@ -306,24 +305,24 @@ public class ItemListener implements Listener {
                          * CRYSTAL SHARD
 						 */
                         if (name.contains(Broadcast.get("items.crystal-shard"))) {
-                            int teamId = plugin.getArenaManager().getTeam(player);
-                            a.setScore(teamId, a.getScore(teamId) + e.getItem().getItemStack().getAmount());
+                            CrystalQuestTeam team = plugin.getArenaManager().getTeam(player);
+                            a.setScore(team, a.getScore(team) + e.getItem().getItemStack().getAmount());
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20, 20);
                         }
                         /*
                          * SMALL CRYSTAL
 						 */
                         else if (name.contains(Broadcast.get("items.small-crystal"))) {
-                            int teamId = plugin.getArenaManager().getTeam(player);
-                            a.setScore(teamId, a.getScore(teamId) + e.getItem().getItemStack().getAmount() * 2);
+                            CrystalQuestTeam team = plugin.getArenaManager().getTeam(player);
+                            a.setScore(team, a.getScore(team) + e.getItem().getItemStack().getAmount() * 2);
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20, 20);
                         }
                         /*
                          * SHINY CRYSTAL
 						 */
                         else if (name.contains(Broadcast.get("items.shiny-crystal"))) {
-                            int teamId = plugin.getArenaManager().getTeam(player);
-                            a.setScore(teamId, a.getScore(teamId) + e.getItem().getItemStack().getAmount() * 3);
+                            CrystalQuestTeam team = plugin.getArenaManager().getTeam(player);
+                            a.setScore(team, a.getScore(team) + e.getItem().getItemStack().getAmount() * 3);
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20, 20);
                         }
                         /*

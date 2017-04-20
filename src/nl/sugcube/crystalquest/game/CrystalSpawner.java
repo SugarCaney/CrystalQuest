@@ -35,7 +35,7 @@ public class CrystalSpawner implements Runnable {
             }
 
             for (Location loc : a.getCrystalSpawns()) {
-                if (a.isEndGame() || a.getGameCrystalMap().containsValue(loc)) {
+                if (a.isEndGame() || a.getCrystalLocations().containsValue(loc)) {
                     continue;
                 }
 
@@ -47,7 +47,7 @@ public class CrystalSpawner implements Runnable {
                                 .spawnEntity(loc.add(0, 0.05, 0), EntityType.ENDER_CRYSTAL);
                         ec.setShowingBottom(false);
                         a.getGameCrystals().add(ec);
-                        a.getGameCrystalMap().put(ec, loc);
+                        a.getCrystalLocations().put(ec, loc);
                     }
                     catch (Exception ignored) {
                     }

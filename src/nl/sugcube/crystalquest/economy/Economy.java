@@ -2,7 +2,6 @@ package nl.sugcube.crystalquest.economy;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
 import nl.sugcube.crystalquest.game.ArenaManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,16 +17,6 @@ import java.util.List;
  * @author SugarCaney
  */
 public class Economy {
-
-	/*
-     * CONFIG-NODES:
-	 * Balances: shop.balance.<UUID>
-	 * Upgrades: shop.upgrade.<UUID>.<upgrade>
-	 * 
-	 * >>OLD<< NODES:
-	 * ---Balances: economy.balance.<playername>---
-	 * ---Upgrades: economy.upgrade.<playername>.<upgrade>---
-	 */
 
     public static CrystalQuest plugin;
 
@@ -176,13 +165,6 @@ public class Economy {
             plugin.getData().set("shop." + type + "." + p.getUniqueId().toString() + "." + upgrade, 0);
             return 0;
         }
-
-		/*if (plugin.getData().isSet("economy." + type + "." + p.getName() + "." + upgrade)) {
-			return plugin.getData().getInt("economy." + type + "." + p.getName() + "." + upgrade);
-		} else {
-			plugin.getData().set("economy." + type + "." + p.getName() + "." + upgrade, 0);
-			return 0;
-		}*/
     }
 
     /**
@@ -203,7 +185,7 @@ public class Economy {
                 String finals = "";
                 ArenaManager am = plugin.getArenaManager();
                 if (am.isInGame(p)) {
-                    finals = s.replace("%teamcolour%", Teams.getTeamChatColour(am.getTeam(p)) + "");
+                    finals = s.replace("%teamcolour%", am.getTeam(p).getChatColour() + "");
                 }
                 else {
                     finals = s.replace("%teamcolour%", "");

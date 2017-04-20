@@ -22,7 +22,7 @@ public class CommandList extends CrystalQuestCommand {
     protected void executeImpl(CrystalQuest plugin, CommandSender sender, String... arguments) {
         StringBuilder arenas = new StringBuilder();
         boolean first = false;
-        for (Arena a : plugin.am.arena) {
+        for (Arena a : plugin.am.arenas) {
             if (!first) {
                 arenas.append(a.getName()).append("[").append(a.getId() + 1).append("]");
                 first = true;

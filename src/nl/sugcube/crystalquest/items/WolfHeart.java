@@ -1,10 +1,10 @@
 package nl.sugcube.crystalquest.items;
 
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.ArenaManager;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.EntityEffect;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -46,14 +46,14 @@ public class WolfHeart extends ItemExecutor {
         // Spawn wolfie
         ArenaManager arenaManager = plugin.getArenaManager();
         Arena arena = arenaManager.getArena(player.getUniqueId());
-        int teamId = arenaManager.getTeam(player);
+        CrystalQuestTeam team = arenaManager.getTeam(player);
 
         World world = player.getWorld();
         Wolf wolf = world.spawn(player.getLocation(), Wolf.class);
         wolf.setOwner(player);
         wolf.setAdult();
-        wolf.setCustomName(Teams.getTeamChatColour(teamId) + getWolfName());
-        wolf.setCollarColor(Teams.getTeamDyeColour(teamId));
+        wolf.setCustomName(team.getChatColour() + getWolfName());
+        wolf.setCollarColor(team.getDyeColour());
         wolf.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
 
         // Add potion effects

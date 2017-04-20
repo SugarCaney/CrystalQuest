@@ -2,7 +2,6 @@ package nl.sugcube.crystalquest.listeners;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
 import nl.sugcube.crystalquest.Update;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import nl.sugcube.crystalquest.events.PlayerEarnCrystalsEvent;
@@ -11,6 +10,7 @@ import nl.sugcube.crystalquest.events.PlayerLeaveArenaEvent;
 import nl.sugcube.crystalquest.events.TeamWinGameEvent;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.ArenaManager;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -33,6 +33,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -48,7 +50,7 @@ public class PlayerListener implements Listener {
     }
 
     /*
-     * Make sure nobody is in the arena.
+     * Make sure nobody is in the arenas.
      */
     @EventHandler
     public void onPlayerInArena(PlayerMoveEvent e) {
@@ -166,22 +168,24 @@ public class PlayerListener implements Listener {
 	 */
 
     @EventHandler
-    public void onTeamWinGame(TeamWinGameEvent e) {
-        Team[] teams = e.getTeams();
-        Arena a = e.getArena();
-        int score = a.getScore(Teams.getTeamIdFromNAME(e.getTeamName()));
-        int verschil = 9999999;
+    public void onTeamWinGame(TeamWinGameEvent event) {
+        CrystalQuestTeam winningTeam = event.getTeam();
+        Collection<Team> teams = event.getTeams();
+        Arena arena = event.getArena();
+        int score = arena.getScore(winningTeam);
+        int delta = 9999999;
 
         int i = 0;
-        for (Team t : teams) {
-            if (i == e.getTeamCount()) {
+        for (Team team : teams) {
+            if (i == event.getTeamCount()) {
                 break;
             }
 
-            if (t != null) {
-                if (a.getScore(i) >= 0) {
-                    if (Math.abs(score - a.getScore(i)) < verschil) {
-                        verschil = Math.abs(score - a.getScore(i));
+            CrystalQuestTeam iTeam = CrystalQuestTeam.valueOf(i);
+            if (team != null) {
+                if (arena.getScore(iTeam) >= 0) {
+                    if (Math.abs(score - arena.getScore(iTeam)) < delta) {
+                        delta = Math.abs(score - arena.getScore(iTeam));
                     }
                 }
             }
@@ -189,14 +193,14 @@ public class PlayerListener implements Listener {
         }
 
         int crystals = 25;
-        int extrac = 0;
-        extrac = (int)((((double)score) - ((double)verschil)) / ((double)score)) * 25;
+        int extrac;
+        extrac = (int)((((double)score) - ((double)delta)) / ((double)score)) * 25;
         if (extrac > 25) {
             extrac = 25;
         }
         crystals += extrac;
 
-        for (UUID id : e.getPlayers()) {
+        for (UUID id : event.getPlayers()) {
             Player p = Bukkit.getPlayer(id);
             int vip = 1;
             if (p.hasPermission("crystalquest.doublecash") ||
@@ -214,16 +218,15 @@ public class PlayerListener implements Listener {
 
 
             // Call Event
-            PlayerEarnCrystalsEvent event = new PlayerEarnCrystalsEvent(p, a, moneyEarned);
-            Bukkit.getPluginManager().callEvent(event);
+            PlayerEarnCrystalsEvent crystalEvent = new PlayerEarnCrystalsEvent(p, arena, moneyEarned);
+            Bukkit.getPluginManager().callEvent(crystalEvent);
 
-            String message = plugin.economy.getCoinMessage(p, event.getAmount());
-            ;
+            String message = plugin.economy.getCoinMessage(p, crystalEvent.getAmount());
 
-            if (!event.isCancelled()) {
-                plugin.economy.getBalance().addCrystals(p, event.getAmount(), false);
+            if (!crystalEvent.isCancelled()) {
+                plugin.economy.getBalance().addCrystals(p, crystalEvent.getAmount(), false);
 
-                if (event.showMessage() && message != null) {
+                if (crystalEvent.showMessage() && message != null) {
                     p.sendMessage(message);
                 }
             }
@@ -346,7 +349,7 @@ public class PlayerListener implements Listener {
                 if (plugin.getArenaManager().isInGame(player)) {
                     if (!plugin.getArenaManager().getArena(player.getUniqueId()).getSpectators()
                             .contains(player.getUniqueId())) {
-                        event.setMessage(Teams.getTeamChatColour(plugin.getArenaManager().getTeam(player)) +
+                        event.setMessage(plugin.getArenaManager().getTeam(player).getChatColour() +
                                 event.getMessage());
                     }
                     else {
@@ -369,7 +372,7 @@ public class PlayerListener implements Listener {
         }
 
         if (a.isInGame()) {
-            for (Team t : a.getTeams()) {
+            for (Team t : a.getScoreboardTeams()) {
                 if (t.getPlayers().size() == a.getPlayers().size()) {
                     a.declareWinner();
                     a.setEndGame(true);
@@ -427,32 +430,37 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerRespawn(PlayerRespawnEvent e) {
-        Player p = e.getPlayer();
-        if (plugin.am.isInGame(p)) {
-            p.getInventory().clear();
-            plugin.im.setClassInventory(p);
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        if (plugin.am.isInGame(player)) {
+            player.getInventory().clear();
+            plugin.im.setClassInventory(player);
             Random ran = new Random();
-            Arena a = plugin.getArenaManager().getArena(p.getUniqueId());
+            Arena arena = plugin.getArenaManager().getArena(player.getUniqueId());
 
-			/*
-             * Teleports to team spawn if there are team spawns set.
-			 * Otherwise, the normal playerspawns count.
-			 */
-            if (a.getTeamSpawns().get(a.getTeamCount() - 1).size() > 0) {
-                int team = a.getTeam(p);
-                e.setRespawnLocation(a.getTeamSpawns().get(team).get(ran.nextInt(a.getTeamSpawns().get(team).size())));
+            // Teleports to team spawn if there are team spawns set.
+            // Otherwise, the normal playerspawns count.
+            CrystalQuestTeam team = arena.getTeam(player);
+            List<Location> teamSpawns = arena.getTeamSpawns(team);
+
+            // No team spawns
+            if (teamSpawns == null || teamSpawns.isEmpty()) {
+                List<Location> playerSpawns = arena.getPlayerSpawns();
+                Location respawnLocation = playerSpawns.get(ran.nextInt(playerSpawns.size()));
+                event.setRespawnLocation(respawnLocation);
             }
+            // Team spawns
             else {
-                e.setRespawnLocation((a.getPlayerSpawns().get(ran.nextInt(a.getPlayerSpawns().size()))));
+                Location respawnLocation = teamSpawns.get(ran.nextInt(teamSpawns.size()));
+                event.setRespawnLocation(respawnLocation);
             }
 
-            p.setLevel(0);
-            p.setExp(0);
+            player.setLevel(0);
+            player.setExp(0);
 
-            if (plugin.ab.getAbilities().containsKey(p)) {
-                if (plugin.ab.getAbilities().get(p).contains("health_boost")) {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 36000, 0));
+            if (plugin.ab.getAbilities().containsKey(player.getUniqueId())) {
+                if (plugin.ab.getAbilities().get(player.getUniqueId()).contains("health_boost")) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 36000, 0));
                 }
             }
         }

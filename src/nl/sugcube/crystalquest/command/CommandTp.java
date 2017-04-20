@@ -37,7 +37,7 @@ public class CommandTp extends CrystalQuestCommand {
             arena = plugin.am.getArena(arguments[0]);
         }
 
-        // Check if the arena exists.
+        // Check if the arenas exists.
         if (arena == null) {
             player.sendMessage(Broadcast.get("arena.no-exist"));
             return;

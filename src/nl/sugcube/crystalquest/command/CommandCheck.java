@@ -32,7 +32,7 @@ public class CommandCheck extends CrystalQuestCommand {
                 arena = plugin.am.getArena(arguments[0]);
             }
 
-            // Check if the arena exists.
+            // Check if the arenas exists.
             if (arena == null) {
                 sender.sendMessage(Broadcast.get("arena.no-exist"));
                 return;
@@ -85,17 +85,10 @@ public class CommandCheck extends CrystalQuestCommand {
                 );
             }
 
-            if (arena.getLobbySpawns().length > 0) {
-                if (arena.getLobbySpawns()[0] == null) {
-                    sender.sendMessage(Broadcast.TAG + SMeth.setColours(
-                            Broadcast.get("commands.team-lobby-spawns") + " &7Not set")
-                    );
-                }
-                else {
-                    sender.sendMessage(Broadcast.TAG + SMeth.setColours(
-                            Broadcast.get("commands.team-lobby-spawns") + " &aSet!")
-                    );
-                }
+            if (arena.areLobbySpawnsSet()) {
+                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                        Broadcast.get("commands.team-lobby-spawns") + " &aSet!")
+                );
             }
             else {
                 sender.sendMessage(Broadcast.TAG + SMeth.setColours(
@@ -116,7 +109,7 @@ public class CommandCheck extends CrystalQuestCommand {
 
             if (arena.getTeamSpawns().size() > 0) {
                 if (arena.getTeamCount() > 1) {
-                    if (arena.getTeamSpawns().get(arena.getTeamCount() - 1).size() > 0) {
+                    if (!arena.getTeamSpawns().isEmpty()) {
                         sender.sendMessage(Broadcast.TAG + SMeth.setColours(
                                 Broadcast.get("commands.player-spawns") + " &aTeam Spawns")
                         );

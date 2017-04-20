@@ -2,7 +2,6 @@ package nl.sugcube.crystalquest.game;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import nl.sugcube.crystalquest.events.ArenaTickEvent;
 import nl.sugcube.crystalquest.items.WandType;
@@ -27,7 +26,7 @@ public class GameLoop implements Runnable {
     public CrystalQuest plugin;
     public ArenaManager am;
     public Random ran;
-    private String winningTeam;
+    private CrystalQuestTeam winningTeam;
 
     public GameLoop(CrystalQuest instance, ArenaManager arenaManager) {
         this.plugin = instance;
@@ -179,7 +178,7 @@ public class GameLoop implements Runnable {
         }
         else {
             try {
-                this.winningTeam = arena.declareWinner();
+                winningTeam = arena.declareWinner();
                 arena.setAfterCount(plugin.getConfig().getInt("arena.after-count"));
                 arena.setEndGame(true);
                 arena.setIsCounting(false);
@@ -204,13 +203,13 @@ public class GameLoop implements Runnable {
                 Player p = Bukkit.getPlayer(id);
                 try {
                     if (!arena.getSpectators().contains(p.getUniqueId())) {
-                        if (arena.getTeam(p) == Teams.getTeamIdFromNAME(this.winningTeam)) {
+                        if (arena.getTeam(p) == winningTeam) {
                             Firework f = p.getLocation().getWorld().spawn(p.getLocation().add(0, 2, 0), Firework.class);
                             FireworkMeta fm = f.getFireworkMeta();
                             fm.setPower(1);
                             FireworkEffect fe = FireworkEffect.builder()
                                     .flicker(true)
-                                    .withColor(plugin.im.getTeamColour(arena.getTeam(p)))
+                                    .withColor(arena.getTeam(p).getColour())
                                     .with(Type.STAR)
                                     .build();
                             fm.clearEffects();
@@ -226,7 +225,7 @@ public class GameLoop implements Runnable {
     }
 
     public void run() {
-        for (Arena arena : am.arena) {
+        for (Arena arena : am.arenas) {
             if (!arena.isEnabled()) {
                 continue;
             }

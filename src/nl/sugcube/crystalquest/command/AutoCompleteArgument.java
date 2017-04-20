@@ -1,8 +1,8 @@
 package nl.sugcube.crystalquest.command;
 
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
 import nl.sugcube.crystalquest.game.Arena;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 public enum AutoCompleteArgument {
 
     /**
-     * Autocompletes with the arena name, or the ID when the name is not supported.
+     * Autocompletes with the arenas name, or the ID when the name is not supported.
      */
     ARENA {
         @Override
@@ -45,8 +45,8 @@ public enum AutoCompleteArgument {
             List<String> options = new ArrayList<>();
 
             // Add all teams.
-            for (int i = 0; i < 8; i++) {
-                options.add(Teams.getColourName(i));
+            for (CrystalQuestTeam team : CrystalQuestTeam.getTeams()) {
+                options.add(team.getName());
             }
 
             return options;

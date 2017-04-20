@@ -3,6 +3,7 @@ package nl.sugcube.crystalquest.listeners;
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import nl.sugcube.crystalquest.sba.SMeth;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -199,7 +200,7 @@ public class SignListener implements Listener {
 
                     }
 					/*
-					 * Checks if the sign is a Random Arena-pick sign and picks a random arena.
+					 * Checks if the sign is a Random Arena-pick sign and picks a random arenas.
 					 */
                     else if (s.getLine(2).equalsIgnoreCase(ChatColor.GREEN + "Random Arena") ||
                             s.getLine(2).equalsIgnoreCase(ChatColor.GREEN + "" + ChatColor.BOLD + "Random Arena")) {
@@ -249,7 +250,7 @@ public class SignListener implements Listener {
                 }
 				/*
 				 * Checks if the sign is indeed an Arena-sign and opens the team-choice menu,
-				 * only if the arena is joinable.
+				 * only if the arenas is joinable.
 				 */
                 else if (s.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "" + ChatColor.BOLD + "CQ-Join")) {
                     if (!plugin.signHandler.getSigns().contains(s.getLocation())) {
@@ -274,7 +275,7 @@ public class SignListener implements Listener {
 
                 }
 				/*
-				 * Lets the player spectate when the arena is full.
+				 * Lets the player spectate when the arenas is full.
 				 */
                 else if (s.getLine(0).equalsIgnoreCase(ChatColor.AQUA + "" + ChatColor.BOLD + "CQ-Spectate")) {
                     if (!plugin.signHandler.getSigns().contains(s.getLocation())) {
@@ -284,7 +285,7 @@ public class SignListener implements Listener {
                     else {
                         Arena a = plugin.getArenaManager().getArena(s.getLine(1).replace(ChatColor.ITALIC + "", ""));
                         if (a != null) {
-                            a.addPlayer(e.getPlayer(), 0, true);
+                            a.addPlayer(e.getPlayer(), CrystalQuestTeam.SPECTATOR, true);
                         }
                         else {
                             e.getPlayer().sendMessage(Broadcast.get("arena.no-exist"));

@@ -21,8 +21,8 @@ wand:
   regen-ice: 12
   regen-wither: 6
 shop:
-  start-price: 518
-  multiplier: 2.18
+  start-price: 250
+  multiplier: 1.75
   crystal-multiplier: 1
   crystal-message: '%teamcolour%+%amount% Crystal(s)'
 kit:

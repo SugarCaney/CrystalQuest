@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * This event is called when the arena changes from pre-game to in-game.
+ * This event is called when the arenas changes from pre-game to in-game.
  *
  * @author SugarCaney
  */
@@ -19,7 +19,7 @@ public class ArenaStartEvent extends Event implements Cancellable {
     public Arena arena;
 
     /**
-     * @return (Arena) The arena which started
+     * @return (Arena) The arenas which started
      */
     public Arena getArena() {
         return this.arena;
@@ -29,7 +29,7 @@ public class ArenaStartEvent extends Event implements Cancellable {
      * Constructor.
      *
      * @param a
-     *         (Arena) The current arena
+     *         (Arena) The current arenas
      */
     public ArenaStartEvent(Arena a) {
         this.arena = a;

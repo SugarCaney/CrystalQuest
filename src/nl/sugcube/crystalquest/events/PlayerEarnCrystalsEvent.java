@@ -88,7 +88,7 @@ public class PlayerEarnCrystalsEvent extends Event implements Cancellable {
     }
 
     /**
-     * Get the arena in which the event occured.
+     * Get the arenas in which the event occured.
      *
      * @return (Arena)
      */

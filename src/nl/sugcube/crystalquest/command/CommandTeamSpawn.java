@@ -2,8 +2,8 @@ package nl.sugcube.crystalquest.command;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
 import nl.sugcube.crystalquest.game.Arena;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -34,9 +34,17 @@ public class CommandTeamSpawn extends CrystalQuestCommand {
             arena = plugin.am.getArena(arguments[0]);
         }
 
-        // Check if the arena exists.
+        // Check if the arenas exists.
         if (arena == null) {
             sender.sendMessage(Broadcast.get("arena.no-exist"));
+            return;
+        }
+
+        // Clear everything
+        if (arguments[1].equalsIgnoreCase("clear")) {
+            for (CrystalQuestTeam team : CrystalQuestTeam.getTeams()) {
+                arena.getTeamSpawns().remove(team);
+            }
             return;
         }
 
@@ -45,9 +53,9 @@ public class CommandTeamSpawn extends CrystalQuestCommand {
             try {
                 // Clear
                 if (arguments[2].equalsIgnoreCase("clear")) {
-                    int teamId = Teams.getTeamId(arguments[1]);
-                    if (teamId < arena.getTeamCount()) {
-                        arena.getTeamSpawns().get(teamId).clear();
+                    CrystalQuestTeam team = CrystalQuestTeam.valueOfName(arguments[1]);
+                    if (arena.hasTeam(team)) {
+                        arena.getTeamSpawns().get(team).clear();
                         sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.teamspawn-clear")
                                 .replace("%arena%", arguments[0])
                                 .replace("%team%", arguments[1]));
@@ -67,11 +75,11 @@ public class CommandTeamSpawn extends CrystalQuestCommand {
 
         // Add
         if (canContinue) {
-            int teamId = Teams.getTeamId(arguments[1]);
-            if (teamId < arena.getTeamCount()) {
-                arena.getTeamSpawns().get(teamId).add(((Player)sender).getLocation());
+            CrystalQuestTeam team = CrystalQuestTeam.valueOfName(arguments[1]);
+            if (arena.hasTeam(team)) {
+                arena.getTeamSpawns().get(team).add(((Player)sender).getLocation());
                 sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.teamspawn-added")
-                        .replace("%no%", arena.getTeamSpawns().get(teamId).size() + "")
+                        .replace("%no%", arena.getTeamSpawns().get(team).size() + "")
                         .replace("%arena%", arguments[0])
                         .replace("%team%", arguments[1]));
             }

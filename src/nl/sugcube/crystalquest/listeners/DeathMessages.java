@@ -102,9 +102,12 @@ public class DeathMessages implements Listener {
 
                                     if (shooter.hasPermission("crystalquest.fireworkkill") || shooter.hasPermission("crystalquest.staff")
                                             || shooter.hasPermission("crystalquest.admin")) {
-                                        plugin.particleHandler.playFirework(p.getLocation(), FireworkEffect.builder()
-                                                .withColor(plugin.im.getTeamColour(plugin.getArenaManager().getTeam(shooter)))
-                                                .with(Type.BURST).build());
+                                        plugin.particleHandler.playFirework(
+                                                p.getLocation(), FireworkEffect.builder()
+                                                        .withColor(plugin.getArenaManager().getTeam(shooter).getColour())
+                                                        .with(Type.BURST)
+                                                        .build()
+                                        );
                                     }
 
                                     double chance = Multipliers.getMultiplier("blood",
@@ -176,9 +179,11 @@ public class DeathMessages implements Listener {
                                 Player shooter = (Player)len;
                                 if (shooter.hasPermission("crystalquest.fireworkkill") || shooter.hasPermission("crystalquest.staff")
                                         || shooter.hasPermission("crystalquest.admin")) {
-                                    plugin.particleHandler.playFirework(p.getLocation(), FireworkEffect.builder()
-                                            .withColor(plugin.im.getTeamColour(plugin.getArenaManager().getTeam(shooter)))
-                                            .with(Type.BURST).build());
+                                    plugin.particleHandler.playFirework(
+                                            p.getLocation(), FireworkEffect.builder()
+                                                    .withColor(plugin.getArenaManager().getTeam(shooter).getColour())
+                                                    .with(Type.BURST).build()
+                                    );
                                 }
 
                                 //Adds crystals to their balance

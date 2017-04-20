@@ -2,7 +2,8 @@ package nl.sugcube.crystalquest.listeners;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
+import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import nl.sugcube.crystalquest.game.Arena;
 import org.bukkit.DyeColor;
@@ -150,9 +151,9 @@ public class EntityListener implements Listener {
         if (e.getEntity() instanceof Wolf) {
             Wolf w = (Wolf)e.getEntity();
             DyeColor collar = w.getCollarColor();
-            int wolfTeam = Teams.getDyeColourTeam(collar);
+            CrystalQuestTeam wolfTeam = Teams.getDyeColourTeam(collar);
             if (e.getDamager() instanceof Player) {
-                int damagerTeam = plugin.getArenaManager().getTeam((Player)e.getDamager());
+                CrystalQuestTeam damagerTeam = plugin.getArenaManager().getTeam((Player)e.getDamager());
                 if (wolfTeam == damagerTeam) {
                     e.setCancelled(true);
                 }
@@ -160,7 +161,7 @@ public class EntityListener implements Listener {
             else if (e.getDamager() instanceof Arrow) {
                 Arrow arrow = (Arrow)e.getDamager();
                 if (arrow.getShooter() instanceof Player) {
-                    int damagerTeam = plugin.getArenaManager().getTeam((Player)arrow.getShooter());
+                    CrystalQuestTeam damagerTeam = plugin.getArenaManager().getTeam((Player)arrow.getShooter());
                     if (wolfTeam == damagerTeam) {
                         e.setCancelled(true);
                     }
@@ -196,7 +197,7 @@ public class EntityListener implements Listener {
                 if (e.getDamager() instanceof Player) {
                     Player pl = (Player)e.getDamager();
                     plugin.getArenaManager().getArena(pl.getUniqueId()).getGameCrystals().remove(e.getEntity());
-                    plugin.getArenaManager().getArena(pl.getUniqueId()).getGameCrystalMap().remove(e.getEntity());
+                    plugin.getArenaManager().getArena(pl.getUniqueId()).getCrystalLocations().remove(e.getEntity());
 
                     if (isValid) {
                         if (isOwnTeamCrystal((EnderCrystal)e.getEntity(), pl)) {
@@ -219,7 +220,7 @@ public class EntityListener implements Listener {
                             fm.setPower(0);
                             FireworkEffect fe = FireworkEffect.builder()
                                     .flicker(true)
-                                    .withColor(plugin.im.getTeamColour(plugin.am.getTeam(pl)))
+                                    .withColor(plugin.am.getTeam(pl).getColour())
                                     .build();
                             fm.clearEffects();
                             fm.addEffect(fe);
@@ -227,7 +228,8 @@ public class EntityListener implements Listener {
                         }
                         else {
                             pl.sendMessage(Broadcast.get("arena.own-crystals")
-                                    .replace("%colour%", "" + Teams.getTeamChatColour(plugin.getArenaManager().getTeam(pl))));
+                                    .replace("%colour%", "" + plugin.getArenaManager().getTeam(pl)
+                                            .getChatColour()));
                         }
                     }
                 }
@@ -245,11 +247,9 @@ public class EntityListener implements Listener {
      *         (Player) The player who has smashed the crystal.
      * @return (boolean) True if the crystal is team-specified.
      */
-    @SuppressWarnings("deprecation")
     public boolean isOwnTeamCrystal(EnderCrystal ec, Player pl) {
         Location loc = ec.getLocation().add(0, -1, 0);
-        return (loc.getBlock().getType() != Material.WOOL) ||
-                (Teams.getTeamFromDataValue(loc.getBlock().getData()) != plugin.getArenaManager().getTeam(pl));
+        return (loc.getBlock().getType() != Material.WOOL) || (Teams.getTeamFromDataValue(loc.getBlock().getData()) != plugin.getArenaManager().getTeam(pl));
     }
 
 }

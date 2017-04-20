@@ -2,7 +2,8 @@ package nl.sugcube.crystalquest.items;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.Teams;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
+import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import nl.sugcube.crystalquest.game.Arena;
 import org.bukkit.EntityEffect;
@@ -28,7 +29,7 @@ public class Curse extends ItemExecutor {
     boolean execute(CrystalQuest plugin, Player player, ItemStack itemStack) {
         // Determine target
         Arena arena = plugin.getArenaManager().getArena(player.getUniqueId());
-        int targetTeam = Teams.getRandomTeamToHit(player);
+        CrystalQuestTeam targetTeam = Teams.getRandomTeamToHit(player);
 
         if (arena.getPlayers().size() <= 1) {
             return true;
@@ -53,7 +54,7 @@ public class Curse extends ItemExecutor {
 
         // Send confirmation message
         player.sendMessage(Broadcast.get("item-use.cursed")
-                .replace("%team%", Teams.getTeamNameById(targetTeam)));
+                .replace("%team%", targetTeam.toString()));
 
         return true;
     }
