@@ -4,7 +4,6 @@ import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * @author SugarCaney
@@ -45,6 +44,6 @@ public class CommandForceStart extends CrystalQuestCommand {
 
     @Override
     protected boolean assertSender(CommandSender sender) {
-        return sender instanceof Player;
+        return true;
     }
 }
