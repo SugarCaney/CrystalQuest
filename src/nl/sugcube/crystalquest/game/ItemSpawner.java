@@ -33,10 +33,10 @@ public class ItemSpawner implements Runnable {
                     loc.getWorld().dropItemNaturally(loc, plugin.itemHandler.getRandomItem());
                 }
 
-                if (ran.nextInt(10 * plugin.getConfig().getInt("arena.item-spawn-chance")) == 0) {
+                if (ran.nextInt(15 * plugin.getConfig().getInt("arena.item-spawn-chance")) == 0) {
                     for (int i = 0; i <= ran.nextInt(3); i++) {
                         ExperienceOrb orb = loc.getWorld().spawn(loc.add(0, 0.2, 0), ExperienceOrb.class);
-                        orb.setExperience(ran.nextInt(7) + 1);
+                        orb.setExperience(ran.nextInt(5) + 1);
                     }
                 }
             }
