@@ -88,17 +88,18 @@ public class SaveData {
                 data.set(pfx + "protection", null);
             }
 
-            for (CrystalQuestTeam team : arena.getTeams()) {
-                List<String> teamSpawns = arena.getTeamSpawns(team).stream()
-                        .map(SMeth::toLocationString)
-                        .collect(Collectors.toList());
-
-                if (teamSpawns.isEmpty()) {
+            for (CrystalQuestTeam team : CrystalQuestTeam.getTeams()) {
+                List<Location> teamSpawns = arena.getTeamSpawns(team);
+                if (teamSpawns == null) {
                     data.set(pfx + "team-spawns." + team.getName(), null);
                     continue;
                 }
 
-                data.set(pfx + "team-spawns." + team.getName(), teamSpawns);
+                List<String> teamSpawnsStrings = teamSpawns.stream()
+                        .map(SMeth::toLocationString)
+                        .collect(Collectors.toList());
+
+                data.set(pfx + "team-spawns." + team.getName(), teamSpawnsStrings);
             }
 
             // Backwards compatibility cleanup (v1.3 and below).

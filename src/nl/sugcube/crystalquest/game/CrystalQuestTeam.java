@@ -28,7 +28,15 @@ public enum CrystalQuestTeam {
 
     WHITE("white", ChatColor.WHITE, DyeColor.WHITE, (short)0, Color.WHITE),
 
-    BLACK("black", ChatColor.DARK_GRAY, DyeColor.BLACK, (short)15, Color.BLACK);
+    BLACK("black", ChatColor.DARK_GRAY, DyeColor.BLACK, (short)15, Color.BLACK),
+
+    BROWN("brown", ChatColor.GRAY, DyeColor.BROWN, (short)12, fromRGB(92, 50, 0)),
+
+    DARK_BLUE("darkblue", ChatColor.DARK_BLUE, DyeColor.BLUE, (short)11, Color.BLUE),
+
+    DARK_GREEN("darkgreen", ChatColor.DARK_GREEN, DyeColor.GREEN, (short)13, fromRGB(14, 86, 9)),
+
+    PURPLE("purple", ChatColor.DARK_PURPLE, DyeColor.PURPLE, (short)10, fromRGB(118, 30, 129));
 
     private final String name;
     private final ChatColor chatColour;
@@ -42,7 +50,8 @@ public enum CrystalQuestTeam {
     private static final Random RANDOM = new Random();
     private static final CrystalQuestTeam[] VALUES_ARRAY = values();
     private static final Set<CrystalQuestTeam> VALUES = EnumSet.of(
-            GREEN, ORANGE, YELLOW, RED, BLUE, MAGENTA, WHITE, BLACK
+            GREEN, ORANGE, YELLOW, RED, BLUE, MAGENTA, WHITE, BLACK, BROWN, DARK_BLUE, DARK_GREEN,
+            PURPLE
     );
 
     /**

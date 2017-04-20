@@ -40,6 +40,14 @@ public class CommandTeamSpawn extends CrystalQuestCommand {
             return;
         }
 
+        // Clear everything
+        if (arguments[1].equalsIgnoreCase("clear")) {
+            for (CrystalQuestTeam team : CrystalQuestTeam.getTeams()) {
+                arena.getTeamSpawns().remove(team);
+            }
+            return;
+        }
+
         boolean canContinue = true;
         if (arguments.length >= 3) {
             try {
