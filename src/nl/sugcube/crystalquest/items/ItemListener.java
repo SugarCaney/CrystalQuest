@@ -261,6 +261,11 @@ public class ItemListener implements Listener {
                                             im1.setDisplayName(Broadcast.get("items.anvil"));
                                             newIs.setItemMeta(im1);
                                         }
+                                        else if (newIs.getType() == Material.SUGAR_CANE) {
+                                            ItemMeta im1 = newIs.getItemMeta();
+                                            im1.setDisplayName(Broadcast.get("items.poison-dart"));
+                                            newIs.setItemMeta(im1);
+                                        }
                                         player.getInventory().addItem(newIs);
                                     }
                                 }
