@@ -11,6 +11,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -54,10 +55,11 @@ public class LoadData {
     public static void loadArenas() {
         FileConfiguration data = plugin.getData();
 
-        for (String s : data.getConfigurationSection("arena").getKeys(false)) {
-            ArenaManager am = plugin.getArenaManager();
-            int id = am.createArena();
-            Arena arena = am.getArena(id);
+        Set<String> arenaIds = data.getConfigurationSection("arena").getKeys(false);
+        ArenaManager arenaManager = plugin.getArenaManager();
+        for (String arenaId : arenaIds) {
+            int id = arenaManager.createArena();
+            Arena arena = arenaManager.getArena(id);
             String pfx = "arena." + id + ".";
 
             arena.setName(data.getString(pfx + "name"));
@@ -66,19 +68,22 @@ public class LoadData {
             arena.setMaxPlayers(data.getInt(pfx + "max-players"));
             arena.setDoubleJump(data.getBoolean(pfx + "double-jump"));
 
-            int count = 0;
-            Location[] loc = new Location[8];
-            for (String str : data.getStringList(pfx + "team-lobby")) {
-                loc[count] = SMeth.toLocation(str);
-                count++;
-            }
-            // Temporary workaround for team conversion.
-            for (int i = 0; i < loc.length; i++) {
-                if (loc[i] == null) {
-                    continue;
-                }
+            // Compatibility to v1.3 and below
+            String teamLobbySection = pfx + "team-lobby";
+            List<String> teamLobbies = data.getStringList(teamLobbySection);
 
-                arena.setLobbySpawn(CrystalQuestTeam.valueOf(i), loc[i]);
+            if (teamLobbies != null && !teamLobbies.isEmpty()) {
+                compat_teamspawn_v1_3(arena, teamLobbies);
+            }
+            // Otherwise, use team names.
+            else {
+                ConfigurationSection section = data.getConfigurationSection(teamLobbySection);
+                for (String key : section.getKeys(false)) {
+                    CrystalQuestTeam team = CrystalQuestTeam.valueOfName(key);
+                    String locationString = data.getString(teamLobbySection + "." + key);
+                    Location location = SMeth.toLocation(locationString);
+                    arena.setLobbySpawn(team, location);
+                }
             }
 
             arena.setEnabled(data.getBoolean(pfx + "state"));
@@ -103,7 +108,7 @@ public class LoadData {
 
             ConfigurationSection teamSpawns = data.getConfigurationSection(pfx + "team-spawns");
             if (teamSpawns == null) {
-                return;
+                continue;
             }
 
             for (String key : teamSpawns.getKeys(false)) {
@@ -125,6 +130,27 @@ public class LoadData {
                         .collect(Collectors.toList());
                 arena.getTeamSpawns().put(team, spawnList);
             }
+        }
+    }
+
+    /**
+     * Loads the teamspawn data from CQ versions up to v1.3.
+     * <p>
+     * Pre v1.3: Teamlobbies are stored in a list mapped to team indices.<br>
+     * Post v1.3: Teamlobbies are mapped from {@link CrystalQuestTeam#name} to location.
+     */
+    private static void compat_teamspawn_v1_3(Arena arena, List<String> locations) {
+        for (int i = 0; i < locations.size(); i++) {
+            if (locations.get(i) == null) {
+                continue;
+            }
+
+            Location parsed = SMeth.toLocation(locations.get(i));
+            if (parsed == null) {
+                continue;
+            }
+
+            arena.setLobbySpawn(CrystalQuestTeam.valueOf(i), parsed);
         }
     }
 

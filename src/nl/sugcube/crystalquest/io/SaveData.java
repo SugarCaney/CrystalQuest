@@ -60,7 +60,13 @@ public class SaveData {
                     .collect(Collectors.toList()));
             data.set(pfx + "min-players", arena.getMinPlayers());
             data.set(pfx + "max-players", arena.getMaxPlayers());
-            data.set(pfx + "team-lobby", toStringList(arena.getLobbySpawns()));
+
+            data.set(pfx + "team-lobby", null);
+            for (CrystalQuestTeam team : arena.getTeams()) {
+                Location lobby = arena.getLobbySpawn(team);
+                data.set(pfx + "team-lobby." + team.getName(), SMeth.toLocationString(lobby));
+            }
+
             data.set(pfx + "state", arena.isEnabled());
             data.set(pfx + "player-spawns", toStringList(arena.getPlayerSpawns()));
             data.set(pfx + "crystal-spawns", toStringList(arena.getCrystalSpawns()));
