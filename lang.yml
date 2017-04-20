@@ -208,6 +208,8 @@ commands:
   tp-nospawns: "&c[!!] There are no spawns set to teleport to!"
   tp-teleport: "Teleported to arena &7%a%"
   parse-number-error: "&c[!!] Could not parse number '%n%'"
+  setcount-usage: "&c[!!] Usage: /cq setcount <seconds>"
+  setcount-set: "Countdown of arena &7%arena%&e has been set to &7%seconds%&e seconds."
 help:
   remove: "Deletes an arena"
   setlobby: "Set the main lobbyspawn"
