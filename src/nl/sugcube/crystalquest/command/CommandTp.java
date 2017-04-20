@@ -3,11 +3,14 @@ package nl.sugcube.crystalquest.command;
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author SugarCaney
@@ -51,13 +54,37 @@ public class CommandTp extends CrystalQuestCommand {
 
         // Find spawn location.
         List<Location> spawns = arena.getPlayerSpawns();
+        Location result = null;
         if (spawns.isEmpty()) {
-            player.sendMessage(Broadcast.get("commands.tp-nospawns"));
-            return;
+            // Try team spawns
+            List<Location> teamSpawns = arena.getTeamSpawns().values().stream()
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+
+            if (teamSpawns.isEmpty()) {
+                // Finally try lobby spawns
+                List<Location> lobbySpawns = CrystalQuestTeam.getTeams().stream()
+                        .map(arena::getLobbySpawn)
+                        .collect(Collectors.toList());
+
+                if (lobbySpawns.isEmpty()) {
+                    player.sendMessage(Broadcast.get("commands.tp-nospawns"));
+                    return;
+                }
+                else {
+                    result = lobbySpawns.get(0);
+                }
+            }
+            else {
+                result = teamSpawns.get(0);
+            }
+        }
+        else {
+            result = spawns.get(0);
         }
 
         // Teleport
-        player.teleport(spawns.get(0));
+        player.teleport(result);
         player.sendMessage(Broadcast.TAG + Broadcast.get("commands.tp-teleport")
                 .replace("%a%", arguments[0]));
     }
