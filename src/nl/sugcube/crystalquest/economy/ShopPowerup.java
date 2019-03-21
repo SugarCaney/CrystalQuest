@@ -72,8 +72,9 @@ public class ShopPowerup implements Listener {
     public void showMenu(Player p) {
         p.closeInventory();
 
-        Inventory inv = Bukkit.createInventory(null, 54, ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD +
-                " Powerups");
+        Inventory inv = Bukkit.createInventory(null, 54,
+                ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Powerups"
+        );
 
         updateMenu(p, inv);
         p.openInventory(inv);
@@ -172,9 +173,8 @@ public class ShopPowerup implements Listener {
             showMenu(p);
             return true;
         }
-        else {
-            return false;
-        }
+
+        return false;
     }
 
     /**
@@ -183,7 +183,7 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemBuyCreeper(Player p) {
-        ItemStack is = new ItemStack(Material.LEGACY_MONSTER_EGG, 1, (short)50);
+        ItemStack is = new ItemStack(Material.CREEPER_SPAWN_EGG, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "creepers", "upgrade") < 5) {
             im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.DARK_GREEN + "Creepers");
@@ -191,7 +191,7 @@ public class ShopPowerup implements Listener {
         else {
             im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.DARK_GREEN + "Creepers");
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".creepers")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".creepers");
@@ -224,7 +224,7 @@ public class ShopPowerup implements Listener {
         else {
             im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".wolf")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".wolf");
@@ -262,7 +262,7 @@ public class ShopPowerup implements Listener {
         else {
             im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.AQUA + "Weaponry");
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".weaponry")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".weaponry");
@@ -294,7 +294,7 @@ public class ShopPowerup implements Listener {
         else {
             im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.YELLOW + "Explosives");
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".explosive")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".explosive");
@@ -319,7 +319,7 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemBuyDebuff(Player p) {
-        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)1);
+        ItemStack is = new ItemStack(Material.WITHER_SKELETON_SKULL, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "debuff", "upgrade") < 5) {
             im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.RED + "Debuffs");
@@ -327,7 +327,7 @@ public class ShopPowerup implements Listener {
         else {
             im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.RED + "Debuffs");
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".debuff")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".debuff");
@@ -359,7 +359,7 @@ public class ShopPowerup implements Listener {
         else {
             im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.LIGHT_PURPLE + "Buffs");
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".buff")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".buff");
@@ -386,7 +386,7 @@ public class ShopPowerup implements Listener {
         ItemStack is = new ItemStack(Material.BONE, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".wolf")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".wolf");
@@ -415,10 +415,10 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemStatusCreeper(Player p) {
-        ItemStack is = new ItemStack(Material.LEGACY_MONSTER_EGG, 1, (short)50);
+        ItemStack is = new ItemStack(Material.CREEPER_SPAWN_EGG, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.DARK_GREEN + "Creepers");
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".creepers")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".creepers");
@@ -452,7 +452,7 @@ public class ShopPowerup implements Listener {
         ItemStack is = new ItemStack(Material.DIAMOND_AXE, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.AQUA + "Weaponry");
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".weaponry")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".weaponry");
@@ -481,7 +481,7 @@ public class ShopPowerup implements Listener {
         ItemStack is = new ItemStack(Material.EGG, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.YELLOW + "Explosives");
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".explosive")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".explosive");
@@ -509,10 +509,10 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemStatusDebuff(Player p) {
-        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)1);
+        ItemStack is = new ItemStack(Material.WITHER_SKELETON_SKULL, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.RED + "Debuffs");
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".debuff")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".debuff");
@@ -538,10 +538,10 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemStatusBuff(Player p) {
-        ItemStack is = new ItemStack(Material.LEGACY_SPECKLED_MELON, 1);
+        ItemStack is = new ItemStack(Material.GLISTERING_MELON_SLICE, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.LIGHT_PURPLE + "Buffs");
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".buff")) {
             level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".buff");
@@ -570,7 +570,7 @@ public class ShopPowerup implements Listener {
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.GREEN + "Main Menu");
         is.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Go back to the Main Menu!");
         im.setLore(lore);
         is.setItemMeta(im);

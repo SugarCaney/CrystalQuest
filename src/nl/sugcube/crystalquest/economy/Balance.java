@@ -47,7 +47,6 @@ public class Balance {
      *         (int) The amount of crystals to add (negative number to remove).
      * @param showMessage
      *         (boolean) When true, a notification will be sent to the player.
-     * @return (boolean) True if succesful, false if not succesful.
      */
     public void addCrystals(Player p, int amount, boolean showMessage) {
         int balance = plugin.getData().getInt("shop.balance." + p.getUniqueId().toString());
@@ -72,12 +71,7 @@ public class Balance {
      * @return (boolean) True if so, false if not.
      */
     public boolean canAfford(Player p, int amount) {
-        if (getBalance(p, false) >= amount) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return getBalance(p, false) >= amount;
     }
 
     /**
@@ -98,14 +92,5 @@ public class Balance {
         else {
             return 0;
         }
-        /*if (plugin.getData().isSet("economy.balance." + name)) {
-            return plugin.getData().getInt("economy.balance." + name);
-		} else if (createAccount) {
-			plugin.getData().set("economy.balance." + name, 0);
-			return 0;
-		} else {
-			return -1;
-		}*/
     }
-
 }

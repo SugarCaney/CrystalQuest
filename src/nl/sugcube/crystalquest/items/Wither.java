@@ -22,7 +22,7 @@ public class Wither extends ItemExecutor {
     private static final int WITHER_DURATION = 120;
 
     public Wither() {
-        super(Material.LEGACY_SKULL_ITEM, (short)1);
+        super(Material.WITHER_SKELETON_SKULL);
     }
 
     @Override

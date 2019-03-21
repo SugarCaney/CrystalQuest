@@ -60,5 +60,4 @@ public class PlayerJoinArenaEvent extends Event implements Cancellable {
     public void setCancelled(boolean cancel) {
         cancelled = cancel;
     }
-
 }

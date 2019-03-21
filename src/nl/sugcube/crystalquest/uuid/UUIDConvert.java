@@ -2,7 +2,6 @@ package nl.sugcube.crystalquest.uuid;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
@@ -26,7 +25,7 @@ public class UUIDConvert {
              * CRYSTALS
 			 */
             for (String playerName : data.getConfigurationSection("economy.crystals").getKeys(false)) {
-                UUIDFetcher fetcher = new UUIDFetcher(Arrays.asList(playerName));
+                UUIDFetcher fetcher = new UUIDFetcher(Collections.singletonList(playerName));
                 Map<String, UUID> response = null;
                 try {
                     response = fetcher.call();
@@ -47,7 +46,7 @@ public class UUIDConvert {
 			 * BALANCE
 			 */
             for (String playerName : data.getConfigurationSection("economy.balance").getKeys(false)) {
-                UUIDFetcher fetcher = new UUIDFetcher(Arrays.asList(playerName));
+                UUIDFetcher fetcher = new UUIDFetcher(Collections.singletonList(playerName));
                 Map<String, UUID> response = null;
                 try {
                     response = fetcher.call();

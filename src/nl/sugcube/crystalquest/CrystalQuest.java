@@ -143,7 +143,7 @@ public class CrystalQuest extends JavaPlugin {
         curseListener = new CurseListener(this);
         PluginDescriptionFile pdfFile = this.getDescription();
         this.pm = getServer().getPluginManager();
-        this.economy = new Economy(this, pm);
+        this.economy = new Economy(this);
         this.ab = new Ability(this);
 
 		/*
@@ -217,22 +217,6 @@ public class CrystalQuest extends JavaPlugin {
 
         Broadcast.setMessages();
         itemHandler.addAllItems();
-
-        //Plugin metrics
-        if (this.getConfig().getBoolean("metrics.enabled")) {
-            try {
-                Metrics metrics = new Metrics(this);
-                metrics.start();
-                this.getLogger().info("Started Metrics.");
-            }
-            catch (Exception e) {
-                this.getLogger().info("Failed starting Metrics.");
-            }
-        }
-        else {
-            this.getLogger().info("Didn't start Metrics (disabled in the configuration).");
-        }
-
     }
 
     public void onDisable() {
@@ -257,7 +241,7 @@ public class CrystalQuest extends JavaPlugin {
 		 * Saves data
 		 */
         SaveData.saveArenas();        //ARENAS
-        SaveData.saveSigns();        //SIGNS
+        SaveData.saveSigns();         //SIGNS
         SaveData.saveLobbySpawn();    //LOBBYSPAWN
 
         this.getLogger().info("[CrystalQuest] CrystalQuest v" + pdfFile.getVersion() + " has been disabled!");

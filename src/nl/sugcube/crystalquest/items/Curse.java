@@ -22,7 +22,7 @@ public class Curse extends ItemExecutor {
     private static final Random random = new Random();
 
     public Curse() {
-        super(Material.LEGACY_SKULL_ITEM, (short)0);
+        super(Material.SKELETON_SKULL);
     }
 
     @Override

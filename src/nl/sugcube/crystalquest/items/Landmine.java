@@ -22,9 +22,33 @@ public class Landmine extends ItemExecutor {
     private static final Set<Material> PLACEABLE_MATERIALS = new HashSet<>();
     static {
         Collections.addAll(PLACEABLE_MATERIALS,
-                Material.LEGACY_LONG_GRASS, Material.LEGACY_STATIONARY_WATER, Material.WATER,
-                Material.DEAD_BUSH, Material.LEGACY_YELLOW_FLOWER, Material.LEGACY_RED_ROSE,
-                Material.RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL
+                Material.TALL_GRASS,
+                Material.WATER,
+                Material.DEAD_BUSH,
+                Material.DANDELION,
+                Material.POPPY,
+                Material.BLUE_ORCHID,
+                Material.OXEYE_DAISY,
+                Material.ALLIUM,
+                Material.AZURE_BLUET,
+                Material.ORANGE_TULIP,
+                Material.RED_TULIP,
+                Material.WHITE_TULIP,
+                Material.PINK_TULIP,
+                Material.BROWN_MUSHROOM,
+                Material.RED_MUSHROOM,
+                Material.FERN,
+                Material.LARGE_FERN,
+                Material.GRASS,
+                Material.RAIL,
+                Material.DETECTOR_RAIL,
+                Material.POWERED_RAIL,
+                Material.OAK_SAPLING,
+                Material.BIRCH_SAPLING,
+                Material.SPRUCE_SAPLING,
+                Material.JUNGLE_SAPLING,
+                Material.ACACIA_SAPLING,
+                Material.DARK_OAK_SAPLING
         );
     }
 

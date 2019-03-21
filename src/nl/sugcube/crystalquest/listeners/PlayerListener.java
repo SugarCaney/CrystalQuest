@@ -26,6 +26,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
@@ -134,7 +135,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (block.getType() != Material.LEGACY_SOIL) {
+        if (block.getType() != Material.FARMLAND) {
             return;
         }
 
@@ -142,8 +143,11 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onSpectatorPickupItem(PlayerPickupItemEvent e) {
-        Player p = e.getPlayer();
+    public void onSpectatorPickupItem(EntityPickupItemEvent e) {
+        if (!(e instanceof Player)) {
+            return;
+        }
+        Player p = (Player)e.getEntity();
         if (plugin.getArenaManager().isInGame(p)) {
             if (plugin.getArenaManager().getArena(p.getUniqueId()).getSpectators().contains(p.getUniqueId())) {
                 e.setCancelled(true);

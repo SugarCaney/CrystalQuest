@@ -72,12 +72,6 @@ public class Classes {
             return true;
         }
 
-        if (plugin.getData().getStringList("economy.classes." + player.getName()).contains(Class)) {
-            return true;
-        }
-
-        //If none apply, return false.
-        return false;
+        return plugin.getData().getStringList("economy.classes." + player.getName()).contains(Class);
     }
-
 }

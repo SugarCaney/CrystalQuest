@@ -55,7 +55,7 @@ public class ShopClasses implements Listener {
                         im.setDisplayName(SMeth.setColours(name));
 
                         if (plugin.getConfig().getString("kit." + key + ".lore") != "") {
-                            List<String> lore = new ArrayList<String>();
+                            List<String> lore = new ArrayList<>();
                             String[] lines = plugin.getConfig().getString("kit." + key + ".lore").split("%nl%");
                             for (String str : lines) {
                                 lore.add(SMeth.setColours(str));
@@ -93,7 +93,8 @@ public class ShopClasses implements Listener {
         p.closeInventory();
 
         Inventory inv = Bukkit.createInventory(null, 54,
-                ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Classes");
+                ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Classes"
+        );
 
         updateMenu(p, inv);
         p.openInventory(inv);
@@ -129,13 +130,12 @@ public class ShopClasses implements Listener {
 
                             if (economy.getBalance().canAfford(p, price)) {
                                 if (plugin.getData().isSet("shop.classes." + p.getUniqueId().toString())) {
-                                    List<String> list = new ArrayList<String>();
-                                    list = plugin.getData().getStringList("shop.classes." + p.getUniqueId().toString());
+                                    List<String> list = plugin.getData().getStringList("shop.classes." + p.getUniqueId().toString());
                                     list.add(techName);
                                     plugin.getData().set("shop.classes." + p.getUniqueId().toString(), list);
                                 }
                                 else {
-                                    List<String> list = new ArrayList<String>();
+                                    List<String> list = new ArrayList<>();
                                     list.add(techName);
                                     plugin.getData().set("shop.classes." + p.getUniqueId().toString(), list);
                                 }
@@ -164,11 +164,10 @@ public class ShopClasses implements Listener {
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.GREEN + "Main Menu");
         is.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.main-menu"));
         im.setLore(lore);
         is.setItemMeta(im);
         return is;
     }
-
 }

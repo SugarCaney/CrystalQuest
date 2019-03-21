@@ -44,7 +44,7 @@ public class CrystalSpawner implements Runnable {
                     try {
                         EnderCrystal ec = (EnderCrystal)Bukkit.getPlayer(a.getPlayers().get(0))
                                 .getWorld()
-                                .spawnEntity(loc.add(0, 0.05, 0), EntityType.ENDER_CRYSTAL);
+                                .spawnEntity(loc.clone().add(0, 0.45, 0), EntityType.ENDER_CRYSTAL);
                         ec.setShowingBottom(false);
                         a.getGameCrystals().add(ec);
                         a.getCrystalLocations().put(ec, loc);

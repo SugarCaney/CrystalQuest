@@ -1,10 +1,15 @@
 package nl.sugcube.crystalquest.game;
 
+import nl.sugcube.crystalquest.util.Materials;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
 import static org.bukkit.Color.fromRGB;
@@ -15,27 +20,16 @@ import static org.bukkit.Color.fromRGB;
 public enum CrystalQuestTeam {
 
     GREEN("green", ChatColor.GREEN, DyeColor.LIME, (short)5, fromRGB(0, 255, 0)),
-
     ORANGE("orange", ChatColor.GOLD, DyeColor.ORANGE, (short)1, fromRGB(255, 140, 0)),
-
     YELLOW("yellow", ChatColor.YELLOW, DyeColor.YELLOW, (short)4, fromRGB(255, 255, 0)),
-
     RED("red", ChatColor.RED, DyeColor.RED, (short)14, fromRGB(255, 0, 0)),
-
     BLUE("blue", ChatColor.AQUA, DyeColor.LIGHT_BLUE, (short)3, fromRGB(0, 255, 255)),
-
     MAGENTA("magenta", ChatColor.LIGHT_PURPLE, DyeColor.MAGENTA, (short)2, fromRGB(255, 0, 255)),
-
     WHITE("white", ChatColor.WHITE, DyeColor.WHITE, (short)0, Color.WHITE),
-
     BLACK("black", ChatColor.DARK_GRAY, DyeColor.BLACK, (short)15, Color.BLACK),
-
     BROWN("brown", ChatColor.GRAY, DyeColor.BROWN, (short)12, fromRGB(92, 50, 0)),
-
     DARK_BLUE("darkblue", ChatColor.DARK_BLUE, DyeColor.BLUE, (short)11, Color.BLUE),
-
     DARK_GREEN("darkgreen", ChatColor.DARK_GREEN, DyeColor.GREEN, (short)13, fromRGB(14, 86, 9)),
-
     PURPLE("purple", ChatColor.DARK_PURPLE, DyeColor.PURPLE, (short)10, fromRGB(118, 30, 129));
 
     private final String name;
@@ -47,7 +41,6 @@ public enum CrystalQuestTeam {
 
     public static final CrystalQuestTeam SPECTATOR = null;
 
-    private static final Random RANDOM = new Random();
     private static final CrystalQuestTeam[] VALUES_ARRAY = values();
     private static final Set<CrystalQuestTeam> VALUES = EnumSet.of(
             GREEN, ORANGE, YELLOW, RED, BLUE, MAGENTA, WHITE, BLACK, BROWN, DARK_BLUE, DARK_GREEN,
@@ -214,6 +207,10 @@ public enum CrystalQuestTeam {
 
     public short getDataValueWool() {
         return dataValueWool;
+    }
+
+    public Material getWoolMaterial() {
+        return Materials.woolFromDamageValue(getDataValueWool());
     }
 
     public String getName() {

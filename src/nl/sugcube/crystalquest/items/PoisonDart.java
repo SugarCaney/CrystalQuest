@@ -3,6 +3,7 @@ package nl.sugcube.crystalquest.items;
 import nl.sugcube.crystalquest.CrystalQuest;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TippedArrow;
 import org.bukkit.inventory.ItemStack;
@@ -25,6 +26,7 @@ public class PoisonDart extends ItemExecutor {
         TippedArrow arrow = player.launchProjectile(TippedArrow.class);
         arrow.addCustomEffect(POISON, true);
         arrow.setVelocity(arrow.getVelocity().multiply(0.6));
+        arrow.setPickupStatus(Arrow.PickupStatus.CREATIVE_ONLY);
         player.playSound(player.getLocation(), Sound.ENTITY_BAT_TAKEOFF, 12F, 12F);
 
         return true;

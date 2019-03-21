@@ -113,7 +113,7 @@ public class SaveData {
      * Cleans up old team-spawns storage format.
      * <p>
      * Pre v1.3: Team spawn lists were stored by their numerical id.<br>
-     * Post v1.3: Team spawn lists are stored by their name {@link CrystalQuestTeam#name}.
+     * Post v1.3: Team spawn lists are stored by their name {@code CrystalQuestTeam#name}.
      */
     private static void compat_cleanup_v1_3(String prefix) {
         for (int i = 0; i < 8; i++) {

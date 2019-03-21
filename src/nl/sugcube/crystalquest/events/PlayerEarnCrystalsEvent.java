@@ -61,8 +61,6 @@ public class PlayerEarnCrystalsEvent extends Event implements Cancellable {
 
     /**
      * Get the amount of crystals earned.
-     *
-     * @return (int)
      */
     public int getAmount() {
         return amount;
@@ -70,9 +68,6 @@ public class PlayerEarnCrystalsEvent extends Event implements Cancellable {
 
     /**
      * Set the amount of crystals earned.
-     *
-     * @param amount
-     *         (int)
      */
     public void setAmount(int amount) {
         this.amount = amount;
@@ -89,11 +84,8 @@ public class PlayerEarnCrystalsEvent extends Event implements Cancellable {
 
     /**
      * Get the arenas in which the event occured.
-     *
-     * @return (Arena)
      */
     public Arena getArena() {
         return arena;
     }
-
 }

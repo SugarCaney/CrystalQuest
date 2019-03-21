@@ -130,26 +130,4 @@ Pikachu
 Oddish
 Bongo Cat
 Loss
-
-
-[12:45:51 INFO]: DEBUG >> TeamWinGameEvent: TeamWinGameEvent{
-    player=[e467a50f-88e5-4331-a371-76f61261c1eb],
-    arena=nl.sugcube.crystalquest.game.Arena@17da0d56,
-    team=?bTeam Blue,
-    teamCount=3,
-    teams=[
-        org.bukkit.craftbukkit.v1_13_R2.scoreboard.CraftTeam@1115df72,
-        org.bukkit.craftbukkit.v1_13_R2.scoreboard.CraftTeam@503a2f52,
-        org.bukkit.craftbukkit.v1_13_R2.scoreboard.CraftTeam@2357cf1b
-    ]
-}
-
-[12:45:51 INFO]: DEBUG >> Scoreboard teams: '
-    org.bukkit.craftbukkit.v1_13_R2.scoreboard.CraftTeam@1115df72,
-    org.bukkit.craftbukkit.v1_13_R2.scoreboard.CraftTeam@503a2f52,
-    org.bukkit.craftbukkit.v1_13_R2.scoreboard.CraftTeam@2357cf1b
-'
-
-[12:45:51 INFO]: DEBUG >> Scoreboard team '
-    org.bukkit.craftbukkit.v1_13_R2.scoreboard.CraftTeam@1115df72
-' with display name 'blue'
+java.lang.NullPointerException

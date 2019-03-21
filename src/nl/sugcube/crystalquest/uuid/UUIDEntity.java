@@ -22,7 +22,5 @@ public class UUIDEntity {
 		}
 		
 		return null;
-		
 	}
-	
 }

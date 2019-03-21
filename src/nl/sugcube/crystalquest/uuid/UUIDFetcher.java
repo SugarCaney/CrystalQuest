@@ -75,7 +75,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         return connection;
     }
 
-    @SuppressWarnings("unchecked")
     private static String buildBody(List<String> names) {
         List<JSONObject> lookups = new ArrayList<>();
         for (String name : names) {

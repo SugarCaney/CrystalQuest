@@ -650,7 +650,7 @@ public class Arena {
         }
 
         int leastAmount = getScoreboardTeams().stream()
-                .min((t, u) -> Integer.valueOf(t.getSize()).compareTo(u.getSize()))
+                .min(Comparator.comparingInt(Team::getSize))
                 .map(Team::getSize)
                 .orElseThrow(() -> new IllegalStateException("There is no minimum"));
 
@@ -680,7 +680,7 @@ public class Arena {
             scoreboardTeams.put(cqTeam, team);
         }
 
-        points = score.registerNewObjective("points", "dummy");
+        points = score.registerNewObjective("points", "dummy", "CrystalQuest");
         points.setDisplaySlot(DisplaySlot.SIDEBAR);
         updateTimer();
 
@@ -758,7 +758,7 @@ public class Arena {
         }
 
         Score hScore = scoreboardScores.values().stream()
-                .max((s, t) -> Integer.valueOf(s.getScore()).compareTo(t.getScore()))
+                .max(Comparator.comparingInt(Score::getScore))
                 .orElseThrow(() -> new AssertionError("Should not happen!"));
 
         CrystalQuestTeam winningTeam = null;
@@ -852,8 +852,7 @@ public class Arena {
 
             //Removes all blocks placed in-game
             if (getGameBlocks().size() > 0) {
-                List<Block> toRemove = new ArrayList<>();
-                toRemove.addAll(getGameBlocks());
+                List<Block> toRemove = new ArrayList<>(getGameBlocks());
                 for (Location location : getLandmines().keySet()) {
                     toRemove.add(location.getBlock());
                 }
@@ -935,8 +934,8 @@ public class Arena {
 
         players.remove(p.getUniqueId());
         for (Team team : scoreboardTeams.values()) {
-            if (team.hasPlayer((OfflinePlayer)p)) {
-                team.removePlayer((OfflinePlayer)p);
+            if (team.hasPlayer(p)) {
+                team.removePlayer(p);
             }
         }
 
@@ -1006,7 +1005,7 @@ public class Arena {
 
                         if (!spectate) {
                             players.add(p.getUniqueId());
-                            getTeamObject(team).addPlayer((OfflinePlayer)p);
+                            getTeamObject(team).addPlayer(p);
                         }
                         p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                         p.setScoreboard(this.score);
@@ -1297,9 +1296,7 @@ public class Arena {
      * @see Arena#playerSpawns
      */
     public void removePlayerSpawn(Location loc) {
-        if (playerSpawns.contains(loc)) {
-            playerSpawns.remove(loc);
-        }
+        playerSpawns.remove(loc);
     }
 
     /**

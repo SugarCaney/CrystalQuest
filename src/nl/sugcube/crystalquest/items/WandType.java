@@ -23,7 +23,7 @@ public enum WandType {
     private final short durability;
     private final String regenConfig;
 
-    private WandType(int id, Material material, String name, short durability, String regenConfig) {
+    WandType(int id, Material material, String name, short durability, String regenConfig) {
         this.id = id;
         this.material = material;
         this.name = name;
@@ -91,5 +91,4 @@ public enum WandType {
     public short getDurability() {
         return durability;
     }
-
 }

@@ -9,7 +9,6 @@ import nl.sugcube.crystalquest.game.ArenaManager;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.event.EventHandler;
@@ -34,7 +33,7 @@ public class DeathMessages implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
-        Player p = (Player)e.getEntity();
+        Player p = e.getEntity();
         plugin.itemHandler.cursed.remove(p);
 
         if (plugin.getArenaManager().isInGame(p)) {
@@ -60,7 +59,7 @@ public class DeathMessages implements Listener {
 
             ArenaManager am = plugin.getArenaManager();
             if (am.isInGame(p)) {
-                LivingEntity len = p.getKiller();
+                Player len = p.getKiller();
                 Arena a = am.getArena(p.getUniqueId());
                 EntityDamageEvent damageEvent = p.getLastDamageCause();
                 DamageCause cause = null;
@@ -96,7 +95,7 @@ public class DeathMessages implements Listener {
                         }
                         else if (cause == DamageCause.PROJECTILE) {
                             if (damageEvent.getEntity() instanceof Player) {
-                                Player shooter = (Player)p.getKiller();
+                                Player shooter = p.getKiller();
                                 if (shooter != null) {
                                     a.sendDeathMessage(p, shooter, "shot");
 
@@ -154,7 +153,7 @@ public class DeathMessages implements Listener {
                         else if (cause == DamageCause.THORNS) {
                             if (damageEvent.getEntity() instanceof Player && len != null) {
                                 if (len instanceof Player) {
-                                    a.sendDeathMessage(p, (Player)len, "pricked");
+                                    a.sendDeathMessage(p, len, "pricked");
                                 }
                             }
                         }
@@ -166,22 +165,21 @@ public class DeathMessages implements Listener {
                         }
                         else if (cause == DamageCause.ENTITY_ATTACK) {
                             if (len instanceof Player) {
-                                a.sendDeathMessage(p, (Player)len);
+                                a.sendDeathMessage(p, len);
 
                                 double chance = Multipliers.getMultiplier("blood",
-                                        plugin.economy.getLevel((Player)len, "blood", "crystals"), false);
+                                        plugin.economy.getLevel(len, "blood", "crystals"), false);
                                 int multiplier = 1;
 
                                 if (ran.nextInt(100) <= chance * 100 && chance != 0) {
                                     multiplier = 2;
                                 }
 
-                                Player shooter = (Player)len;
-                                if (shooter.hasPermission("crystalquest.fireworkkill") || shooter.hasPermission("crystalquest.staff")
-                                        || shooter.hasPermission("crystalquest.admin")) {
+                                if (len.hasPermission("crystalquest.fireworkkill") || len.hasPermission("crystalquest.staff")
+                                        || len.hasPermission("crystalquest.admin")) {
                                     plugin.particleHandler.playFirework(
                                             p.getLocation(), FireworkEffect.builder()
-                                                    .withColor(plugin.getArenaManager().getTeam(shooter).getColour())
+                                                    .withColor(plugin.getArenaManager().getTeam(len).getColour())
                                                     .with(Type.BURST).build()
                                     );
                                 }
@@ -189,29 +187,28 @@ public class DeathMessages implements Listener {
                                 //Adds crystals to their balance
                                 int money = (int)(1 * plugin.getConfig().getDouble("shop.crystal-multiplier"));
                                 int vip = 1;
-                                if (((Player)len).hasPermission("crystalquest.triplecash") ||
-                                        ((Player)len).hasPermission("crystalquest.admin") ||
-                                        ((Player)len).hasPermission("crystalquest.staff")) {
+                                if (len.hasPermission("crystalquest.triplecash") ||
+                                        len.hasPermission("crystalquest.admin") ||
+                                        len.hasPermission("crystalquest.staff")) {
                                     vip = 3;
                                 }
-                                else if (((Player)len).hasPermission("crystalquest.doublecash")) {
+                                else if (len.hasPermission("crystalquest.doublecash")) {
                                     vip = 2;
                                 }
 
                                 //Call event
-                                Player moneyPlayer = (Player)len;
                                 int moneyEarned = money * multiplier * vip;
 
-                                PlayerEarnCrystalsEvent event = new PlayerEarnCrystalsEvent(moneyPlayer, a, moneyEarned);
+                                PlayerEarnCrystalsEvent event = new PlayerEarnCrystalsEvent(len, a, moneyEarned);
                                 Bukkit.getPluginManager().callEvent(event);
 
-                                String message = plugin.economy.getCoinMessage(moneyPlayer, event.getAmount());
+                                String message = plugin.economy.getCoinMessage(len, event.getAmount());
 
                                 if (!event.isCancelled()) {
-                                    plugin.economy.getBalance().addCrystals(moneyPlayer, event.getAmount(), false);
+                                    plugin.economy.getBalance().addCrystals(len, event.getAmount(), false);
 
                                     if (event.showMessage() && message != null) {
-                                        moneyPlayer.sendMessage(message);
+                                        len.sendMessage(message);
                                     }
                                 }
                             }

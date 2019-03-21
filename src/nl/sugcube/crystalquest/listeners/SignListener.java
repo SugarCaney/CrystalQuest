@@ -31,7 +31,7 @@ public class SignListener implements Listener {
 
     @EventHandler
     public void onSignBreak(BlockBreakEvent e) {
-        if (e.getBlock().getType() == Material.WALL_SIGN || e.getBlock().getType() == Material.LEGACY_SIGN_POST) {
+        if (e.getBlock().getType() == Material.WALL_SIGN || e.getBlock().getType() == Material.SIGN) {
             Sign sign = (Sign)e.getBlock().getState();
             plugin.signHandler.getSigns().remove(sign);
         }
@@ -73,7 +73,6 @@ public class SignListener implements Listener {
                 else {
                     try {
                         Arena a = plugin.am.getArena(e.getLine(1).replace(ChatColor.ITALIC + "", ""));
-                        ChatColor color;
 
                         if (a.isEnabled()) {
                             if (a.isCounting()) {
@@ -90,7 +89,6 @@ public class SignListener implements Listener {
                                 e.setLine(0, ChatColor.AQUA + "" + ChatColor.BOLD + "CQ-Spectate");
                             }
                             else if (a.isEndGame()) {
-                                color = ChatColor.DARK_PURPLE;
                                 e.setLine(3, ChatColor.DARK_PURPLE + "Restarting");
                                 e.setLine(2, "");
                                 e.setLine(1, ChatColor.ITALIC + a.getName());
@@ -142,11 +140,10 @@ public class SignListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e) {
-
         //Checks Right mouse button
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             //Checks if sign.
-            if (e.getClickedBlock().getType() == Material.WALL_SIGN || e.getClickedBlock().getType() == Material.LEGACY_SIGN_POST) {
+            if (e.getClickedBlock().getType() == Material.WALL_SIGN || e.getClickedBlock().getType() == Material.SIGN) {
                 //Checks if the sign contains [CrystalQuest]
                 Sign s = (Sign)e.getClickedBlock().getState();
                 if (s.getLine(0).contains("CrystalQuest")) {

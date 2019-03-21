@@ -36,12 +36,12 @@ public class ProjectileListener implements Listener {
             return;
         }
 
-        Player player = (Player)ball.getShooter();
-        if (!plugin.getArenaManager().isInGame(player)) {
+        Player shooter = (Player)ball.getShooter();
+        if (!plugin.getArenaManager().isInGame(shooter)) {
             return;
         }
 
-        if (plugin.getArenaManager().getArena(player.getUniqueId()).getSpectators().contains(player.getUniqueId())) {
+        if (plugin.getArenaManager().getArena(shooter.getUniqueId()).getSpectators().contains(shooter.getUniqueId())) {
             return;
         }
 
@@ -55,26 +55,25 @@ public class ProjectileListener implements Listener {
         }
 
         len.setHealth(0);
-        len.getWorld().playSound(len.getLocation(), Sound.ENTITY_BLAZE_DEATH,
-                20F, 20F);
+        len.getWorld().playSound(len.getLocation(), Sound.ENTITY_BLAZE_DEATH, 20F, 20F);
 
         Random ran = new Random();
         double chance = Multipliers.getMultiplier("blood",
-                plugin.economy.getLevel(player, "blood", "crystals"), false);
+                plugin.economy.getLevel(shooter, "blood", "crystals"), false);
         int multiplier = 1;
 
         if (ran.nextInt(100) <= chance * 100 && chance != 0) {
             multiplier = 2;
         }
 
-        //Adds crystals to player's balance
+        //Adds crystals to shooter's balance
         int vip = 1;
-        if (player.hasPermission("crystalquest.triplecash") ||
-                player.hasPermission("crystalquest.admin") ||
-                player.hasPermission("crystalquest.staff")) {
+        if (shooter.hasPermission("crystalquest.triplecash") ||
+                shooter.hasPermission("crystalquest.admin") ||
+                shooter.hasPermission("crystalquest.staff")) {
             vip = 3;
         }
-        else if (player.hasPermission("crystalquest.doublecash")) {
+        else if (shooter.hasPermission("crystalquest.doublecash")) {
             vip = 2;
         }
         int money = (int)(1 * plugin.getConfig().getDouble("shop.crystal-multiplier"));
@@ -82,28 +81,27 @@ public class ProjectileListener implements Listener {
         //Call Event
         int moneyEarned = money * multiplier * vip;
 
-        PlayerEarnCrystalsEvent event = new PlayerEarnCrystalsEvent(player,
-                plugin.getArenaManager().getArena(player.getUniqueId()), moneyEarned);
+        PlayerEarnCrystalsEvent event = new PlayerEarnCrystalsEvent(shooter,
+                plugin.getArenaManager().getArena(shooter.getUniqueId()), moneyEarned);
         Bukkit.getPluginManager().callEvent(event);
 
-        String message = plugin.economy.getCoinMessage(player, event.getAmount());
+        String message = plugin.economy.getCoinMessage(shooter, event.getAmount());
 
         if (!event.isCancelled()) {
-            plugin.economy.getBalance().addCrystals(player, event.getAmount(), false);
+            plugin.economy.getBalance().addCrystals(shooter, event.getAmount(), false);
 
             if (event.showMessage() && message != null) {
-                player.sendMessage(message);
+                shooter.sendMessage(message);
             }
         }
 
-        if (len instanceof Player) {
-            Player pl = (Player)len;
-            FireworkEffect fe = FireworkEffect.builder()
+        if (shooter instanceof Player) {
+            FireworkEffect fireworkEffect = FireworkEffect.builder()
                     .with(Type.CREEPER)
-                    .withColor(plugin.getArenaManager().getTeam(pl).getColour())
+                    .withColor(plugin.getArenaManager().getTeam(shooter).getColour())
                     .build();
             try {
-                plugin.particleHandler.playFirework(len.getLocation().add(0, 4, 0), fe);
+                plugin.particleHandler.playFirework(len.getLocation().add(0, 4, 0), fireworkEffect);
             }
             catch (Exception ignored) {
             }

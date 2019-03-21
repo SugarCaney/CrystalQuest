@@ -22,7 +22,7 @@ public class CreeperEgg extends ItemExecutor {
     private static Random random = new Random();
 
     public CreeperEgg() {
-        super(Material.LEGACY_MONSTER_EGG);
+        super(Material.CREEPER_SPAWN_EGG);
     }
 
     @Override

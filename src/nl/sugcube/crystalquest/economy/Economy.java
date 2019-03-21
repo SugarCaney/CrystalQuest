@@ -31,9 +31,9 @@ public class Economy {
     private ShopPowerup shopPowerupMenu;
     private ShopCrystals shopCrystals;
     private ShopClasses shopClasses;
-    @SuppressWarnings("unused") private Multipliers multi = new Multipliers(plugin);
 
-    public Economy(CrystalQuest instance, PluginManager plma) {
+    public Economy(CrystalQuest instance) {
+        new Multipliers(plugin);
         plugin = instance;
         shopMainMenu = new ShopMainMenu(plugin, this);
         shopPowerupMenu = new ShopPowerup(plugin, this);
@@ -158,11 +158,12 @@ public class Economy {
      * @return (int) The level of the player for a certain upgrade.
      */
     public int getLevel(Player p, String upgrade, String type) {
-        if (plugin.getData().isSet("shop." + type + "." + p.getUniqueId().toString() + "." + upgrade)) {
-            return plugin.getData().getInt("shop." + type + "." + p.getUniqueId().toString() + "." + upgrade);
+        String node = "shop." + type + "." + p.getUniqueId().toString() + "." + upgrade;
+        if (plugin.getData().isSet(node)) {
+            return plugin.getData().getInt(node);
         }
         else {
-            plugin.getData().set("shop." + type + "." + p.getUniqueId().toString() + "." + upgrade, 0);
+            plugin.getData().set(node, 0);
             return 0;
         }
     }

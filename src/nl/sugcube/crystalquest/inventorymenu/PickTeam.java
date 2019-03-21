@@ -110,12 +110,10 @@ public class PickTeam {
      * @return The wool beloning to the given team.
      */
     public ItemStack getWool(CrystalQuestTeam team) {
-        short damageValue = team.getDataValueWool();
-        ItemStack is = new ItemStack(Material.LEGACY_WOOL, 1, damageValue);
+        ItemStack is = new ItemStack(team.getWoolMaterial(), 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("menu.join") + team.toString());
         is.setItemMeta(im);
         return is;
     }
-
 }

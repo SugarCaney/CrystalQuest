@@ -33,7 +33,7 @@ public class LoadData {
         plugin.signHandler.getSigns().clear();
         for (String s : plugin.getData().getStringList("signs")) {
             Location loc = SMeth.toLocation(s);
-            if (loc.getBlock().getType() == Material.WALL_SIGN || loc.getBlock().getType() == Material.LEGACY_SIGN_POST) {
+            if (loc.getBlock().getType() == Material.WALL_SIGN || loc.getBlock().getType() == Material.SIGN) {
                 plugin.signHandler.getSigns().add(loc);
             }
         }
@@ -142,7 +142,7 @@ public class LoadData {
      * Loads the teamspawn data from CQ versions up to v1.3.
      * <p>
      * Pre v1.3: Teamlobbies are stored in a list mapped to team indices.<br>
-     * Post v1.3: Teamlobbies are mapped from {@link CrystalQuestTeam#name} to location.
+     * Post v1.3: Teamlobbies are mapped from {@code CrystalQuestTeam.name} to location.
      */
     private static void compat_teamspawn_v1_3(Arena arena, List<String> locations) {
         for (int i = 0; i < locations.size(); i++) {

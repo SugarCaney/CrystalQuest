@@ -2,7 +2,7 @@ package nl.sugcube.crystalquest.command;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import org.bukkit.Bukkit;
+import nl.sugcube.crystalquest.util.BukkitUtil;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,7 +32,7 @@ public class CommandBalance extends CrystalQuestCommand {
 
         // Parse player
         if (player == null) {
-            player = Bukkit.getPlayer(arguments[0]);
+            player = BukkitUtil.getPlayerByName(arguments[0]);
             if (player == null) {
                 sender.sendMessage(Broadcast.get("commands.couldnt-find-player-var")
                         .replace("%p%", arguments[0]));

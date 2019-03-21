@@ -83,7 +83,7 @@ public class SignHandler {
                 }
                 s.update();
             }
-            catch (Exception e) {
+            catch (Exception ignored) {
             }
         }
 

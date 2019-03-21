@@ -2,10 +2,11 @@ package nl.sugcube.crystalquest.listeners;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.game.CrystalQuestTeam;
-import nl.sugcube.crystalquest.game.Teams;
 import nl.sugcube.crystalquest.economy.Multipliers;
 import nl.sugcube.crystalquest.game.Arena;
+import nl.sugcube.crystalquest.game.CrystalQuestTeam;
+import nl.sugcube.crystalquest.game.Teams;
+import nl.sugcube.crystalquest.util.Materials;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
@@ -16,6 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.Random;
@@ -35,11 +37,11 @@ public class EntityListener implements Listener {
     public void onEntityDeath(EntityDeathEvent e) {
         Entity ent = e.getEntity();
         if (ent instanceof Creeper) {
-            Creeper c = (Creeper)ent;
+            Creeper creeper = (Creeper)ent;
             boolean isGameCreeper = false;
             for (Arena a : plugin.getArenaManager().getArenas()) {
                 for (Creeper creep : a.getGameCreepers()) {
-                    if (creep == c) {
+                    if (creep == creeper) {
                         isGameCreeper = true;
                     }
                 }
@@ -49,11 +51,11 @@ public class EntityListener implements Listener {
                 double amount = 1;
                 if (e.getEntity().getKiller() != null) {
                     Player p = e.getEntity().getKiller();
-                    amount = Multipliers.getMultiplier("creepergem",
-                            plugin.economy.getLevel(p, "creepers", "upgrade"), false);
+                    amount = Multipliers.getMultiplier("creepergem", plugin.economy.getLevel(p, "creepers", "upgrade"), false);
                 }
                 for (double i = 0; i < amount; i++) {
-                    c.getWorld().dropItem(c.getLocation(), plugin.itemHandler.getItemByName(Broadcast.get("items.crystal-shard")));
+                    ItemStack shards = plugin.itemHandler.getItemByName(Broadcast.get("items.crystal-shard"));
+                    creeper.getWorld().dropItem(creeper.getLocation(), shards);
                 }
             }
         }
@@ -201,36 +203,36 @@ public class EntityListener implements Listener {
 
                     if (isValid) {
                         if (isOwnTeamCrystal((EnderCrystal)e.getEntity(), pl)) {
-                            double chance = Multipliers.getMultiplier("smash",
-                                    plugin.economy.getLevel(pl, "smash", "crystals"), false);
-                            double multi = 3;
-
-                            if (chance > 0) {
-                                Random ran = new Random();
-                                if (ran.nextInt(100) <= chance * 100) {
-                                    multi = 6;
-                                }
-                            }
-
-                            plugin.am.getArena(pl.getUniqueId()).addScore(plugin.am.getTeam(pl), (int)multi);
-                            e.getEntity().remove();
-
-                            Firework f = e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), Firework.class);
-                            FireworkMeta fm = f.getFireworkMeta();
-                            fm.setPower(0);
-                            FireworkEffect fe = FireworkEffect.builder()
-                                    .flicker(true)
-                                    .withColor(plugin.am.getTeam(pl).getColour())
-                                    .build();
-                            fm.clearEffects();
-                            fm.addEffect(fe);
-                            f.setFireworkMeta(fm);
-                        }
-                        else {
                             pl.sendMessage(Broadcast.get("arena.own-crystals")
                                     .replace("%colour%", "" + plugin.getArenaManager().getTeam(pl)
                                             .getChatColour()));
+                            return;
                         }
+
+                        double chance = Multipliers.getMultiplier("smash",
+                                plugin.economy.getLevel(pl, "smash", "crystals"), false);
+                        double multi = 3;
+
+                        if (chance > 0) {
+                            Random ran = new Random();
+                            if (ran.nextInt(100) <= chance * 100) {
+                                multi = 6;
+                            }
+                        }
+
+                        plugin.am.getArena(pl.getUniqueId()).addScore(plugin.am.getTeam(pl), (int)multi);
+                        e.getEntity().remove();
+
+                        Firework f = e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), Firework.class);
+                        FireworkMeta fm = f.getFireworkMeta();
+                        fm.setPower(0);
+                        FireworkEffect fe = FireworkEffect.builder()
+                                .flicker(true)
+                                .withColor(plugin.am.getTeam(pl).getColour())
+                                .build();
+                        fm.clearEffects();
+                        fm.addEffect(fe);
+                        f.setFireworkMeta(fm);
                     }
                 }
             }
@@ -249,7 +251,7 @@ public class EntityListener implements Listener {
      */
     public boolean isOwnTeamCrystal(EnderCrystal ec, Player pl) {
         Location loc = ec.getLocation().add(0, -1, 0);
-        return (loc.getBlock().getType() != Material.LEGACY_WOOL) || (Teams.getTeamFromDataValue(loc.getBlock().getData()) != plugin.getArenaManager().getTeam(pl));
+        Material blockBelow = loc.getBlock().getType();
+        return Materials.isWool(blockBelow) && Teams.getTeamFromWoolMaterial(blockBelow) == plugin.getArenaManager().getTeam(pl);
     }
-
 }

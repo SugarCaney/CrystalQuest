@@ -50,5 +50,4 @@ public class ArenaStartEvent extends Event implements Cancellable {
     public void setCancelled(boolean cancel) {
         cancelled = cancel;
     }
-
 }

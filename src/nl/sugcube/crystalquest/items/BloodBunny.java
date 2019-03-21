@@ -34,7 +34,7 @@ public class BloodBunny extends ItemExecutor {
             }});
 
     public BloodBunny() {
-        super(Material.LEGACY_CARROT_ITEM);
+        super(Material.CARROT);
     }
 
     @Override

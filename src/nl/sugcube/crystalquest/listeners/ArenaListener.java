@@ -56,19 +56,22 @@ public class ArenaListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-        if (plugin.getConfig().getBoolean("arena.blood") && event.getEntity() instanceof LivingEntity) {
-            if (plugin.prot.isInProtectedArena(event.getEntity().getLocation())) {
-                if (event.getEntity() instanceof Player) {
-                    Player p = (Player)event.getEntity();
-                    if (!plugin.getArenaManager().isInGame(p) || plugin.getArenaManager().isSpectator(p)) {
-                        return;
-                    }
-                }
+        if (!plugin.getConfig().getBoolean("arena.blood") || !(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
+        if (!plugin.prot.isInProtectedArena(event.getEntity().getLocation())) {
+            return;
+        }
 
-                event.getEntity().getWorld().playEffect(event.getEntity().getLocation().add(0, 1.5, 0),
-                        Effect.STEP_SOUND, SItem.toMaterial(plugin.getConfig().getString("arena.blood-material")));
+        if (event.getEntity() instanceof Player) {
+            Player p = (Player)event.getEntity();
+            if (!plugin.getArenaManager().isInGame(p) || plugin.getArenaManager().isSpectator(p)) {
+                return;
             }
         }
+
+        event.getEntity().getWorld().playEffect(event.getEntity().getLocation().add(0, 1.5, 0),
+                Effect.STEP_SOUND, SItem.toMaterial(plugin.getConfig().getString("arena.blood-material")));
     }
 
 }

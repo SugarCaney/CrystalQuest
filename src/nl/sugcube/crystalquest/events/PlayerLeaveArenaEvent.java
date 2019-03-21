@@ -16,7 +16,6 @@ public class PlayerLeaveArenaEvent extends Event {
     private Arena arena;
 
     /**
-     * @param void
      * @return Get the arenas the player left
      */
     public Arena getArena() {
@@ -24,7 +23,6 @@ public class PlayerLeaveArenaEvent extends Event {
     }
 
     /**
-     * @param void
      * @return The player who left the arenas
      */
     public Player getPlayer() {
@@ -43,5 +41,4 @@ public class PlayerLeaveArenaEvent extends Event {
     public static HandlerList getHandlerList() {
         return handlers;
     }
-
 }

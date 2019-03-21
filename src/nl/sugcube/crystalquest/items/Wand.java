@@ -5,6 +5,7 @@ import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.ArenaManager;
 import nl.sugcube.crystalquest.game.CrystalQuestTeam;
+import nl.sugcube.crystalquest.util.BukkitUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -69,7 +71,6 @@ public class Wand implements Listener {
         return null;
     }
 
-    @SuppressWarnings("deprecation")
     @EventHandler
     public void onWandUse(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK && e.getAction() != Action.RIGHT_CLICK_AIR) {
@@ -93,7 +94,7 @@ public class Wand implements Listener {
          * WAND: MAGMA
          */
         if (getWandType(player.getInventory().getItemInMainHand()) == WandType.MAGMA) {
-            if (player.getInventory().getItemInMainHand().getDurability() == (short)0) {
+            if (((Damageable)player.getInventory().getItemInMainHand()).getDamage() == 0) {
                 Fireball fb = player.launchProjectile(Fireball.class);
                 fb.setVelocity(player.getLocation().getDirection().multiply(3));
 
@@ -115,7 +116,7 @@ public class Wand implements Listener {
                     }
                 }
 
-                player.getInventory().getItemInMainHand().setDurability(WandType.MAGMA.getDurability());
+                ((Damageable)player.getInventory().getItemInMainHand()).setDamage(WandType.MAGMA.getDurability());
             }
 
             return;
@@ -125,7 +126,7 @@ public class Wand implements Listener {
          * WAND: TELEPORT
          */
         if (getWandType(player.getInventory().getItemInMainHand()) == WandType.TELEPORT) {
-            if (player.getInventory().getItemInMainHand().getDurability() == (short)0) {
+            if (((Damageable)player.getInventory().getItemInMainHand()).getDamage() == 0) {
                 Set<Material> targetSet = null;
                 Location loc = player.getTargetBlock(targetSet, 64).getLocation().add(0, 1, 0);
                 if (loc.getBlock().getType() == Material.AIR) {
@@ -147,7 +148,7 @@ public class Wand implements Listener {
                             player.teleport(loc);
                             player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
                             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 1F);
-                            player.getInventory().getItemInMainHand().setDurability(WandType.TELEPORT.getDurability());
+                            ((Damageable)player.getInventory().getItemInMainHand()).setDamage(WandType.TELEPORT.getDurability());
                         }
                     }
                 }
@@ -160,7 +161,7 @@ public class Wand implements Listener {
          * WAND: HEAL
          */
         if (getWandType(player.getInventory().getItemInMainHand()) == WandType.HEAL) {
-            if (player.getInventory().getItemInMainHand().getDurability() != (short)0) {
+            if (((Damageable)player.getInventory().getItemInMainHand()).getDamage() != 0) {
                 return;
             }
 
@@ -168,7 +169,7 @@ public class Wand implements Listener {
             Team scoreboardTeam = arena.getTeamObject(team);
 
             for (OfflinePlayer pl : scoreboardTeam.getPlayers()) {
-                Player target = Bukkit.getPlayer(pl.getName());
+                Player target = BukkitUtil.getPlayerByName(pl.getName());
 
                 target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 8, 5));
 
@@ -181,7 +182,7 @@ public class Wand implements Listener {
                 }
             }
 
-            player.getInventory().getItemInMainHand().setDurability(WandType.HEAL.getDurability());
+            ((Damageable)player.getInventory().getItemInMainHand()).setDamage(WandType.HEAL.getDurability());
 
             return;
         }
@@ -190,7 +191,7 @@ public class Wand implements Listener {
          * WAND: FREEZE
          */
         if (getWandType(player.getInventory().getItemInMainHand()) == WandType.FREEZE) {
-            if (player.getInventory().getItemInMainHand().getDurability() != (short)0) {
+            if (((Damageable)player.getInventory().getItemInMainHand()).getDamage() != 0) {
                 return;
             }
 
@@ -212,7 +213,7 @@ public class Wand implements Listener {
                     }
                 }
             }
-            player.getInventory().getItemInMainHand().setDurability(WandType.FREEZE.getDurability());
+            ((Damageable)player.getInventory().getItemInMainHand()).setDamage(WandType.FREEZE.getDurability());
 
             return;
         }
@@ -221,7 +222,7 @@ public class Wand implements Listener {
          * WAND: WITHER
          */
         if (getWandType(player.getInventory().getItemInMainHand()) == WandType.WITHER) {
-            if (player.getInventory().getItemInMainHand().getDurability() == (short)0) {
+            if (((Damageable)player.getInventory().getItemInMainHand()).getDamage() == 0) {
                 WitherSkull ws = player.launchProjectile(WitherSkull.class);
                 ws.setVelocity(player.getLocation().getDirection().multiply(3));
 
@@ -244,7 +245,7 @@ public class Wand implements Listener {
                     }
                 }
 
-                player.getInventory().getItemInMainHand().setDurability(WandType.WITHER.getDurability());
+                ((Damageable)player.getInventory().getItemInMainHand()).setDamage(WandType.WITHER.getDurability());
             }
         }
     }

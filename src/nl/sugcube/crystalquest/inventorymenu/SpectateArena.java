@@ -86,24 +86,24 @@ public class SpectateArena {
         String status;
 
         if (a.isEndGame()) {
-            is = new ItemStack(Material.LEGACY_WOOL, 1, (short)2);
+            is = new ItemStack(Material.MAGENTA_WOOL, 1);
             status = ChatColor.DARK_PURPLE + "Restarting";
         }
         else if (a.isInGame()) {
-            is = new ItemStack(Material.LEGACY_WOOL, 1, (short)14);
+            is = new ItemStack(Material.RED_WOOL, 1);
             status = ChatColor.DARK_RED + "In Game";
         }
         else if (a.isCounting()) {
-            is = new ItemStack(Material.LEGACY_WOOL, 1, (short)1);
+            is = new ItemStack(Material.ORANGE_WOOL, 1);
             status = ChatColor.GOLD + "Starting";
         }
         else {
-            is = new ItemStack(Material.LEGACY_WOOL, 1, (short)5);
+            is = new ItemStack(Material.LIME_WOOL, 1);
             status = ChatColor.GREEN + "In Lobby";
         }
 
         String displayName = ChatColor.AQUA + "Spectate " + a.getName();
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.YELLOW + "Currently " + status);
         lore.add(ChatColor.YELLOW + "Players: " + a.getPlayers().size() + "/" + a.getMaxPlayers());
 
@@ -114,5 +114,4 @@ public class SpectateArena {
 
         return is;
     }
-
 }

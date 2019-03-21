@@ -1,10 +1,8 @@
 package nl.sugcube.crystalquest.game;
 
 import nl.sugcube.crystalquest.CrystalQuest;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
-import org.bukkit.OfflinePlayer;
+import nl.sugcube.crystalquest.util.Materials;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -103,6 +101,16 @@ public class Teams {
      */
     public static CrystalQuestTeam getTeamFromDataValue(short dataValue) throws IllegalArgumentException {
         return CrystalQuestTeam.valueOf(dataValue);
+    }
+
+    /**
+     * Get the team matching the wool block.
+     * @param wool
+     *          The wool block material.
+     * @return The corresponding team.
+     */
+    public static CrystalQuestTeam getTeamFromWoolMaterial(Material wool) {
+        return CrystalQuestTeam.valueOf(Materials.woolDamageValue(wool));
     }
 
     /**

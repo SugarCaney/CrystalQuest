@@ -38,8 +38,9 @@ public class ShopMainMenu implements Listener {
     public void showMenu(Player p) {
         p.closeInventory();
 
-        Inventory inv = Bukkit.createInventory(null, 9, ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD +
-                " Menu");
+        Inventory inv = Bukkit.createInventory(null, 9,
+                ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Menu"
+        );
 
         ItemStack[] contents = inv.getContents();
         contents[0] = getItemClass();
@@ -143,5 +144,4 @@ public class ShopMainMenu implements Listener {
         is.setItemMeta(im);
         return is;
     }
-
 }

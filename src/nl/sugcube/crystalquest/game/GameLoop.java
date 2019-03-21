@@ -13,6 +13,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.Random;
@@ -89,94 +90,7 @@ public class GameLoop implements Runnable {
     }
 
     private void doGameLoop(Arena arena) {
-        if (arena.getTimeLeft() > 0) {
-            ArenaTickEvent event = new ArenaTickEvent(arena, arena.getTimeLeft(), arena.getTimeLeft() - 1, true);
-            Bukkit.getPluginManager().callEvent(event);
-
-            for (UUID id : arena.getPlayers()) {
-                Player player = Bukkit.getPlayer(id);
-                if (arena.getTimeLeft() % 10 == 0) {
-                    player.setFoodLevel(20);
-                    player.setSaturation(4);
-                }
-
-                // Remove items from inventory.
-                for (ItemStack is : player.getInventory().getContents()) {
-                    if (is != null) {
-                        if (is.getType() == Material.GLASS_BOTTLE) {
-                            player.getInventory().remove(is);
-                        }
-                        if (is.hasItemMeta()) {
-                            if (is.getItemMeta().hasDisplayName()) {
-                                if (is.getItemMeta().getDisplayName()
-                                        .equalsIgnoreCase(Broadcast.get("items.crystal-shard"))) {
-                                    player.getInventory().remove(is);
-                                }
-                                else if (is.getItemMeta().getDisplayName()
-                                        .equalsIgnoreCase(Broadcast.get("items.small-crystal"))) {
-                                    player.getInventory().remove(is);
-                                }
-                                else if (is.getItemMeta().getDisplayName()
-                                        .equalsIgnoreCase(Broadcast.get("items.shiny-crystal"))) {
-                                    player.getInventory().remove(is);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Check out of bounds: kill
-                if (!plugin.prot.isInProtectedArenaIgnoreY(player.getLocation())) {
-                    if (player.getHealth() > 0) {
-                        player.setHealth(0);
-                    }
-                }
-
-                // Check XP
-                if (player.getLevel() > 0) {
-                    int extraPoints = (int)Multipliers.getMultiplier("xp",
-                            plugin.economy.getLevel(player, "xp", "crystals"), false) - 1;
-
-                    arena.addScore(plugin.getArenaManager().getTeam(player), player.getLevel() + extraPoints);
-                    player.setLevel(0);
-                }
-
-                // Wands
-                for (ItemStack is : player.getInventory().getContents()) {
-                    if (plugin.wand.getWandType(is) != null) {
-                        if (is.getDurability() != 0) {
-                            double multiplier = 1;
-                            if (plugin.ab.getAbilities().containsKey(player.getUniqueId())) {
-                                if (plugin.ab.getAbilities().get(player.getUniqueId()).contains("magical_aura")) {
-                                    multiplier = 2.1;
-                                }
-                                else if (plugin.ab.getAbilities().get(player.getUniqueId()).contains("power_loss")) {
-                                    multiplier = 0.6;
-                                }
-                            }
-                            else {
-                                multiplier = 1;
-                            }
-
-                            WandType type = plugin.wand.getWandType(is);
-                            short addedDura = (short)(type.getDurability() / plugin.getConfig().getInt(type.getRegenConfig()) * multiplier);
-                            short newDura;
-                            if (is.getDurability() - addedDura < 0) {
-                                newDura = 0;
-                            }
-                            else {
-                                newDura = (short)(is.getDurability() - addedDura);
-                            }
-                            is.setDurability(newDura);
-                        }
-                    }
-                }
-            }
-
-            arena.setTimeLeft(arena.getTimeLeft() - 1);
-            arena.updateTimer();
-        }
-        else {
+        if (arena.getTimeLeft() <= 0) {
             try {
                 winningTeam = arena.declareWinner();
                 arena.setAfterCount(plugin.getConfig().getInt("arena.after-count"));
@@ -187,7 +101,95 @@ public class GameLoop implements Runnable {
             catch (Exception e) {
                 e.printStackTrace();
             }
+            return;
         }
+
+        ArenaTickEvent event = new ArenaTickEvent(arena, arena.getTimeLeft(), arena.getTimeLeft() - 1, true);
+        Bukkit.getPluginManager().callEvent(event);
+
+        for (UUID id : arena.getPlayers()) {
+            Player player = Bukkit.getPlayer(id);
+            if (arena.getTimeLeft() % 10 == 0) {
+                player.setFoodLevel(20);
+                player.setSaturation(4);
+            }
+
+            // Remove items from inventory.
+            for (ItemStack is : player.getInventory().getContents()) {
+                if (is != null) {
+                    if (is.getType() == Material.GLASS_BOTTLE) {
+                        player.getInventory().remove(is);
+                    }
+                    if (is.hasItemMeta()) {
+                        if (is.getItemMeta().hasDisplayName()) {
+                            if (is.getItemMeta().getDisplayName()
+                                    .equalsIgnoreCase(Broadcast.get("items.crystal-shard"))) {
+                                player.getInventory().remove(is);
+                            }
+                            else if (is.getItemMeta().getDisplayName()
+                                    .equalsIgnoreCase(Broadcast.get("items.small-crystal"))) {
+                                player.getInventory().remove(is);
+                            }
+                            else if (is.getItemMeta().getDisplayName()
+                                    .equalsIgnoreCase(Broadcast.get("items.shiny-crystal"))) {
+                                player.getInventory().remove(is);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Check out of bounds: kill
+            if (!plugin.prot.isInProtectedArenaIgnoreY(player.getLocation())) {
+                if (player.getHealth() > 0) {
+                    player.setHealth(0);
+                }
+            }
+
+            // Check XP
+            if (player.getLevel() > 0) {
+                int extraPoints = (int)Multipliers.getMultiplier("xp",
+                        plugin.economy.getLevel(player, "xp", "crystals"), false) - 1;
+
+                arena.addScore(plugin.getArenaManager().getTeam(player), player.getLevel() + extraPoints);
+                player.setLevel(0);
+            }
+
+            // Wands
+            for (ItemStack is : player.getInventory().getContents()) {
+                if (plugin.wand.getWandType(is) != null) {
+                    Damageable meta = (Damageable)is.getItemMeta();
+                    if (meta.getDamage() > 0) {
+                        double multiplier = 1;
+                        if (plugin.ab.getAbilities().containsKey(player.getUniqueId())) {
+                            if (plugin.ab.getAbilities().get(player.getUniqueId()).contains("magical_aura")) {
+                                multiplier = 2.1;
+                            }
+                            else if (plugin.ab.getAbilities().get(player.getUniqueId()).contains("power_loss")) {
+                                multiplier = 0.6;
+                            }
+                        }
+                        else {
+                            multiplier = 1;
+                        }
+
+                        WandType type = plugin.wand.getWandType(is);
+                        int addedDura = (int)(type.getDurability() / plugin.getConfig().getInt(type.getRegenConfig()) * multiplier);
+                        int newDurability;
+                        if (meta.getDamage() - addedDura < 0) {
+                            newDurability = 0;
+                        }
+                        else {
+                            newDurability = meta.getDamage() - addedDura;
+                        }
+                        meta.setDamage(newDurability);
+                    }
+                }
+            }
+        }
+
+        arena.setTimeLeft(arena.getTimeLeft() - 1);
+        arena.updateTimer();
     }
 
     private void doEndGame(Arena arena) {

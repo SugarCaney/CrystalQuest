@@ -55,7 +55,6 @@ public class SelectClass {
      *
      * @param player
      *         (Player) The target player.
-     * @return void
      */
     public void setRandomClass(Player player) {
         String chosenClass = "";
@@ -63,8 +62,7 @@ public class SelectClass {
         while (!isOk) {
             Random ran = new Random();
 
-            List<String> classes = new ArrayList<String>();
-            classes.addAll(plugin.getConfig().getConfigurationSection("kit").getKeys(false));
+            List<String> classes = new ArrayList<>(plugin.getConfig().getConfigurationSection("kit").getKeys(false));
 
             int classId = ran.nextInt(classes.size());
             String pickedClass = classes.get(classId);
@@ -84,7 +82,6 @@ public class SelectClass {
      *
      * @param p
      *         (Player) The target player.
-     * @return void
      */
     public void openMenu(Player p) {
 
@@ -102,15 +99,14 @@ public class SelectClass {
 		/*
          * Checks and sets the size the inventory has to be to fit in all the classes.
 		 */
-        int invSize = 9;
-
+        int inventorySize = 9;
         for (int i = 54; i >= 9; i -= 9) {
             if (classes.size() < i) {
-                invSize = i;
+                inventorySize = i;
             }
         }
 
-        Inventory inv = Bukkit.createInventory(p, invSize, "Pick a Class");
+        Inventory inv = Bukkit.createInventory(p, inventorySize, "Pick a Class");
 
         //Adds the random-class
         ItemStack randomItem = new ItemStack(Material.REDSTONE, 1);
@@ -122,20 +118,20 @@ public class SelectClass {
 		/*
 		 * Fills the inventory with the avaiable classes.
 		 */
-        for (String s : classes) {
-            ItemStack icon = plugin.sh.toItemStack(plugin.getConfig().getString("kit." + s + ".icon"));
+        for (String className : classes) {
+            ItemStack icon = plugin.sh.toItemStack(plugin.getConfig().getString("kit." + className + ".icon"));
             ItemMeta im = icon.getItemMeta();
-            String name = plugin.getConfig().getString("kit." + s + ".name");
+            String name = plugin.getConfig().getString("kit." + className + ".name");
             im.setDisplayName(SMeth.setColours(name));
 
-            if (plugin.getConfig().getString("kit." + s + ".lore") != "") {
+            if (plugin.getConfig().getString("kit." + className + ".lore") != "") {
                 List<String> lore = new ArrayList<>();
-                String[] lines = plugin.getConfig().getString("kit." + s + ".lore").split("%nl%");
+                String[] lines = plugin.getConfig().getString("kit." + className + ".lore").split("%nl%");
                 for (String str : lines) {
                     lore.add(SMeth.setColours(str));
                 }
 
-                if (!Classes.hasPermission(p, s)) {
+                if (!Classes.hasPermission(p, className)) {
                     lore.add(ChatColor.RESET + "" + ChatColor.RED + Broadcast.get("menu.not-available"));
                 }
 

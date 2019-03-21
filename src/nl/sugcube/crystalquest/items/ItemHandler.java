@@ -10,10 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -52,7 +49,7 @@ public class ItemHandler {
         try {
             InputStream is = plugin.getResource("woof");
             BufferedReader in = new BufferedReader(new InputStreamReader(is));
-            String line = "";
+            String line;
             while ((line = in.readLine()) != null) {
                 dogNames.add(line.trim());
             }
@@ -141,7 +138,7 @@ public class ItemHandler {
         else if (is.getType() == Material.IRON_HOE) {
             is.setAmount(ran.nextInt(2) + 1);
         }
-        else if (is.getType() == Material.LEGACY_RED_ROSE) {
+        else if (is.getType() == Material.POPPY) {
             is.setAmount(ran.nextInt(3) + 1);
         }
         return is;
@@ -175,7 +172,7 @@ public class ItemHandler {
      * Adds the Curse-item to the items-list
      */
     public void addCurse() {
-        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)0);
+        ItemStack is = new ItemStack(Material.SKELETON_SKULL, 1);
         SkullMeta im = (SkullMeta)is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.curse"));
         is.setItemMeta(im);
@@ -200,7 +197,7 @@ public class ItemHandler {
      * Add the Blood Bunny-item
      */
     public void addBloodBunny() {
-        ItemStack is = new ItemStack(Material.LEGACY_CARROT_ITEM, 1);
+        ItemStack is = new ItemStack(Material.CARROT, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.bunny"));
         is.setItemMeta(im);
@@ -272,7 +269,7 @@ public class ItemHandler {
      * Add the Landmine-item
      */
     public void addLandmine() {
-        ItemStack is = new ItemStack(Material.LEGACY_STONE_PLATE, 1);
+        ItemStack is = new ItemStack(Material.STONE_PRESSURE_PLATE, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.landmine"));
         is.setItemMeta(im);
@@ -296,7 +293,7 @@ public class ItemHandler {
      * Add the CreeperEgg-item to the items-list
      */
     public void addCreeperEgg() {
-        ItemStack is = new ItemStack(Material.LEGACY_MONSTER_EGG, 1, (short)50);
+        ItemStack is = new ItemStack(Material.CREEPER_SPAWN_EGG, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.DARK_GREEN + "Creeper Egg");
         is.setItemMeta(im);
@@ -308,8 +305,10 @@ public class ItemHandler {
      * Adds the Hammer-item to the items-list
      */
     public void addHammer() {
-        ItemStack is = new ItemStack(Material.DIAMOND_AXE, 1, (short)1561);
+        ItemStack is = new ItemStack(Material.DIAMOND_AXE, 1);
         ItemMeta im = is.getItemMeta();
+        Damageable imDamage = (Damageable)im;
+        imDamage.setDamage(1561);
         im.setDisplayName(Broadcast.get("items.hammer"));
         is.setItemMeta(im);
         is.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 3);
@@ -321,7 +320,7 @@ public class ItemHandler {
      * Adds the Wither-item to the items-list
      */
     public void addWither() {
-        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)1);
+        ItemStack is = new ItemStack(Material.WITHER_SKELETON_SKULL, 1);
         SkullMeta im = (SkullMeta)is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.wither"));
         is.setItemMeta(im);
@@ -392,7 +391,7 @@ public class ItemHandler {
      * Adds the Blooper-item to the items-list
      */
     public void addBlooper() {
-        ItemStack is = new ItemStack(Material.INK_SAC, 1, (short)0);
+        ItemStack is = new ItemStack(Material.INK_SAC, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.blooper"));
         is.setItemMeta(im);
@@ -500,7 +499,7 @@ public class ItemHandler {
         ItemStack is = new ItemStack(Material.WRITTEN_BOOK, 1);
         BookMeta meta = (BookMeta)is.getItemMeta();
         meta.setDisplayName(ChatColor.YELLOW + "Instruction Manual");
-        meta.setAuthor(ChatColor.GREEN + "MrSugarCaney");
+        meta.setAuthor(ChatColor.GREEN + "SugarCaney");
 
         String[] pages = new String[17];
 
@@ -579,7 +578,7 @@ public class ItemHandler {
                 ChatColor.UNDERLINE + "Power Loss\n" + ChatColor.BLACK + "Wands regenerate twice as slow.\n\n";
 
         String version = plugin.getDescription().getVersion();
-        String uptodate = "";
+        String uptodate;
         if (plugin.getConfig().getBoolean("updates.check-for-updates")) {
             Update uc = new Update(69421, version);
             if (uc.query()) {
@@ -593,7 +592,7 @@ public class ItemHandler {
             uptodate = "Checking disabled!";
         }
         pages[16] = "Good luck and thanks for playing!\n\n" +
-                "Plugin Author:\n-" + ChatColor.GOLD + ChatColor.BOLD + "MrSugarCaney\n\n" + ChatColor.RESET + ChatColor.BLACK +
+                "Plugin Author:\n-" + ChatColor.GOLD + ChatColor.BOLD + "SugarCaney\n\n" + ChatColor.RESET + ChatColor.BLACK +
                 "Current Version:\n" + version + "\n" + uptodate + "\n\n" + specialMessage2lines;
 
         meta.addPage(pages);

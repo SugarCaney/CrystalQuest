@@ -68,8 +68,9 @@ public class ShopCrystals implements Listener {
     public void showMenu(Player p) {
         p.closeInventory();
 
-        Inventory inv = Bukkit.createInventory(null, 54, ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD +
-                " Crystals");
+        Inventory inv = Bukkit.createInventory(null, 54,
+                ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Crystals"
+        );
 
         updateMenu(p, inv);
         p.openInventory(inv);
@@ -165,7 +166,7 @@ public class ShopCrystals implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemBuyKill(Player p) {
-        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)3);
+        ItemStack is = new ItemStack(Material.PLAYER_HEAD, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "blood", "crystals") < 5) {
             im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.RED + "Blood Diamonds");
@@ -173,7 +174,7 @@ public class ShopCrystals implements Listener {
         else {
             im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.RED + "Blood Diamonds");
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".blood")) {
             level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".blood");
@@ -205,7 +206,7 @@ public class ShopCrystals implements Listener {
         else {
             im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.YELLOW + "Win-Cash");
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".win")) {
             level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".win");
@@ -237,7 +238,7 @@ public class ShopCrystals implements Listener {
         else {
             im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".smash")) {
             level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".smash");
@@ -269,7 +270,7 @@ public class ShopCrystals implements Listener {
         else {
             im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.GREEN + "Xp-Bonus");
         }
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".xp")) {
             level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".xp");
@@ -293,10 +294,10 @@ public class ShopCrystals implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemStatusKill(Player p) {
-        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)3);
+        ItemStack is = new ItemStack(Material.PLAYER_HEAD, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.RED + "Blood Diamonds");
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".blood")) {
             level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".blood");
@@ -326,7 +327,7 @@ public class ShopCrystals implements Listener {
         ItemStack is = new ItemStack(Material.GOLD_INGOT, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.YELLOW + "Win-Cash");
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".win")) {
             level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".win");
@@ -355,7 +356,7 @@ public class ShopCrystals implements Listener {
         ItemStack is = new ItemStack(Material.NETHER_STAR, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.LIGHT_PURPLE + "Smash-Bonus");
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".smash")) {
             level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".smash");
@@ -385,7 +386,7 @@ public class ShopCrystals implements Listener {
         ItemStack is = new ItemStack(Material.EXPERIENCE_BOTTLE, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.GREEN + "Xp-Bonus");
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         int level = 0;
         if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".xp")) {
             level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".xp");
@@ -415,7 +416,7 @@ public class ShopCrystals implements Listener {
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.GREEN + "Main Menu");
         is.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
-        List<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Go back to the Main Menu!");
         im.setLore(lore);
         is.setItemMeta(im);
