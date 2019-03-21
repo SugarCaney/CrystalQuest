@@ -165,7 +165,7 @@ public class ShopCrystals implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemBuyKill(Player p) {
-        ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)3);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "blood", "crystals") < 5) {
             im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.RED + "Blood Diamonds");
@@ -261,7 +261,7 @@ public class ShopCrystals implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemBuyExp(Player p) {
-        ItemStack is = new ItemStack(Material.EXP_BOTTLE, 1);
+        ItemStack is = new ItemStack(Material.EXPERIENCE_BOTTLE, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "xp", "crystals") < 5) {
             im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.GREEN + "Xp-Bonus");
@@ -293,7 +293,7 @@ public class ShopCrystals implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemStatusKill(Player p) {
-        ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)3);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.RED + "Blood Diamonds");
         List<String> lore = new ArrayList<String>();
@@ -382,7 +382,7 @@ public class ShopCrystals implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemStatusExp(Player p) {
-        ItemStack is = new ItemStack(Material.EXP_BOTTLE, 1);
+        ItemStack is = new ItemStack(Material.EXPERIENCE_BOTTLE, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.GREEN + "Xp-Bonus");
         List<String> lore = new ArrayList<String>();

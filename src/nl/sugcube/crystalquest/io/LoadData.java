@@ -33,7 +33,7 @@ public class LoadData {
         plugin.signHandler.getSigns().clear();
         for (String s : plugin.getData().getStringList("signs")) {
             Location loc = SMeth.toLocation(s);
-            if (loc.getBlock().getType() == Material.WALL_SIGN || loc.getBlock().getType() == Material.SIGN_POST) {
+            if (loc.getBlock().getType() == Material.WALL_SIGN || loc.getBlock().getType() == Material.LEGACY_SIGN_POST) {
                 plugin.signHandler.getSigns().add(loc);
             }
         }
@@ -55,7 +55,12 @@ public class LoadData {
     public static void loadArenas() {
         FileConfiguration data = plugin.getData();
 
-        Set<String> arenaIds = data.getConfigurationSection("arena").getKeys(false);
+        ConfigurationSection arenaSection = data.getConfigurationSection("arena");
+        if (arenaSection == null) {
+            return;
+        }
+
+        Set<String> arenaIds = arenaSection.getKeys(false);
         ArenaManager arenaManager = plugin.getArenaManager();
         for (String arenaId : arenaIds) {
             int id = arenaManager.createArena();

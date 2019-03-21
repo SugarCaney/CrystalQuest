@@ -20,7 +20,7 @@ public class Blooper extends ItemExecutor {
     private static final int BLOOPER_DURATION = 118;
 
     public Blooper() {
-        super(Material.INK_SACK);
+        super(Material.INK_SAC);
     }
 
     @Override
@@ -46,10 +46,10 @@ public class Blooper extends ItemExecutor {
         for (Player target : Teams.getPlayersFromTeam(arena, targetTeam)) {
             target.addPotionEffect(effect);
             target.addPotionEffect(effect2);
-            target.playSound(target.getLocation(), Sound.BLOCK_SLIME_STEP, 12F, 12F);
+            target.playSound(target.getLocation(), Sound.BLOCK_SLIME_BLOCK_STEP, 12F, 12F);
         }
 
-        player.playSound(player.getLocation(), Sound.BLOCK_SLIME_STEP, 12F, 12F);
+        player.playSound(player.getLocation(), Sound.BLOCK_SLIME_BLOCK_STEP, 12F, 12F);
 
         // Send confirmation message
         player.sendMessage(Broadcast.get("item-use.blooper")

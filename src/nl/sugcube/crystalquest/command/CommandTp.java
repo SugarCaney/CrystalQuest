@@ -84,9 +84,10 @@ public class CommandTp extends CrystalQuestCommand {
         }
 
         // Teleport
-        player.teleport(result);
-        player.sendMessage(Broadcast.TAG + Broadcast.get("commands.tp-teleport")
-                .replace("%a%", arguments[0]));
+        if (result != null) {
+            player.teleport(result);
+            player.sendMessage(Broadcast.TAG + Broadcast.get("commands.tp-teleport").replace("%a%", arguments[0]));
+        }
     }
 
     @Override

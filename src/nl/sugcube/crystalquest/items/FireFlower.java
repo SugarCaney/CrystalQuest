@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 public class FireFlower extends ItemExecutor {
 
     public FireFlower() {
-        super(Material.RED_ROSE);
+        super(Material.POPPY);
     }
 
     @Override

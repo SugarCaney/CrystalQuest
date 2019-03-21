@@ -142,11 +142,11 @@ public class Wand implements Listener {
                         if (isInBounds) {
                             float yaw = player.getLocation().getYaw();
                             player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
-                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1F, 1F);
+                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 1F);
                             loc.setYaw(yaw);
                             player.teleport(loc);
                             player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
-                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1F, 1F);
+                            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 1F);
                             player.getInventory().getItemInMainHand().setDurability(WandType.TELEPORT.getDurability());
                         }
                     }

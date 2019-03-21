@@ -134,7 +134,7 @@ public class ShopMainMenu implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemClass() {
-        ItemStack is = new ItemStack(Material.GOLD_SWORD, 1);
+        ItemStack is = new ItemStack(Material.GOLDEN_SWORD, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.GOLD + "Buy Classes");
         List<String> lore = new ArrayList<String>();

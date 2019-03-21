@@ -116,7 +116,7 @@ public class ItemListener implements Listener {
          * CHECKS FOR LANDMINES
          */
         else if (e.getAction() == Action.PHYSICAL) {
-            if (e.getClickedBlock().getType() == Material.STONE_PLATE) {
+            if (e.getClickedBlock().getType() == Material.STONE_PRESSURE_PLATE) {
                 if (!plugin.getArenaManager().getArena(p.getUniqueId()).getSpectators().contains(p.getUniqueId())) {
                     final Block b = e.getClickedBlock();
                     b.setType(Material.AIR);
@@ -246,7 +246,7 @@ public class ItemListener implements Listener {
                                             im1.setDisplayName(Broadcast.get("items.railgun"));
                                             newIs.setItemMeta(im1);
                                         }
-                                        else if (newIs.getType() == Material.STONE_PLATE) {
+                                        else if (newIs.getType() == Material.STONE_PRESSURE_PLATE) {
                                             ItemMeta im1 = newIs.getItemMeta();
                                             im1.setDisplayName(Broadcast.get("items.landmine"));
                                             newIs.setItemMeta(im1);

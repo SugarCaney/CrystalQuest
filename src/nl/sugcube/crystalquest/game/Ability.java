@@ -166,13 +166,13 @@ public class Ability implements Listener {
                     }
                     if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("water_healing")) {
                         if (p.getLocation().getBlock().getType() == Material.WATER ||
-                                p.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
+                                p.getLocation().getBlock().getType() == Material.LEGACY_STATIONARY_WATER) {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 2));
                         }
                     }
                     if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("corroding")) {
                         if (p.getLocation().getBlock().getType() == Material.WATER ||
-                                p.getLocation().getBlock().getType() == Material.STATIONARY_WATER) {
+                                p.getLocation().getBlock().getType() == Material.LEGACY_STATIONARY_WATER) {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, 1));
                         }
                     }

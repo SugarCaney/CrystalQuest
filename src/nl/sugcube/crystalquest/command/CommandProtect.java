@@ -54,6 +54,7 @@ public class CommandProtect extends CrystalQuestCommand {
                     .replace("%arena%", arguments[1]));
         }
         catch (Exception e) {
+            e.printStackTrace();
             sender.sendMessage(Broadcast.get("commands.protect-error"));
         }
     }

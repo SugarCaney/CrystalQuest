@@ -143,7 +143,7 @@ public class InventoryManager {
 
                 //Auto-equip Armour
                 int itemId = SItem.toId(is.getType());
-                if ((itemId >= 298 && itemId < 318) || is.getType() == Material.SKULL_ITEM) {
+                if ((itemId >= 298 && itemId < 318) || is.getType() == Material.LEGACY_SKULL_ITEM) {
                     if ((itemId + 2) % 4 == 0) {
                         player.getInventory().setHelmet(is);
                     }
@@ -153,7 +153,7 @@ public class InventoryManager {
                     else if (itemId % 4 == 0) {
                         player.getInventory().setLeggings(is);
                     }
-                    else if (is.getType() != Material.SKULL_ITEM) {
+                    else if (is.getType() != Material.LEGACY_SKULL_ITEM) {
                         player.getInventory().setBoots(is);
                     }
                     else {

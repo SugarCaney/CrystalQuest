@@ -25,6 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.logging.Level;
 
 /**
@@ -278,9 +279,10 @@ public class CrystalQuest extends JavaPlugin {
         }
         data = YamlConfiguration.loadConfiguration(dataFile);
 
-        InputStream defStream = this.getResource("data.yml");
-        if (defStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defStream);
+        InputStream dataStream = this.getResource("data.yml");
+        if (dataStream != null) {
+            InputStreamReader reader = new InputStreamReader(dataStream);
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(reader);
             data.setDefaults(defConfig);
         }
     }
@@ -327,9 +329,10 @@ public class CrystalQuest extends JavaPlugin {
         }
         lang = YamlConfiguration.loadConfiguration(langFile);
 
-        InputStream defStream = this.getResource("lang.yml");
-        if (defStream != null) {
-            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defStream);
+        InputStream langStream = this.getResource("lang.yml");
+        if (langStream != null) {
+            InputStreamReader reader = new InputStreamReader(langStream);
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(reader);
             lang.setDefaults(defConfig);
         }
     }

@@ -22,14 +22,14 @@ public class Landmine extends ItemExecutor {
     private static final Set<Material> PLACEABLE_MATERIALS = new HashSet<>();
     static {
         Collections.addAll(PLACEABLE_MATERIALS,
-                Material.LONG_GRASS, Material.STATIONARY_WATER, Material.WATER,
-                Material.DEAD_BUSH, Material.YELLOW_FLOWER, Material.RED_ROSE,
-                Material.RAILS, Material.DETECTOR_RAIL, Material.POWERED_RAIL
+                Material.LEGACY_LONG_GRASS, Material.LEGACY_STATIONARY_WATER, Material.WATER,
+                Material.DEAD_BUSH, Material.LEGACY_YELLOW_FLOWER, Material.LEGACY_RED_ROSE,
+                Material.RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL
         );
     }
 
     public Landmine() {
-        super(Material.STONE_PLATE);
+        super(Material.STONE_PRESSURE_PLATE);
     }
 
     @Override

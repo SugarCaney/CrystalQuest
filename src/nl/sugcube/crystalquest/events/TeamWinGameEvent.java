@@ -82,4 +82,13 @@ public class TeamWinGameEvent extends Event {
         return handlers;
     }
 
+    @Override
+    public String toString() {
+        return "TeamWinGameEvent{" + "player=" + player +
+                ", arena=" + arena +
+                ", team=" + team +
+                ", teamCount=" + teamCount +
+                ", teams=" + teams +
+                '}';
+    }
 }

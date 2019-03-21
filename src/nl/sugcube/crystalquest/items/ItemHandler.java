@@ -141,7 +141,7 @@ public class ItemHandler {
         else if (is.getType() == Material.IRON_HOE) {
             is.setAmount(ran.nextInt(2) + 1);
         }
-        else if (is.getType() == Material.RED_ROSE) {
+        else if (is.getType() == Material.LEGACY_RED_ROSE) {
             is.setAmount(ran.nextInt(3) + 1);
         }
         return is;
@@ -175,7 +175,7 @@ public class ItemHandler {
      * Adds the Curse-item to the items-list
      */
     public void addCurse() {
-        ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short)0);
+        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)0);
         SkullMeta im = (SkullMeta)is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.curse"));
         is.setItemMeta(im);
@@ -200,7 +200,7 @@ public class ItemHandler {
      * Add the Blood Bunny-item
      */
     public void addBloodBunny() {
-        ItemStack is = new ItemStack(Material.CARROT_ITEM, 1);
+        ItemStack is = new ItemStack(Material.LEGACY_CARROT_ITEM, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.bunny"));
         is.setItemMeta(im);
@@ -272,7 +272,7 @@ public class ItemHandler {
      * Add the Landmine-item
      */
     public void addLandmine() {
-        ItemStack is = new ItemStack(Material.STONE_PLATE, 1);
+        ItemStack is = new ItemStack(Material.LEGACY_STONE_PLATE, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.landmine"));
         is.setItemMeta(im);
@@ -296,7 +296,7 @@ public class ItemHandler {
      * Add the CreeperEgg-item to the items-list
      */
     public void addCreeperEgg() {
-        ItemStack is = new ItemStack(Material.MONSTER_EGG, 1, (short)50);
+        ItemStack is = new ItemStack(Material.LEGACY_MONSTER_EGG, 1, (short)50);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.DARK_GREEN + "Creeper Egg");
         is.setItemMeta(im);
@@ -321,7 +321,7 @@ public class ItemHandler {
      * Adds the Wither-item to the items-list
      */
     public void addWither() {
-        ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short)1);
+        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)1);
         SkullMeta im = (SkullMeta)is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.wither"));
         is.setItemMeta(im);
@@ -357,7 +357,7 @@ public class ItemHandler {
      * Adds the FireFlower-item to the items-list
      */
     public void addFireFlower() {
-        ItemStack is = new ItemStack(Material.RED_ROSE, 1);
+        ItemStack is = new ItemStack(Material.POPPY, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.flower"));
         is.setItemMeta(im);
@@ -392,7 +392,7 @@ public class ItemHandler {
      * Adds the Blooper-item to the items-list
      */
     public void addBlooper() {
-        ItemStack is = new ItemStack(Material.INK_SACK, 1, (short)0);
+        ItemStack is = new ItemStack(Material.INK_SAC, 1, (short)0);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.blooper"));
         is.setItemMeta(im);

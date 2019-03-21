@@ -111,7 +111,7 @@ public class PickTeam {
      */
     public ItemStack getWool(CrystalQuestTeam team) {
         short damageValue = team.getDataValueWool();
-        ItemStack is = new ItemStack(Material.WOOL, 1, damageValue);
+        ItemStack is = new ItemStack(Material.LEGACY_WOOL, 1, damageValue);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("menu.join") + team.toString());
         is.setItemMeta(im);

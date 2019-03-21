@@ -183,7 +183,7 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemBuyCreeper(Player p) {
-        ItemStack is = new ItemStack(Material.MONSTER_EGG, 1, (short)50);
+        ItemStack is = new ItemStack(Material.LEGACY_MONSTER_EGG, 1, (short)50);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "creepers", "upgrade") < 5) {
             im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.DARK_GREEN + "Creepers");
@@ -319,7 +319,7 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemBuyDebuff(Player p) {
-        ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short)1);
+        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "debuff", "upgrade") < 5) {
             im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.RED + "Debuffs");
@@ -351,7 +351,7 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemBuyBuff(Player p) {
-        ItemStack is = new ItemStack(Material.SPECKLED_MELON, 1);
+        ItemStack is = new ItemStack(Material.GLISTERING_MELON_SLICE, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "buff", "upgrade") < 5) {
             im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.LIGHT_PURPLE + "Buffs");
@@ -415,7 +415,7 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemStatusCreeper(Player p) {
-        ItemStack is = new ItemStack(Material.MONSTER_EGG, 1, (short)50);
+        ItemStack is = new ItemStack(Material.LEGACY_MONSTER_EGG, 1, (short)50);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.DARK_GREEN + "Creepers");
         List<String> lore = new ArrayList<String>();
@@ -509,7 +509,7 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemStatusDebuff(Player p) {
-        ItemStack is = new ItemStack(Material.SKULL_ITEM, 1, (short)1);
+        ItemStack is = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (short)1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.RED + "Debuffs");
         List<String> lore = new ArrayList<String>();
@@ -538,7 +538,7 @@ public class ShopPowerup implements Listener {
      * @return (ItemStack)
      */
     public ItemStack getItemStatusBuff(Player p) {
-        ItemStack is = new ItemStack(Material.SPECKLED_MELON, 1);
+        ItemStack is = new ItemStack(Material.LEGACY_SPECKLED_MELON, 1);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.LIGHT_PURPLE + "Buffs");
         List<String> lore = new ArrayList<String>();

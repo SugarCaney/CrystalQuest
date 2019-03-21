@@ -21,7 +21,7 @@ public class PlaceLandmine implements Runnable {
     }
 
     public void run() {
-        block.setType(Material.STONE_PLATE);
+        block.setType(Material.STONE_PRESSURE_PLATE);
         arena.getGameBlocks().add(block);
     }
 

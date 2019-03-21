@@ -31,11 +31,9 @@ public class SignListener implements Listener {
 
     @EventHandler
     public void onSignBreak(BlockBreakEvent e) {
-        if (e.getBlock().getType() == Material.WALL_SIGN || e.getBlock().getType() == Material.SIGN_POST) {
-            Sign s = (Sign)e.getBlock().getState();
-            if (plugin.signHandler.getSigns().contains(s)) {
-                plugin.signHandler.getSigns().remove(s);
-            }
+        if (e.getBlock().getType() == Material.WALL_SIGN || e.getBlock().getType() == Material.LEGACY_SIGN_POST) {
+            Sign sign = (Sign)e.getBlock().getState();
+            plugin.signHandler.getSigns().remove(sign);
         }
     }
 
@@ -148,7 +146,7 @@ public class SignListener implements Listener {
         //Checks Right mouse button
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             //Checks if sign.
-            if (e.getClickedBlock().getType() == Material.WALL_SIGN || e.getClickedBlock().getType() == Material.SIGN_POST) {
+            if (e.getClickedBlock().getType() == Material.WALL_SIGN || e.getClickedBlock().getType() == Material.LEGACY_SIGN_POST) {
                 //Checks if the sign contains [CrystalQuest]
                 Sign s = (Sign)e.getClickedBlock().getState();
                 if (s.getLine(0).contains("CrystalQuest")) {

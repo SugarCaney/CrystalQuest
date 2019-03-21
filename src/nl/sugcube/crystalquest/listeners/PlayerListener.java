@@ -134,7 +134,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (block.getType() != Material.SOIL) {
+        if (block.getType() != Material.LEGACY_SOIL) {
             return;
         }
 
@@ -165,27 +165,24 @@ public class PlayerListener implements Listener {
     }
     /*
      * END SPECTATOR STUFF
-	 */
+     */
 
     @EventHandler
     public void onTeamWinGame(TeamWinGameEvent event) {
         CrystalQuestTeam winningTeam = event.getTeam();
-        Collection<Team> teams = event.getTeams();
+        Collection<Team> scoreboardTeams = event.getTeams();
         Arena arena = event.getArena();
-        int score = arena.getScore(winningTeam);
+        int winningScore = arena.getScore(winningTeam);
         int delta = 9999999;
 
         int i = 0;
-        for (Team team : teams) {
-            if (i == event.getTeamCount()) {
-                break;
-            }
-
-            CrystalQuestTeam iTeam = CrystalQuestTeam.valueOf(i);
-            if (team != null) {
+        for (Team scoreboardTeam : scoreboardTeams) {
+            String teamDisplayName = scoreboardTeam.getDisplayName();
+            CrystalQuestTeam iTeam = CrystalQuestTeam.valueOfTeamName(teamDisplayName);
+            if (scoreboardTeam != null) {
                 if (arena.getScore(iTeam) >= 0) {
-                    if (Math.abs(score - arena.getScore(iTeam)) < delta) {
-                        delta = Math.abs(score - arena.getScore(iTeam));
+                    if (Math.abs(winningScore - arena.getScore(iTeam)) < delta) {
+                        delta = Math.abs(winningScore - arena.getScore(iTeam));
                     }
                 }
             }
@@ -194,7 +191,7 @@ public class PlayerListener implements Listener {
 
         int crystals = 25;
         int extrac;
-        extrac = (int)((((double)score) - ((double)delta)) / ((double)score)) * 25;
+        extrac = (int)((((double)winningScore) - ((double)delta)) / ((double)winningScore)) * 25;
         if (extrac > 25) {
             extrac = 25;
         }

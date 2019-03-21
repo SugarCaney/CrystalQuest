@@ -100,7 +100,7 @@ public class StringHandler {
 
             if (item[0].split(";").length > 1) {
                 String newName = SMeth.setColours(item[0].split(";")[1]);
-                if (is.getType() == Material.SKULL_ITEM) {
+                if (is.getType() == Material.LEGACY_SKULL_ITEM) {
                     is.setDurability((short)3);
                     SkullMeta im = (SkullMeta)is.getItemMeta();
                     im.setOwner(newName);

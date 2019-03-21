@@ -249,7 +249,7 @@ public class EntityListener implements Listener {
      */
     public boolean isOwnTeamCrystal(EnderCrystal ec, Player pl) {
         Location loc = ec.getLocation().add(0, -1, 0);
-        return (loc.getBlock().getType() != Material.WOOL) || (Teams.getTeamFromDataValue(loc.getBlock().getData()) != plugin.getArenaManager().getTeam(pl));
+        return (loc.getBlock().getType() != Material.LEGACY_WOOL) || (Teams.getTeamFromDataValue(loc.getBlock().getData()) != plugin.getArenaManager().getTeam(pl));
     }
 
 }

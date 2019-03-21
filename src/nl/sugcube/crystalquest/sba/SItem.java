@@ -62,19 +62,19 @@ public final class SItem {
             case "cobblestone":
                 return Material.COBBLESTONE;
             case "woodenplanks":
-                return Material.WOOD;
+                return Material.OAK_PLANKS;
             case "sapling":
-                return Material.SAPLING;
+                return Material.OAK_SAPLING;
             case "bedrock":
                 return Material.BEDROCK;
             case "water":
                 return Material.WATER;
             case "stationarywater":
-                return Material.STATIONARY_WATER;
+                return Material.LEGACY_STATIONARY_WATER;
             case "lava":
                 return Material.LAVA;
             case "stationarylava":
-                return Material.STATIONARY_LAVA;
+                return Material.LEGACY_STATIONARY_LAVA;
             case "sand":
                 return Material.SAND;
             case "gravel":
@@ -86,9 +86,9 @@ public final class SItem {
             case "coalore":
                 return Material.COAL_ORE;
             case "log":
-                return Material.LOG;
+                return Material.OAK_LOG;
             case "leaves":
-                return Material.LEAVES;
+                return Material.OAK_LEAVES;
             case "sponge":
                 return Material.SPONGE;
             case "glass":
@@ -104,31 +104,31 @@ public final class SItem {
             case "noteblock":
                 return Material.NOTE_BLOCK;
             case "bedblock":
-                return Material.BED_BLOCK;
+                return Material.LEGACY_BED_BLOCK;
             case "poweredrail":
                 return Material.POWERED_RAIL;
             case "detectorrail":
                 return Material.DETECTOR_RAIL;
             case "stickypiston":
-                return Material.PISTON_STICKY_BASE;
+                return Material.STICKY_PISTON;
             case "cobweb":
-                return Material.WEB;
+                return Material.COBWEB;
             case "tallgrass":
-                return Material.LONG_GRASS;
+                return Material.TALL_GRASS;
             case "deadbush":
                 return Material.DEAD_BUSH;
             case "piston":
-                return Material.PISTON_BASE;
+                return Material.PISTON;
             case "pistonextension":
-                return Material.PISTON_EXTENSION;
+                return Material.PISTON_HEAD;
             case "wool":
-                return Material.WOOL;
+                return Material.LEGACY_WOOL;
             case "pistonmovingpiece":
-                return Material.PISTON_MOVING_PIECE;
+                return Material.LEGACY_PISTON_MOVING_PIECE;
             case "dandelion":
-                return Material.YELLOW_FLOWER;
+                return Material.DANDELION;
             case "rose":
-                return Material.RED_ROSE;
+                return Material.POPPY;
             case "browmushroom":
                 return Material.BROWN_MUSHROOM;
             case "redmushroom":
@@ -138,9 +138,9 @@ public final class SItem {
             case "ironblock":
                 return Material.IRON_BLOCK;
             case "doubleslab":
-                return Material.DOUBLE_STEP;
+                return Material.LEGACY_DOUBLE_STEP;
             case "slab":
-                return Material.STEP;
+                return Material.LEGACY_STEP;
             case "brickblock":
                 return Material.BRICK;
             case "tnt":
@@ -156,9 +156,9 @@ public final class SItem {
             case "fire":
                 return Material.FIRE;
             case "mobspawner":
-                return Material.MOB_SPAWNER;
+                return Material.SPAWNER;
             case "woodenstairs":
-                return Material.WOOD_STAIRS;
+                return Material.OAK_STAIRS;
             case "chest":
                 return Material.CHEST;
             case "redstonewire":
@@ -168,23 +168,23 @@ public final class SItem {
             case "diamondblock":
                 return Material.DIAMOND_BLOCK;
             case "craftingtable":
-                return Material.WORKBENCH;
+                return Material.CRAFTING_TABLE;
             case "crops":
-                return Material.CROPS;
+                return Material.LEGACY_CROPS;
             case "farmland":
-                return Material.SOIL;
+                return Material.FARMLAND;
             case "furnace":
                 return Material.FURNACE;
             case "burningfurnace":
-                return Material.BURNING_FURNACE;
+                return Material.LEGACY_BURNING_FURNACE;
             case "signpost":
-                return Material.SIGN_POST;
+                return Material.SIGN;
             case "woodendoorblock":
-                return Material.WOODEN_DOOR;
+                return Material.OAK_DOOR;
             case "ladder":
                 return Material.LADDER;
             case "rails":
-                return Material.RAILS;
+                return Material.RAIL;
             case "cobblestonestairs":
                 return Material.COBBLESTONE_STAIRS;
             case "wallsign":
@@ -192,19 +192,19 @@ public final class SItem {
             case "lever":
                 return Material.LEVER;
             case "stonepressureplate":
-                return Material.STONE_PLATE;
+                return Material.STONE_PRESSURE_PLATE;
             case "irondoorblock":
-                return Material.IRON_DOOR_BLOCK;
+                return Material.IRON_DOOR;
             case "woodenpressureplate":
-                return Material.WOOD_PLATE;
+                return Material.OAK_PRESSURE_PLATE;
             case "redstoneore":
                 return Material.REDSTONE_ORE;
             case "glowingredstoneore":
-                return Material.GLOWING_REDSTONE_ORE;
+                return Material.REDSTONE_ORE;
             case "redstonetorchoff":
-                return Material.REDSTONE_TORCH_OFF;
+                return Material.REDSTONE_TORCH;
             case "redstonetorch":
-                return Material.REDSTONE_TORCH_ON;
+                return Material.REDSTONE_TORCH;
             case "stonebutton":
                 return Material.STONE_BUTTON;
             case "snow":
@@ -218,11 +218,11 @@ public final class SItem {
             case "clayblock":
                 return Material.CLAY;
             case "sugarcaneblock":
-                return Material.SUGAR_CANE_BLOCK;
+                return Material.LEGACY_SUGAR_CANE_BLOCK;
             case "jukebox":
                 return Material.JUKEBOX;
             case "fence":
-                return Material.FENCE;
+                return Material.OAK_FENCE;
             case "pumpkin":
                 return Material.PUMPKIN;
             case "netherrack":
@@ -232,31 +232,31 @@ public final class SItem {
             case "glowstone":
                 return Material.GLOWSTONE;
             case "netherportal":
-                return Material.PORTAL;
+                return Material.NETHER_PORTAL;
             case "jackolantern":
                 return Material.JACK_O_LANTERN;
             case "cakeblock":
-                return Material.CAKE_BLOCK;
+                return Material.LEGACY_CAKE_BLOCK;
             case "repeateroff":
-                return Material.DIODE_BLOCK_OFF;
+                return Material.LEGACY_DIODE_BLOCK_OFF;
             case "repeateron":
-                return Material.DIODE_BLOCK_ON;
+                return Material.LEGACY_DIODE_BLOCK_ON;
             case "trapdoor":
-                return Material.TRAP_DOOR;
+                return Material.LEGACY_TRAP_DOOR;
             case "monsteregg":
-                return Material.MONSTER_EGGS;
+                return Material.LEGACY_MONSTER_EGGS;
             case "smoothstonebrick":
-                return Material.SMOOTH_BRICK;
+                return Material.LEGACY_SMOOTH_BRICK;
             case "mushroom":
-                return Material.HUGE_MUSHROOM_1;
+                return Material.LEGACY_HUGE_MUSHROOM_1;
             case "mushroom2":
-                return Material.HUGE_MUSHROOM_2;
+                return Material.LEGACY_HUGE_MUSHROOM_2;
             case "ironbars":
-                return Material.IRON_BARDING;
+                return Material.LEGACY_IRON_BARDING;
             case "thinglass":
-                return Material.THIN_GLASS;
+                return Material.LEGACY_THIN_GLASS;
             case "melonblock":
-                return Material.MELON_BLOCK;
+                return Material.LEGACY_MELON_BLOCK;
             case "melonstem":
                 return Material.MELON_STEM;
             case "pumpkinstem":
@@ -264,45 +264,45 @@ public final class SItem {
             case "vine":
                 return Material.VINE;
             case "gate":
-                return Material.FENCE_GATE;
+                return Material.LEGACY_FENCE_GATE;
             case "brickstairs":
                 return Material.BRICK_STAIRS;
             case "smoothbrickstairs":
-                return Material.SMOOTH_STAIRS;
+                return Material.LEGACY_SMOOTH_STAIRS;
             case "mycelium":
-                return Material.MYCEL;
+                return Material.LEGACY_MYCEL;
             case "lilypad":
-                return Material.WATER_LILY;
+                return Material.LEGACY_WATER_LILY;
             case "netherbrickblock":
                 return Material.NETHER_BRICK;
             case "netherfence":
-                return Material.NETHER_FENCE;
+                return Material.LEGACY_NETHER_FENCE;
             case "netherbrickstairs":
                 return Material.NETHER_BRICK_STAIRS;
             case "netherwartblock":
-                return Material.NETHER_WARTS;
+                return Material.LEGACY_NETHER_WARTS;
             case "enchantmenttable":
-                return Material.ENCHANTMENT_TABLE;
+                return Material.LEGACY_ENCHANTMENT_TABLE;
             case "brewingstandblock":
                 return Material.BREWING_STAND;
             case "cauldronblock":
                 return Material.CAULDRON;
             case "endportal":
-                return Material.ENDER_PORTAL;
+                return Material.LEGACY_ENDER_PORTAL;
             case "endportalframe":
-                return Material.ENDER_PORTAL_FRAME;
+                return Material.LEGACY_ENDER_PORTAL_FRAME;
             case "endstone":
-                return Material.ENDER_STONE;
+                return Material.LEGACY_ENDER_STONE;
             case "dragonegg":
                 return Material.DRAGON_EGG;
             case "redstonelamp":
-                return Material.REDSTONE_LAMP_OFF;
+                return Material.LEGACY_REDSTONE_LAMP_OFF;
             case "redstonelampon":
-                return Material.REDSTONE_LAMP_ON;
+                return Material.LEGACY_REDSTONE_LAMP_ON;
             case "woodendoubleslab":
-                return Material.WOOD_DOUBLE_STEP;
+                return Material.LEGACY_WOOD_DOUBLE_STEP;
             case "woodenslab":
-                return Material.WOOD_STEP;
+                return Material.LEGACY_WOOD_STEP;
             case "cocoablock":
                 return Material.COCOA;
             case "sandstonestairs":
@@ -318,17 +318,17 @@ public final class SItem {
             case "emeraldblock":
                 return Material.EMERALD_BLOCK;
             case "sprucewoodstairs":
-                return Material.SPRUCE_WOOD_STAIRS;
+                return Material.LEGACY_SPRUCE_WOOD_STAIRS;
             case "birchwoodstairs":
-                return Material.BIRCH_WOOD_STAIRS;
+                return Material.LEGACY_BIRCH_WOOD_STAIRS;
             case "junglewoodstairs":
-                return Material.JUNGLE_WOOD_STAIRS;
+                return Material.LEGACY_JUNGLE_WOOD_STAIRS;
             case "commandblock":
-                return Material.COMMAND;
+                return Material.LEGACY_COMMAND;
             case "beacon":
                 return Material.BEACON;
             case "cobblestonewall":
-                return Material.COBBLE_WALL;
+                return Material.LEGACY_COBBLE_WALL;
             case "flowerpotblock":
                 return Material.FLOWER_POT;
             case "carrotcrops":
@@ -336,27 +336,27 @@ public final class SItem {
             case "potatocrops":
                 return Material.POTATO;
             case "woodenbutton":
-                return Material.WOOD_BUTTON;
+                return Material.LEGACY_WOOD_BUTTON;
             case "headblock":
-                return Material.SKULL;
+                return Material.LEGACY_SKULL;
             case "anvil":
                 return Material.ANVIL;
             case "trappedchest":
                 return Material.TRAPPED_CHEST;
             case "goldenpressureplate":
-                return Material.GOLD_PLATE;
+                return Material.LEGACY_GOLD_PLATE;
             case "ironpressureplate":
-                return Material.IRON_PLATE;
+                return Material.LEGACY_IRON_PLATE;
             case "comparatoroff":
-                return Material.REDSTONE_COMPARATOR_OFF;
+                return Material.LEGACY_REDSTONE_COMPARATOR_OFF;
             case "comparatoron":
-                return Material.REDSTONE_COMPARATOR_ON;
+                return Material.LEGACY_REDSTONE_COMPARATOR_ON;
             case "daylightdetector":
                 return Material.DAYLIGHT_DETECTOR;
             case "redstoneblock":
                 return Material.REDSTONE_BLOCK;
             case "quartzore":
-                return Material.QUARTZ_ORE;
+                return Material.LEGACY_QUARTZ_ORE;
             case "hopper":
                 return Material.HOPPER;
             case "quartzblock":
@@ -368,17 +368,17 @@ public final class SItem {
             case "dropper":
                 return Material.DROPPER;
             case "stainedclay":
-                return Material.STAINED_CLAY;
+                return Material.LEGACY_STAINED_CLAY;
             case "hay":
                 return Material.HAY_BLOCK;
             case "carpet":
-                return Material.CARPET;
+                return Material.LEGACY_CARPET;
             case "hardenedclay":
-                return Material.HARD_CLAY;
+                return Material.LEGACY_HARD_CLAY;
             case "coalblock":
                 return Material.COAL_BLOCK;
             case "ironshovel":
-                return Material.IRON_SPADE;
+                return Material.LEGACY_IRON_SPADE;
             case "ironpickaxe":
                 return Material.IRON_PICKAXE;
             case "ironaxe":
@@ -402,17 +402,17 @@ public final class SItem {
             case "ironsword":
                 return Material.IRON_SWORD;
             case "woodsword":
-                return Material.WOOD_SWORD;
+                return Material.LEGACY_WOOD_SWORD;
             case "woodspade":
-                return Material.WOOD_SPADE;
+                return Material.LEGACY_WOOD_SPADE;
             case "woodpickaxe":
-                return Material.WOOD_PICKAXE;
+                return Material.LEGACY_WOOD_PICKAXE;
             case "woodaxe":
-                return Material.WOOD_AXE;
+                return Material.LEGACY_WOOD_AXE;
             case "stonesword":
                 return Material.STONE_SWORD;
             case "stoneshovel":
-                return Material.STONE_SPADE;
+                return Material.LEGACY_STONE_SPADE;
             case "stonepickaxe":
                 return Material.STONE_PICKAXE;
             case "stoneaxe":
@@ -420,7 +420,7 @@ public final class SItem {
             case "diamondsword":
                 return Material.DIAMOND_SWORD;
             case "diamondshovel":
-                return Material.DIAMOND_SPADE;
+                return Material.LEGACY_DIAMOND_SPADE;
             case "diamondpickaxe":
                 return Material.DIAMOND_PICKAXE;
             case "diamondaxe":
@@ -430,23 +430,23 @@ public final class SItem {
             case "bowl":
                 return Material.BOWL;
             case "mushroomsoup":
-                return Material.MUSHROOM_SOUP;
+                return Material.LEGACY_MUSHROOM_SOUP;
             case "goldensword":
-                return Material.GOLD_SWORD;
+                return Material.LEGACY_GOLD_SWORD;
             case "goldenshovel":
-                return Material.GOLD_SPADE;
+                return Material.LEGACY_GOLD_SPADE;
             case "goldenpickaxe":
-                return Material.GOLD_PICKAXE;
+                return Material.LEGACY_GOLD_PICKAXE;
             case "goldaxe":
-                return Material.GOLD_AXE;
+                return Material.LEGACY_GOLD_AXE;
             case "string":
                 return Material.STRING;
             case "feather":
                 return Material.FEATHER;
             case "gunpowder":
-                return Material.SULPHUR;
+                return Material.LEGACY_SULPHUR;
             case "woodenhoe":
-                return Material.WOOD_HOE;
+                return Material.LEGACY_WOOD_HOE;
             case "stonehoe":
                 return Material.STONE_HOE;
             case "ironhoe":
@@ -454,9 +454,9 @@ public final class SItem {
             case "diamondhoe":
                 return Material.DIAMOND_HOE;
             case "goldenhoe":
-                return Material.GOLD_HOE;
+                return Material.LEGACY_GOLD_HOE;
             case "seeds":
-                return Material.SEEDS;
+                return Material.LEGACY_SEEDS;
             case "wheat":
                 return Material.WHEAT;
             case "bread":
@@ -494,19 +494,19 @@ public final class SItem {
             case "diamondboots":
                 return Material.DIAMOND_BOOTS;
             case "goldenhelmet":
-                return Material.GOLD_HELMET;
+                return Material.LEGACY_GOLD_HELMET;
             case "goldenchestplate":
-                return Material.GOLD_CHESTPLATE;
+                return Material.LEGACY_GOLD_CHESTPLATE;
             case "goldenleggings":
-                return Material.GOLD_LEGGINGS;
+                return Material.LEGACY_GOLD_LEGGINGS;
             case "goldenboots":
-                return Material.GOLD_BOOTS;
+                return Material.LEGACY_GOLD_BOOTS;
             case "flint":
                 return Material.FLINT;
             case "rawpork":
-                return Material.PORK;
+                return Material.LEGACY_PORK;
             case "cookedpork":
-                return Material.GRILLED_PORK;
+                return Material.LEGACY_GRILLED_PORK;
             case "painting":
                 return Material.PAINTING;
             case "goldenapple":
@@ -514,7 +514,7 @@ public final class SItem {
             case "sign":
                 return Material.SIGN;
             case "woodendoor":
-                return Material.WOOD_DOOR;
+                return Material.LEGACY_WOOD_DOOR;
             case "bucket":
                 return Material.BUCKET;
             case "waterbucket":
@@ -530,15 +530,15 @@ public final class SItem {
             case "redstone":
                 return Material.REDSTONE;
             case "snowball":
-                return Material.SNOW_BALL;
+                return Material.LEGACY_SNOW_BALL;
             case "boat":
-                return Material.BOAT;
+                return Material.LEGACY_BOAT;
             case "leather":
                 return Material.LEATHER;
             case "milkbucket":
                 return Material.MILK_BUCKET;
             case "brick":
-                return Material.CLAY_BRICK;
+                return Material.LEGACY_CLAY_BRICK;
             case "clay":
                 return Material.CLAY_BALL;
             case "sugarcane":
@@ -550,9 +550,9 @@ public final class SItem {
             case "slimeball":
                 return Material.SLIME_BALL;
             case "storageminecart":
-                return Material.STORAGE_MINECART;
+                return Material.LEGACY_STORAGE_MINECART;
             case "poweredminecart":
-                return Material.POWERED_MINECART;
+                return Material.LEGACY_POWERED_MINECART;
             case "egg":
                 return Material.EGG;
             case "compass":
@@ -560,15 +560,15 @@ public final class SItem {
             case "fishingrod":
                 return Material.FISHING_ROD;
             case "watch":
-                return Material.WATCH;
+                return Material.LEGACY_WATCH;
             case "glowstonedust":
                 return Material.GLOWSTONE_DUST;
             case "rawfish":
-                return Material.RAW_FISH;
+                return Material.LEGACY_RAW_FISH;
             case "cookedfish":
-                return Material.COOKED_FISH;
+                return Material.LEGACY_COOKED_FISH;
             case "dye":
-                return Material.INK_SACK;
+                return Material.INK_SAC;
             case "bone":
                 return Material.BONE;
             case "sugar":
@@ -576,9 +576,9 @@ public final class SItem {
             case "cake":
                 return Material.CAKE;
             case "bed":
-                return Material.BED;
+                return Material.LEGACY_BED;
             case "repeater":
-                return Material.DIODE;
+                return Material.LEGACY_DIODE;
             case "cookie":
                 return Material.COOKIE;
             case "map":
@@ -592,11 +592,11 @@ public final class SItem {
             case "melonseeds":
                 return Material.MELON_SEEDS;
             case "rawbeef":
-                return Material.RAW_BEEF;
+                return Material.LEGACY_RAW_BEEF;
             case "cookedbeef":
                 return Material.COOKED_BEEF;
             case "rawchicken":
-                return Material.RAW_CHICKEN;
+                return Material.LEGACY_RAW_CHICKEN;
             case "cookedchicken":
                 return Material.COOKED_CHICKEN;
             case "rottenflesh":
@@ -610,7 +610,7 @@ public final class SItem {
             case "goldennugget":
                 return Material.GOLD_NUGGET;
             case "netherwart":
-                return Material.NETHER_STALK;
+                return Material.LEGACY_NETHER_STALK;
             case "potion":
                 return Material.POTION;
             case "glassbottle":
@@ -624,21 +624,21 @@ public final class SItem {
             case "magmacream":
                 return Material.MAGMA_CREAM;
             case "brewingstand":
-                return Material.BREWING_STAND_ITEM;
+                return Material.LEGACY_BREWING_STAND_ITEM;
             case "cauldron":
-                return Material.CAULDRON_ITEM;
+                return Material.LEGACY_CAULDRON_ITEM;
             case "eyeofender":
-                return Material.EYE_OF_ENDER;
+                return Material.LEGACY_EYE_OF_ENDER;
             case "speckledmelon":
-                return Material.SPECKLED_MELON;
+                return Material.LEGACY_SPECKLED_MELON;
             case "spawnegg":
-                return Material.MONSTER_EGG;
+                return Material.LEGACY_MONSTER_EGG;
             case "bottleoenchanting":
-                return Material.EXP_BOTTLE;
+                return Material.LEGACY_EXP_BOTTLE;
             case "fireball":
-                return Material.FIREBALL;
+                return Material.LEGACY_FIREBALL;
             case "bookandquill":
-                return Material.BOOK_AND_QUILL;
+                return Material.LEGACY_BOOK_AND_QUILL;
             case "writtenbook":
                 return Material.WRITTEN_BOOK;
             case "emerald":
@@ -646,91 +646,91 @@ public final class SItem {
             case "itemframe":
                 return Material.ITEM_FRAME;
             case "flowerpot":
-                return Material.FLOWER_POT_ITEM;
+                return Material.LEGACY_FLOWER_POT_ITEM;
             case "carrot":
-                return Material.CARROT_ITEM;
+                return Material.LEGACY_CARROT_ITEM;
             case "potato":
-                return Material.POTATO_ITEM;
+                return Material.LEGACY_POTATO_ITEM;
             case "bakedpotato":
                 return Material.BAKED_POTATO;
             case "poisonouspotato":
                 return Material.POISONOUS_POTATO;
             case "emptymap":
-                return Material.EMPTY_MAP;
+                return Material.LEGACY_EMPTY_MAP;
             case "goldencarrot":
                 return Material.GOLDEN_CARROT;
             case "head":
-                return Material.SKULL_ITEM;
+                return Material.LEGACY_SKULL_ITEM;
             case "carrotstick":
-                return Material.CARROT_STICK;
+                return Material.LEGACY_CARROT_STICK;
             case "netherstar":
                 return Material.NETHER_STAR;
             case "pumpkinpie":
                 return Material.PUMPKIN_PIE;
             case "firework":
-                return Material.FIREWORK;
+                return Material.LEGACY_FIREWORK;
             case "fireworkstar":
-                return Material.FIREWORK_CHARGE;
+                return Material.LEGACY_FIREWORK_CHARGE;
             case "enchantedbook":
                 return Material.ENCHANTED_BOOK;
             case "comparator":
-                return Material.REDSTONE_COMPARATOR;
+                return Material.LEGACY_REDSTONE_COMPARATOR;
             case "netherbrick":
-                return Material.NETHER_BRICK_ITEM;
+                return Material.LEGACY_NETHER_BRICK_ITEM;
             case "netherquartz":
                 return Material.QUARTZ;
             case "tntcart":
-                return Material.EXPLOSIVE_MINECART;
+                return Material.LEGACY_EXPLOSIVE_MINECART;
             case "hopperminecart":
                 return Material.HOPPER_MINECART;
             case "ironhorsearmour":
-                return Material.IRON_BARDING;
+                return Material.LEGACY_IRON_BARDING;
             case "goldenhorsearmour":
-                return Material.GOLD_BARDING;
+                return Material.LEGACY_GOLD_BARDING;
             case "diamondhorsearmour":
-                return Material.DIAMOND_BARDING;
+                return Material.LEGACY_DIAMOND_BARDING;
             case "lead":
-                return Material.LEASH;
+                return Material.LEGACY_LEASH;
             case "nametag":
                 return Material.NAME_TAG;
             case "record13":
-                return Material.GOLD_RECORD;
+                return Material.LEGACY_GOLD_RECORD;
             case "recordcat":
-                return Material.GREEN_RECORD;
+                return Material.LEGACY_GREEN_RECORD;
             case "recordblocks":
-                return Material.RECORD_3;
+                return Material.LEGACY_RECORD_3;
             case "recordchirp":
-                return Material.RECORD_4;
+                return Material.LEGACY_RECORD_4;
             case "recordfar":
-                return Material.RECORD_5;
+                return Material.LEGACY_RECORD_5;
             case "recordmall":
-                return Material.RECORD_6;
+                return Material.LEGACY_RECORD_6;
             case "recordmellohi":
-                return Material.RECORD_7;
+                return Material.LEGACY_RECORD_7;
             case "recordstal":
-                return Material.RECORD_8;
+                return Material.LEGACY_RECORD_8;
             case "recordstrad":
-                return Material.RECORD_9;
+                return Material.LEGACY_RECORD_9;
             case "recordward":
-                return Material.RECORD_10;
+                return Material.LEGACY_RECORD_10;
             case "record11":
-                return Material.RECORD_11;
+                return Material.LEGACY_RECORD_11;
             case "recordwait":
-                return Material.RECORD_12;
+                return Material.LEGACY_RECORD_12;
             case "stainedglass":
-                return Material.STAINED_GLASS;
+                return Material.LEGACY_STAINED_GLASS;
             case "stainedglasspane":
-                return Material.STAINED_GLASS_PANE;
+                return Material.LEGACY_STAINED_GLASS_PANE;
             case "leaves2":
-                return Material.LEAVES_2;
+                return Material.LEGACY_LEAVES_2;
             case "log2":
-                return Material.LOG_2;
+                return Material.LEGACY_LOG_2;
             case "packedice":
                 return Material.PACKED_ICE;
             case "doubleplant":
-                return Material.DOUBLE_PLANT;
+                return Material.LEGACY_DOUBLE_PLANT;
             case "commandminecart":
-                return Material.COMMAND_MINECART;
+                return Material.LEGACY_COMMAND_MINECART;
             default:
                 return Material.AIR;
         }
