@@ -4,7 +4,7 @@ import nl.sugcube.crystalquest.items.WandType;
 import nl.sugcube.crystalquest.sba.SEnch;
 import nl.sugcube.crystalquest.sba.SItem;
 import nl.sugcube.crystalquest.sba.SMeth;
-import org.bukkit.Material;
+import nl.sugcube.crystalquest.util.Materials;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -100,7 +100,7 @@ public class StringHandler {
 
             if (item[0].split(";").length > 1) {
                 String newName = SMeth.setColours(item[0].split(";")[1]);
-                if (is.getType() == Material.LEGACY_SKULL_ITEM) {
+                if (Materials.isSkull(is.getType())) {
                     is.setDurability((short)3);
                     SkullMeta im = (SkullMeta)is.getItemMeta();
                     im.setOwner(newName);
@@ -120,5 +120,4 @@ public class StringHandler {
 
         return is;
     }
-
 }

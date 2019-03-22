@@ -1,7 +1,7 @@
 package nl.sugcube.crystalquest.game;
 
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.sba.SItem;
+import nl.sugcube.crystalquest.util.Materials;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -137,33 +137,25 @@ public class InventoryManager {
                 player.getInventory().setBoots(boots);
             }
             else {
-
                 ItemStack is = plugin.sh.toItemStack(s);
 
                 //Auto-equip Armour
-                int itemId = SItem.toId(is.getType());
-                if ((itemId >= 298 && itemId < 318) || is.getType() == Material.LEGACY_SKULL_ITEM) {
-                    if ((itemId + 2) % 4 == 0) {
-                        player.getInventory().setHelmet(is);
-                    }
-                    else if ((itemId + 1) % 4 == 0) {
-                        player.getInventory().setChestplate(is);
-                    }
-                    else if (itemId % 4 == 0) {
-                        player.getInventory().setLeggings(is);
-                    }
-                    else if (is.getType() != Material.LEGACY_SKULL_ITEM) {
-                        player.getInventory().setBoots(is);
-                    }
-                    else {
-                        player.getInventory().setHelmet(is);
-                    }
+                if (Materials.ARMOUR_HELMETS.contains(is.getType()) || is.getType() == Material.PLAYER_HEAD) {
+                    player.getInventory().setHelmet(is);
                 }
+                else if (Materials.ARMOUR_CHESTPLATES.contains(is.getType())) {
+                    player.getInventory().setChestplate(is);
+                }
+                else if (Materials.ARMOUR_LEGGINGS.contains(is.getType())) {
+                    player.getInventory().setLeggings(is);
+                }
+                else if (Materials.ARMOUR_BOOTS.contains(is.getType())) {
+                    player.getInventory().setBoots(is);
+                }
+                //Add other items.
                 else {
-                    //Add other items.
                     player.getInventory().addItem(is);
                 }
-
             }
         }
 

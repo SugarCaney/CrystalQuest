@@ -35,6 +35,63 @@ public class Materials {
     ));
 
     /**
+     * A list of all different skull materials. The index in which they appear in the list is also
+     * their former data value.
+     */
+    public static List<Material> SKULLS = Collections.unmodifiableList(Arrays.asList(
+            Material.SKELETON_SKULL,
+            Material.WITHER_SKELETON_SKULL,
+            Material.ZOMBIE_HEAD,
+            Material.PLAYER_HEAD,
+            Material.CREEPER_HEAD
+    ));
+
+    /**
+     * A list of all different helmet materials.
+     */
+    public static List<Material> ARMOUR_HELMETS = Collections.unmodifiableList(Arrays.asList(
+            Material.LEATHER_HELMET,
+            Material.IRON_HELMET,
+            Material.GOLDEN_HELMET,
+            Material.CHAINMAIL_HELMET,
+            Material.DIAMOND_HELMET,
+            Material.TURTLE_HELMET
+    ));
+
+    /**
+     * A list of all different chestplate materials.
+     */
+    public static List<Material> ARMOUR_CHESTPLATES = Collections.unmodifiableList(Arrays.asList(
+            Material.LEATHER_CHESTPLATE,
+            Material.IRON_CHESTPLATE,
+            Material.GOLDEN_CHESTPLATE,
+            Material.CHAINMAIL_CHESTPLATE,
+            Material.DIAMOND_CHESTPLATE
+    ));
+
+    /**
+     * A list of all different leggings materials.
+     */
+    public static List<Material> ARMOUR_LEGGINGS = Collections.unmodifiableList(Arrays.asList(
+            Material.LEATHER_LEGGINGS,
+            Material.IRON_LEGGINGS,
+            Material.GOLDEN_LEGGINGS,
+            Material.CHAINMAIL_LEGGINGS,
+            Material.DIAMOND_LEGGINGS
+    ));
+
+    /**
+     * A list of all different boot materials.
+     */
+    public static List<Material> ARMOUR_BOOTS = Collections.unmodifiableList(Arrays.asList(
+            Material.LEATHER_BOOTS,
+            Material.IRON_BOOTS,
+            Material.GOLDEN_BOOTS,
+            Material.CHAINMAIL_BOOTS,
+            Material.DIAMOND_BOOTS
+    ));
+
+    /**
      * Get the wool block material that is tied to a damage value (in legacy code).
      *
      * @param damageValue
@@ -59,6 +116,15 @@ public class Materials {
      */
     public static boolean isWool(Material material) {
         return WOOL_BLOCKS.contains(material);
+    }
+
+    /**
+     * Checks if the given material is a skull/head block.
+     *
+     * @return {@code true} when the given material is a skull/head block, {@code false} otherwise.
+     */
+    public static boolean isSkull(Material material) {
+        return SKULLS.contains(material);
     }
 
     private Materials() {
