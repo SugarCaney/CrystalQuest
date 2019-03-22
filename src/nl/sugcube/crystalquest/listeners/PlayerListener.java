@@ -193,7 +193,6 @@ public class PlayerListener implements Listener {
             i++;
         }
 
-        Bukkit.getLogger().info("<> Winning score: " + winningScore + ", delta: " + delta);
         int crystals = 25;
         int extrac = (int)((winningScore - delta) / winningScore) * 25;
         if (extrac > 25) {
@@ -213,8 +212,6 @@ public class PlayerListener implements Listener {
             int money = (int)(crystals * plugin.getConfig().getDouble("shop.crystal-multiplier") * vip);
             double extra = Multipliers.getMultiplier("win", plugin.economy.getLevel(p, "win", "crystals"), false);
             int moneyEarned = (int)(money * extra);
-
-            Bukkit.getLogger().info("<> money: " + money + ", extra: " + extra);
 
             // Call Event
             PlayerEarnCrystalsEvent crystalEvent = new PlayerEarnCrystalsEvent(p, arena, moneyEarned);

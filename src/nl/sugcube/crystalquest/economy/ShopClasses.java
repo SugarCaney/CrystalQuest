@@ -4,6 +4,7 @@ import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Classes;
 import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -50,6 +51,7 @@ public class ShopClasses implements Listener {
                 if (plugin.getConfig().getInt("kit." + key + ".price") > 0) {
                     if (!Classes.hasPermission(p, key)) {
                         ItemStack icon = plugin.sh.toItemStack(plugin.getConfig().getString("kit." + key + ".icon"));
+                        Items.hideAllFlags(icon);
                         ItemMeta im = icon.getItemMeta();
                         String name = plugin.getConfig().getString("kit." + key + ".name");
                         im.setDisplayName(SMeth.setColours(name));

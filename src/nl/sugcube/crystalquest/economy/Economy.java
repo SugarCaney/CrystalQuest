@@ -116,7 +116,7 @@ public class Economy {
     public ItemStack getItemBalance(Player p) {
         ItemStack is = new ItemStack(Material.EMERALD, 1);
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.GREEN + "Crystals: " + ChatColor.GOLD + getBalance().getBalance(p, false));
+        im.setDisplayName(ChatColor.GREEN + "Crystals: " + ChatColor.GOLD + ChatColor.BOLD + getBalance().getBalance(p, false));
         List<String> lore = new ArrayList<String>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.spend-lore1"));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.spend-lore2"));

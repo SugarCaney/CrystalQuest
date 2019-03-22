@@ -1,6 +1,7 @@
 package nl.sugcube.crystalquest.economy;
 
 import nl.sugcube.crystalquest.CrystalQuest;
+import nl.sugcube.crystalquest.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,6 +21,9 @@ import java.util.List;
  * @author SugarCaney
  */
 public class ShopPowerup implements Listener {
+
+    private static final String PREFIX = "" + ChatColor.GREEN + ChatColor.BOLD + ChatColor.ITALIC;
+    private static final String PREFIX_RED = "" + ChatColor.RED + ChatColor.BOLD + ChatColor.ITALIC;
 
     public static CrystalQuest plugin;
     public static Economy economy;
@@ -109,37 +113,37 @@ public class ShopPowerup implements Listener {
 							/*
 							 * BUY BUFF
 							 */
-                            else if (name.equalsIgnoreCase(ChatColor.GREEN + "[Buy] " + ChatColor.LIGHT_PURPLE + "Buffs")) {
+                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Buffs")) {
                                 buyClass(p, "buff", e.getInventory());
                             }
 							/*
 							 * BUY DEBUFF
 							 */
-                            else if (name.equalsIgnoreCase(ChatColor.GREEN + "[Buy] " + ChatColor.RED + "Debuffs")) {
+                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.RED + "Debuffs")) {
                                 buyClass(p, "debuff", e.getInventory());
                             }
 							/*
 							 * BUY EXPLOSIVE
 							 */
-                            else if (name.equalsIgnoreCase(ChatColor.GREEN + "[Buy] " + ChatColor.YELLOW + "Explosives")) {
+                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.YELLOW + "Explosives")) {
                                 buyClass(p, "explosive", e.getInventory());
                             }
 							/*
 							 * BUY AMMO
 							 */
-                            else if (name.equalsIgnoreCase(ChatColor.GREEN + "[Buy] " + ChatColor.AQUA + "Weaponry")) {
+                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.AQUA + "Weaponry")) {
                                 buyClass(p, "weaponry", e.getInventory());
                             }
 							/*
 							 * BUY CREEPERS
 							 */
-                            else if (name.equalsIgnoreCase(ChatColor.GREEN + "[Buy] " + ChatColor.DARK_GREEN + "Creepers")) {
+                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.DARK_GREEN + "Creepers")) {
                                 buyClass(p, "creepers", e.getInventory());
                             }
 							/*
 							 * BUY WOLF
 							 */
-                            else if (name.equalsIgnoreCase(ChatColor.GREEN + "[Buy] " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥")) {
+                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥")) {
                                 buyClass(p, "wolf", e.getInventory());
                             }
 
@@ -186,10 +190,10 @@ public class ShopPowerup implements Listener {
         ItemStack is = new ItemStack(Material.CREEPER_SPAWN_EGG, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "creepers", "upgrade") < 5) {
-            im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.DARK_GREEN + "Creepers");
+            im.setDisplayName(PREFIX + "BUY " + ChatColor.DARK_GREEN + "Creepers");
         }
         else {
-            im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.DARK_GREEN + "Creepers");
+            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.DARK_GREEN + "Creepers");
         }
         List<String> lore = new ArrayList<>();
         int level = 0;
@@ -219,10 +223,10 @@ public class ShopPowerup implements Listener {
         ItemStack is = new ItemStack(Material.BONE, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "wolf", "upgrade") < 5) {
-            im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
+            im.setDisplayName(PREFIX + "BUY " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
         }
         else {
-            im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
+            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
         }
         List<String> lore = new ArrayList<>();
         int level = 0;
@@ -255,12 +259,13 @@ public class ShopPowerup implements Listener {
      */
     public ItemStack getItemBuyAmmo(Player p) {
         ItemStack is = new ItemStack(Material.DIAMOND_AXE, 1);
+        Items.hideAllFlags(is);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "weaponry", "upgrade") < 5) {
-            im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.AQUA + "Weaponry");
+            im.setDisplayName(PREFIX + "BUY " + ChatColor.AQUA + "Weaponry");
         }
         else {
-            im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.AQUA + "Weaponry");
+            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.AQUA + "Weaponry");
         }
         List<String> lore = new ArrayList<>();
         int level = 0;
@@ -289,10 +294,10 @@ public class ShopPowerup implements Listener {
         ItemStack is = new ItemStack(Material.EGG, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "explosive", "upgrade") < 5) {
-            im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.YELLOW + "Explosives");
+            im.setDisplayName(PREFIX + "BUY " + ChatColor.YELLOW + "Explosives");
         }
         else {
-            im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.YELLOW + "Explosives");
+            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.YELLOW + "Explosives");
         }
         List<String> lore = new ArrayList<>();
         int level = 0;
@@ -322,10 +327,10 @@ public class ShopPowerup implements Listener {
         ItemStack is = new ItemStack(Material.WITHER_SKELETON_SKULL, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "debuff", "upgrade") < 5) {
-            im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.RED + "Debuffs");
+            im.setDisplayName(PREFIX + "BUY " + ChatColor.RED + "Debuffs");
         }
         else {
-            im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.RED + "Debuffs");
+            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RED + "Debuffs");
         }
         List<String> lore = new ArrayList<>();
         int level = 0;
@@ -354,10 +359,10 @@ public class ShopPowerup implements Listener {
         ItemStack is = new ItemStack(Material.GLISTERING_MELON_SLICE, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "buff", "upgrade") < 5) {
-            im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.LIGHT_PURPLE + "Buffs");
+            im.setDisplayName(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Buffs");
         }
         else {
-            im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.LIGHT_PURPLE + "Buffs");
+            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.LIGHT_PURPLE + "Buffs");
         }
         List<String> lore = new ArrayList<>();
         int level = 0;
@@ -450,6 +455,7 @@ public class ShopPowerup implements Listener {
      */
     public ItemStack getItemStatusAmmo(Player p) {
         ItemStack is = new ItemStack(Material.DIAMOND_AXE, 1);
+        Items.hideAllFlags(is);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.AQUA + "Weaponry");
         List<String> lore = new ArrayList<>();

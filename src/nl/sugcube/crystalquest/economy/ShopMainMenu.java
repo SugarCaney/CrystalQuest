@@ -1,6 +1,7 @@
 package nl.sugcube.crystalquest.economy;
 
 import nl.sugcube.crystalquest.CrystalQuest;
+import nl.sugcube.crystalquest.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -136,6 +137,7 @@ public class ShopMainMenu implements Listener {
      */
     public ItemStack getItemClass() {
         ItemStack is = new ItemStack(Material.GOLDEN_SWORD, 1);
+        Items.hideAllFlags(is);
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(ChatColor.GOLD + "Buy Classes");
         List<String> lore = new ArrayList<String>();

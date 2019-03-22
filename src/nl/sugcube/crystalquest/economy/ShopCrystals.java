@@ -21,6 +21,9 @@ import java.util.List;
  */
 public class ShopCrystals implements Listener {
 
+    private static final String PREFIX = "" + ChatColor.GREEN + ChatColor.BOLD + ChatColor.ITALIC;
+    private static final String PREFIX_RED = "" + ChatColor.RED + ChatColor.BOLD + ChatColor.ITALIC;
+
     public static CrystalQuest plugin;
     public static Economy economy;
 
@@ -102,25 +105,25 @@ public class ShopCrystals implements Listener {
 						/*
 						 * BUY EXP
 						 */
-                        else if (name.equalsIgnoreCase(ChatColor.GREEN + "[Buy] " + ChatColor.GREEN + "Xp-Bonus")) {
+                        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.GREEN + "Xp-Bonus")) {
                             buyClass(p, "xp", e.getInventory());
                         }
 						/*
 						 * BUY SMASH
 						 */
-                        else if (name.equalsIgnoreCase(ChatColor.GREEN + "[Buy] " + ChatColor.LIGHT_PURPLE + "Smash-Bonus")) {
+                        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Smash-Bonus")) {
                             buyClass(p, "smash", e.getInventory());
                         }
 						/*
 						 * BUY WIN
 						 */
-                        else if (name.equalsIgnoreCase(ChatColor.GREEN + "[Buy] " + ChatColor.YELLOW + "Win-Cash")) {
+                        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.YELLOW + "Win-Cash")) {
                             buyClass(p, "win", e.getInventory());
                         }
 						/*
 						 * BUY BLOOD
 						 */
-                        else if (name.equalsIgnoreCase(ChatColor.GREEN + "[Buy] " + ChatColor.RED + "Blood Diamonds")) {
+                        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.RED + "Blood Diamonds")) {
                             buyClass(p, "blood", e.getInventory());
                         }
 
@@ -169,10 +172,10 @@ public class ShopCrystals implements Listener {
         ItemStack is = new ItemStack(Material.PLAYER_HEAD, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "blood", "crystals") < 5) {
-            im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.RED + "Blood Diamonds");
+            im.setDisplayName(PREFIX + "BUY " + ChatColor.RED + "Blood Diamonds");
         }
         else {
-            im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.RED + "Blood Diamonds");
+            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RED + "Blood Diamonds");
         }
         List<String> lore = new ArrayList<>();
         int level = 0;
@@ -201,10 +204,10 @@ public class ShopCrystals implements Listener {
         ItemStack is = new ItemStack(Material.GOLD_INGOT, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "win", "crystals") < 5) {
-            im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.YELLOW + "Win-Cash");
+            im.setDisplayName(PREFIX + "BUY " + ChatColor.YELLOW + "Win-Cash");
         }
         else {
-            im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.YELLOW + "Win-Cash");
+            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.YELLOW + "Win-Cash");
         }
         List<String> lore = new ArrayList<>();
         int level = 0;
@@ -233,10 +236,10 @@ public class ShopCrystals implements Listener {
         ItemStack is = new ItemStack(Material.NETHER_STAR, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "smash", "crystals") < 5) {
-            im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
+            im.setDisplayName(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
         }
         else {
-            im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
+            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
         }
         List<String> lore = new ArrayList<>();
         int level = 0;
@@ -265,10 +268,10 @@ public class ShopCrystals implements Listener {
         ItemStack is = new ItemStack(Material.EXPERIENCE_BOTTLE, 1);
         ItemMeta im = is.getItemMeta();
         if (economy.getLevel(p, "xp", "crystals") < 5) {
-            im.setDisplayName(ChatColor.GREEN + "[Buy] " + ChatColor.GREEN + "Xp-Bonus");
+            im.setDisplayName(PREFIX + "BUY " + ChatColor.GREEN + "Xp-Bonus");
         }
         else {
-            im.setDisplayName(ChatColor.RED + "[MAX] " + ChatColor.GREEN + "Xp-Bonus");
+            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.GREEN + "Xp-Bonus");
         }
         List<String> lore = new ArrayList<>();
         int level = 0;

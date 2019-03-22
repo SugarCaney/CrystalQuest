@@ -4,6 +4,7 @@ import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Classes;
 import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -84,7 +85,6 @@ public class SelectClass {
      *         (Player) The target player.
      */
     public void openMenu(Player p) {
-
         List<String> classes = new ArrayList<>();
 
 		/*
@@ -123,6 +123,7 @@ public class SelectClass {
             ItemMeta im = icon.getItemMeta();
             String name = plugin.getConfig().getString("kit." + className + ".name");
             im.setDisplayName(SMeth.setColours(name));
+            Items.hideAllFlags(icon);
 
             if (plugin.getConfig().getString("kit." + className + ".lore") != "") {
                 List<String> lore = new ArrayList<>();
