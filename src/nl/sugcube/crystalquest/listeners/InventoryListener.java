@@ -25,111 +25,116 @@ public class InventoryListener implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        if (plugin.am.isInGame((Player)e.getWhoClicked())) {
-            e.setCancelled(true);
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (plugin.am.isInGame((Player)event.getWhoClicked())) {
+            event.setCancelled(true);
+        }
+        if (event.getCurrentItem() == null) {
+            return;
         }
 
-        if (e.getInventory().getName().contains("Pick Team: ")) {
-            if (e.getCurrentItem() != null) {
-                if (e.getCurrentItem().getAmount() > 0) {
+        String inventoryName = event.getInventory().getName();
+        if (inventoryName.contains("Pick Team: ")) {
+            pickTeam(event);
+        }
+        else if ("Pick a Class".equals(inventoryName)) {
+            pickClass(event);
+        }
+        else if (inventoryName.equalsIgnoreCase("Spectate an arenas")) {
+            spectate(event);
+        }
+        else if (inventoryName.contains(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:")) {
+            event.setCancelled(true);
+        }
+    }
+
+    public void spectate(InventoryClickEvent event) {
+        event.setCancelled(true);
+
+        Player player = (Player)event.getWhoClicked();
+        player.closeInventory();
+
+        if (event.getCurrentItem().hasItemMeta()) {
+            if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+                Arena a = plugin.am.getArena(event.getCurrentItem().getItemMeta().getDisplayName()
+                        .replace(ChatColor.AQUA + "Spectate ", ""));
+                a.addPlayer((Player)event.getWhoClicked(), CrystalQuestTeam.SPECTATOR, true);
+            }
+        }
+    }
+
+    public void pickClass(InventoryClickEvent event) {
+        event.setCancelled(true);
+
+        Player player = (Player)event.getWhoClicked();
+        player.closeInventory();
+
+        if (event.getCurrentItem().hasItemMeta()) {
+            if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("Random Class")) {
+                    plugin.im.playerClass.remove(player.getUniqueId());
+                    player.sendMessage(Broadcast.TAG + Broadcast.get("arena.random-class"));
+                }
+                else {
+                    String techName = plugin.menuSC.getTechnicalClassName(
+                            event.getCurrentItem().getItemMeta().getDisplayName());
+                    if (Classes.hasPermission(player, techName)) {
+                        plugin.im.setPlayerClass(player, techName);
+                        player.sendMessage(Broadcast.TAG + Broadcast.get("arena.chosen-class")
+                                .replace("%class%", event.getCurrentItem().getItemMeta().getDisplayName()));
+                    }
+                    else {
+                        player.sendMessage(Broadcast.get("arena.no-perm-class"));
+                    }
+                }
+            }
+        }
+    }
+
+    public void pickTeam(InventoryClickEvent event) {
+        if (event.getCurrentItem().getAmount() > 0) {
+            try {
+                event.setCancelled(true);
+                Player player = (Player)event.getWhoClicked();
+                player.closeInventory();
+
+                Arena a = plugin.am.getArena(event.getInventory().getName().replace("Pick Team: ", ""));
+                String displayName = "";
+                CrystalQuestTeam team = null;
+
+                if (event.getCurrentItem().hasItemMeta()) {
+                    if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+                        displayName = event.getCurrentItem().getItemMeta().getDisplayName();
+                    }
+                }
+
+                if (displayName.contains("Random Team")) {
                     try {
-                        e.setCancelled(true);
-                        Player player = (Player)e.getWhoClicked();
-                        player.closeInventory();
-
-                        Arena a = plugin.am.getArena(e.getInventory().getName().replace("Pick Team: ", ""));
-                        String displayName = "";
-                        CrystalQuestTeam team = null;
-
-                        if (e.getCurrentItem().hasItemMeta()) {
-                            if (e.getCurrentItem().getItemMeta().hasDisplayName()) {
-                                displayName = e.getCurrentItem().getItemMeta().getDisplayName();
-                            }
-                        }
-
-                        if (displayName.contains("Random Team")) {
-                            try {
-                                if (a.getSmallestTeams().size() > 0) {
-                                    Random ran = new Random();
-                                    boolean isNotOk = true;
-                                    while (isNotOk) {
-                                        team = a.getSmallestTeams().get(ran.nextInt(a.getSmallestTeams().size()));
-                                        if (a.getSmallestTeams().contains(team)) {
-                                            isNotOk = false;
-                                        }
-                                    }
+                        if (a.getSmallestTeams().size() > 0) {
+                            Random ran = new Random();
+                            boolean isNotOk = true;
+                            while (isNotOk) {
+                                team = a.getSmallestTeams().get(ran.nextInt(a.getSmallestTeams().size()));
+                                if (a.getSmallestTeams().contains(team)) {
+                                    isNotOk = false;
                                 }
                             }
-                            catch (Exception exep) {
-                                exep.printStackTrace();
-                            }
                         }
-                        else {
-                            team = CrystalQuestTeam.valueOfName(displayName.replace("Join ", ""));
-                        }
-
-                        a.addPlayer(player, team, false);
-                        plugin.menuPT.updateMenus();
                     }
-                    catch (Exception exeption) {
-                        exeption.printStackTrace();
+                    catch (Exception exep) {
+                        exep.printStackTrace();
                     }
                 }
-            }
-        }
-        else if (e.getInventory().getName() == "Pick a Class") {
-            if (e.getCurrentItem() != null) {
-                e.setCancelled(true);
-
-                Player player = (Player)e.getWhoClicked();
-                player.closeInventory();
-
-                if (e.getCurrentItem().hasItemMeta()) {
-                    if (e.getCurrentItem().getItemMeta().hasDisplayName()) {
-                        if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("Random Class")) {
-                            plugin.im.playerClass.remove(player.getUniqueId());
-                            player.sendMessage(Broadcast.TAG + Broadcast.get("arena.random-class"));
-                        }
-                        else {
-                            String techName = plugin.menuSC.getTechnicalClassName(
-                                    e.getCurrentItem().getItemMeta().getDisplayName());
-                            if (Classes.hasPermission(player, techName)) {
-                                plugin.im.setPlayerClass(player, techName);
-                                player.sendMessage(Broadcast.TAG + Broadcast.get("arena.chosen-class")
-                                        .replace("%class%", e.getCurrentItem().getItemMeta().getDisplayName()));
-                            }
-                            else {
-                                player.sendMessage(Broadcast.get("arena.no-perm-class"));
-                            }
-                        }
-                    }
+                else {
+                    team = CrystalQuestTeam.valueOfName(displayName.replace("Join ", ""));
                 }
-            }
-        }
-        else if (e.getInventory().getName().equalsIgnoreCase("Spectate an arenas")) {
-            if (e.getCurrentItem() != null) {
-                e.setCancelled(true);
 
-                Player player = (Player)e.getWhoClicked();
-                player.closeInventory();
-
-                if (e.getCurrentItem().hasItemMeta()) {
-                    if (e.getCurrentItem().getItemMeta().hasDisplayName()) {
-                        Arena a;
-                        try {
-                            a = plugin.am.getArena(e.getCurrentItem().getItemMeta().getDisplayName()
-                                    .replace(ChatColor.AQUA + "Spectate ", ""));
-                            a.addPlayer((Player)e.getWhoClicked(), CrystalQuestTeam.SPECTATOR, true);
-                        }
-                        catch (Exception ignored) {
-                        }
-                    }
-                }
+                a.addPlayer(player, team, false);
+                plugin.menuPT.updateMenus();
             }
-        }
-        else if (e.getInventory().getName().contains(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:")) {
-            e.setCancelled(true);
+            catch (Exception exeption) {
+                exeption.printStackTrace();
+            }
         }
     }
 }

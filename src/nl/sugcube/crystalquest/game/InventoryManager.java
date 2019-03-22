@@ -101,8 +101,7 @@ public class InventoryManager {
             while (isNotOk && count < 10000) {
                 Random ran = new Random();
                 Set<String> set = plugin.getConfig().getConfigurationSection("kit").getKeys(false);
-                List<String> list = new ArrayList<String>();
-                list.addAll(set);
+                List<String> list = new ArrayList<>(set);
 
                 int random = ran.nextInt(list.size());
                 String ranClass = list.get(random);
