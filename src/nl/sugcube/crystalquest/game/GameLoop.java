@@ -153,6 +153,7 @@ public class GameLoop implements Runnable {
 
                 arena.addScore(plugin.getArenaManager().getTeam(player), player.getLevel() + extraPoints);
                 player.setLevel(0);
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20, 20);
             }
 
             // Wands
