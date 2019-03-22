@@ -198,7 +198,8 @@ public class Arena {
     private Map<Location, UUID> landmines = new ConcurrentHashMap<>();
 
     /**
-     * Map that maps the UUID of a player to the gamemode which they had before entering the arenas.
+     * Map that maps the UUID of a player to the gamemode which they had before entering the
+     * arenas.
      */
     private Map<UUID, GameMode> preSpecGamemodes = new ConcurrentHashMap<>();
 
@@ -747,8 +748,7 @@ public class Arena {
     }
 
     /**
-     * If there are players in the arenas
-     * Reveal the winner
+     * If there are players in the arenas Reveal the winner
      *
      * @return The winning team, or {@code null} when something went wrong.
      */
@@ -826,12 +826,8 @@ public class Arena {
     }
 
     /**
-     * Resets Arena-properties to default. Containing:
-     * Countdown,
-     * Game-time,
-     * Removes the players,
-     * Re-initializes scoreboard.
-     * Sends a "this-team-won" message
+     * Resets Arena-properties to default. Containing: Countdown, Game-time, Removes the players,
+     * Re-initializes scoreboard. Sends a "this-team-won" message
      *
      * @param onEnable
      *         (boolean) If it's called in onEnable.
@@ -916,8 +912,8 @@ public class Arena {
     }
 
     /**
-     * Removes a player from the arenas including removal from the team,
-     * resetting his/her scoreboard and restoring his/her inventory.
+     * Removes a player from the arenas including removal from the team, resetting his/her
+     * scoreboard and restoring his/her inventory.
      *
      * @param p
      *         The player you want to remove from the arenas.
@@ -951,12 +947,8 @@ public class Arena {
         }
 
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
-
-        try {
+        if (p.isOnline()) {
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-        }
-        catch (IllegalArgumentException ignored) {
-            // Somehow, p.isInvalid() does not work on this. This will do :/
         }
 
         playerTeams.remove(p.getUniqueId());
@@ -980,8 +972,8 @@ public class Arena {
     }
 
     /**
-     * Adds a player to the arenas including putting into a team, set the
-     * scoreboard and give the in-game inventory.
+     * Adds a player to the arenas including putting into a team, set the scoreboard and give the
+     * in-game inventory.
      *
      * @param p
      *         The player to add
