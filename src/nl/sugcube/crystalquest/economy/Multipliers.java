@@ -38,7 +38,7 @@ public class Multipliers {
      * @return The applicable multiplier, or -1 when the type does not exist.
      */
     public static double getMultiplier(String type, int level, boolean asPercentage) {
-        double percentageApplier = asPercentage ? 100 : 0;
+        double percentageApplier = asPercentage ? 100 : 1;
         double multiplier;
         if (type.equalsIgnoreCase("buff")) {
             multiplier = MULTIPLIERS_BUFF[level];

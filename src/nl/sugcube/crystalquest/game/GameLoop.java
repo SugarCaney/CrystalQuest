@@ -197,31 +197,31 @@ public class GameLoop implements Runnable {
             arena.setEndGame(false);
             arena.resetArena(false);
             plugin.signHandler.updateSigns();
+            return;
         }
-        else {
-            arena.setAfterCount(arena.getAfterCount() - 1);
 
-            for (UUID id : arena.getPlayers()) {
-                Player p = Bukkit.getPlayer(id);
-                try {
-                    if (!arena.getSpectators().contains(p.getUniqueId())) {
-                        if (arena.getTeam(p) == winningTeam) {
-                            Firework f = p.getLocation().getWorld().spawn(p.getLocation().add(0, 2, 0), Firework.class);
-                            FireworkMeta fm = f.getFireworkMeta();
-                            fm.setPower(1);
-                            FireworkEffect fe = FireworkEffect.builder()
-                                    .flicker(true)
-                                    .withColor(arena.getTeam(p).getColour())
-                                    .with(Type.STAR)
-                                    .build();
-                            fm.clearEffects();
-                            fm.addEffect(fe);
-                            f.setFireworkMeta(fm);
-                        }
+        arena.setAfterCount(arena.getAfterCount() - 1);
+
+        for (UUID id : arena.getPlayers()) {
+            Player p = Bukkit.getPlayer(id);
+            try {
+                if (!arena.getSpectators().contains(p.getUniqueId())) {
+                    if (arena.getTeam(p) == winningTeam) {
+                        Firework f = p.getLocation().getWorld().spawn(p.getLocation().clone().add(0, 2, 0), Firework.class);
+                        FireworkMeta fm = f.getFireworkMeta();
+                        fm.setPower(1);
+                        FireworkEffect fe = FireworkEffect.builder()
+                                .flicker(true)
+                                .withColor(arena.getTeam(p).getColour())
+                                .with(Type.STAR)
+                                .build();
+                        fm.clearEffects();
+                        fm.addEffect(fe);
+                        f.setFireworkMeta(fm);
                     }
                 }
-                catch (Exception ignored) {
-                }
+            }
+            catch (Exception ignored) {
             }
         }
     }

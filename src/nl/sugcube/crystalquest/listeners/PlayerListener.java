@@ -176,8 +176,8 @@ public class PlayerListener implements Listener {
         CrystalQuestTeam winningTeam = event.getTeam();
         Collection<Team> scoreboardTeams = event.getTeams();
         Arena arena = event.getArena();
-        int winningScore = arena.getScore(winningTeam);
-        int delta = 9999999;
+        double winningScore = arena.getScore(winningTeam);
+        double delta = 9999999;
 
         int i = 0;
         for (Team scoreboardTeam : scoreboardTeams) {
@@ -186,16 +186,16 @@ public class PlayerListener implements Listener {
             if (scoreboardTeam != null) {
                 if (arena.getScore(iTeam) >= 0) {
                     if (Math.abs(winningScore - arena.getScore(iTeam)) < delta) {
-                        delta = Math.abs(winningScore - arena.getScore(iTeam));
+                        delta = Math.abs((int)winningScore - arena.getScore(iTeam));
                     }
                 }
             }
             i++;
         }
 
+        Bukkit.getLogger().info("<> Winning score: " + winningScore + ", delta: " + delta);
         int crystals = 25;
-        int extrac;
-        extrac = (int)((((double)winningScore) - ((double)delta)) / ((double)winningScore)) * 25;
+        int extrac = (int)((winningScore - delta) / winningScore) * 25;
         if (extrac > 25) {
             extrac = 25;
         }
@@ -211,12 +211,10 @@ public class PlayerListener implements Listener {
             }
 
             int money = (int)(crystals * plugin.getConfig().getDouble("shop.crystal-multiplier") * vip);
-
-            double extra = Multipliers.getMultiplier("win",
-                    plugin.economy.getLevel(p, "win", "crystals"), false);
-
+            double extra = Multipliers.getMultiplier("win", plugin.economy.getLevel(p, "win", "crystals"), false);
             int moneyEarned = (int)(money * extra);
 
+            Bukkit.getLogger().info("<> money: " + money + ", extra: " + extra);
 
             // Call Event
             PlayerEarnCrystalsEvent crystalEvent = new PlayerEarnCrystalsEvent(p, arena, moneyEarned);
