@@ -4,7 +4,7 @@ import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.ArenaManager;
 import nl.sugcube.crystalquest.game.CrystalQuestTeam;
-import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.sba.SMethods;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -32,7 +32,7 @@ public class LoadData {
     public static void loadSigns() {
         plugin.signHandler.getSigns().clear();
         for (String s : plugin.getData().getStringList("signs")) {
-            Location loc = SMeth.toLocation(s);
+            Location loc = SMethods.toLocation(s);
             if (loc.getBlock().getType() == Material.WALL_SIGN || loc.getBlock().getType() == Material.SIGN) {
                 plugin.signHandler.getSigns().add(loc);
             }
@@ -45,7 +45,7 @@ public class LoadData {
      */
     public static void loadLobbySpawn() {
         if (plugin.getData().getString("lobby-spawn") != null) {
-            plugin.arenaManager.setLobby(SMeth.toLocation(plugin.getData().getString("lobby-spawn")));
+            plugin.arenaManager.setLobby(SMethods.toLocation(plugin.getData().getString("lobby-spawn")));
         }
     }
 
@@ -86,7 +86,7 @@ public class LoadData {
                 for (String key : section.getKeys(false)) {
                     CrystalQuestTeam team = CrystalQuestTeam.valueOfName(key);
                     String locationString = data.getString(teamLobbySection + "." + key);
-                    Location location = SMeth.toLocation(locationString);
+                    Location location = SMethods.toLocation(locationString);
                     arena.setLobbySpawn(team, location);
                 }
             }
@@ -94,19 +94,19 @@ public class LoadData {
             arena.setEnabled(data.getBoolean(pfx + "state"));
 
             for (String str : data.getStringList(pfx + "player-spawns")) {
-                arena.addPlayerSpawn(SMeth.toLocation(str));
+                arena.addPlayerSpawn(SMethods.toLocation(str));
             }
             for (String str : data.getStringList(pfx + "crystal-spawns")) {
-                arena.addCrystalSpawn(SMeth.toLocation(str));
+                arena.addCrystalSpawn(SMethods.toLocation(str));
             }
             for (String str : data.getStringList(pfx + "item-spawns")) {
-                arena.addItemSpawn(SMeth.toLocation(str));
+                arena.addItemSpawn(SMethods.toLocation(str));
             }
 
             int i = 0;
             Location[] locs = new Location[2];
             for (String str : data.getStringList(pfx + "protection")) {
-                locs[i] = SMeth.toLocation(str);
+                locs[i] = SMethods.toLocation(str);
                 i++;
             }
             arena.setProtection(locs);
@@ -131,7 +131,7 @@ public class LoadData {
 
                 List<Location> spawnList = data.getStringList(pfx + "team-spawns." + key)
                         .stream()
-                        .map(SMeth::toLocation)
+                        .map(SMethods::toLocation)
                         .collect(Collectors.toList());
                 arena.getTeamSpawns().put(team, spawnList);
             }
@@ -150,7 +150,7 @@ public class LoadData {
                 continue;
             }
 
-            Location parsed = SMeth.toLocation(locations.get(i));
+            Location parsed = SMethods.toLocation(locations.get(i));
             if (parsed == null) {
                 continue;
             }

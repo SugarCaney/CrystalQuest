@@ -3,7 +3,7 @@ package nl.sugcube.crystalquest.inventorymenu;
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Classes;
-import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.sba.SMethods;
 import nl.sugcube.crystalquest.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -44,7 +44,7 @@ public class SelectClass {
      */
     public String getTechnicalClassName(String trivialName) {
         for (String key : plugin.getConfig().getConfigurationSection("kit").getKeys(false)) {
-            if (SMeth.setColours(plugin.getConfig().getString("kit." + key + ".name")).equals(trivialName)) {
+            if (SMethods.setColours(plugin.getConfig().getString("kit." + key + ".name")).equals(trivialName)) {
                 return key;
             }
         }
@@ -122,14 +122,14 @@ public class SelectClass {
             ItemStack icon = plugin.stringHandler.toItemStack(plugin.getConfig().getString("kit." + className + ".icon"));
             ItemMeta im = icon.getItemMeta();
             String name = plugin.getConfig().getString("kit." + className + ".name");
-            im.setDisplayName(SMeth.setColours(name));
+            im.setDisplayName(SMethods.setColours(name));
             Items.hideAllFlags(icon);
 
             if (plugin.getConfig().getString("kit." + className + ".lore") != "") {
                 List<String> lore = new ArrayList<>();
                 String[] lines = plugin.getConfig().getString("kit." + className + ".lore").split("%nl%");
                 for (String str : lines) {
-                    lore.add(SMeth.setColours(str));
+                    lore.add(SMethods.setColours(str));
                 }
 
                 if (!Classes.hasPermission(p, className)) {

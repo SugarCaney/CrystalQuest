@@ -3,7 +3,7 @@ package nl.sugcube.crystalquest;
 import nl.sugcube.crystalquest.items.WandType;
 import nl.sugcube.crystalquest.sba.SEnch;
 import nl.sugcube.crystalquest.sba.SItem;
-import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.sba.SMethods;
 import nl.sugcube.crystalquest.util.Materials;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -99,7 +99,7 @@ public class StringHandler {
             }
 
             if (item[0].split(";").length > 1) {
-                String newName = SMeth.setColours(item[0].split(";")[1]);
+                String newName = SMethods.setColours(item[0].split(";")[1]);
                 if (Materials.isSkull(is.getType())) {
                     is.setDurability((short)3);
                     SkullMeta im = (SkullMeta)is.getItemMeta();

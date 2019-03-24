@@ -3,7 +3,7 @@ package nl.sugcube.crystalquest.command;
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
-import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.sba.SMethods;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -40,69 +40,69 @@ public class CommandCheck extends CrystalQuestCommand {
 
             // Epic Check List For President!
             if (arena.getName().isEmpty()) {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.name") + " &7Not set&e | ID: &a" +
                                 (arena.getId() + 1))
                 );
             }
             else {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.name") + " &a" + arena.getName() + "&e | ID: &a" +
                                 (arena.getId() + 1))
                 );
             }
 
             if (arena.getTeamCount() < 2) {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.team-amount") + " &7Not set")
                 );
             }
             else {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.team-amount") + " &a" + arena.getTeamCount())
                 );
             }
 
             if (arena.getMinPlayers() < 2) {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.minimum-players") + " &7Not set")
                 );
             }
             else {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.minimum-players") + " &a" + arena.getMinPlayers())
                 );
             }
 
             if (arena.getMaxPlayers() < 2) {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.maximum-players") + " &7Not set")
                 );
             }
             else {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.maximum-players") + " &a" + arena.getMaxPlayers())
                 );
             }
 
             if (arena.areLobbySpawnsSet()) {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.team-lobby-spawns") + " &aSet!")
                 );
             }
             else {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.team-lobby-spawns") + " &7Not set")
                 );
             }
 
             if (arena.isEnabled()) {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.state") + " &aEnabled")
                 );
             }
             else {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.state") + " &7Disabled")
                 );
             }
@@ -110,35 +110,35 @@ public class CommandCheck extends CrystalQuestCommand {
             if (arena.getTeamSpawns().size() > 0) {
                 if (arena.getTeamCount() > 1) {
                     if (!arena.getTeamSpawns().isEmpty()) {
-                        sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                        sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                                 Broadcast.get("commands.player-spawns") + " &aTeam Spawns")
                         );
                     }
                     else if (arena.getPlayerSpawns().size() < 1) {
-                        sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                        sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                                 Broadcast.get("commands.player-spawns") + " &7Not set")
                         );
                     }
                     else {
-                        sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                        sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                                 Broadcast.get("commands.player-spawns") + " &a" + arena.getPlayerSpawns().size())
                         );
                     }
                 }
                 else {
-                    sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                    sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                             Broadcast.get("commands.player-spawns") + " &7Not set")
                     );
                 }
             }
             else {
                 if (arena.getPlayerSpawns().size() < 1) {
-                    sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                    sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                             Broadcast.get("commands.player-spawns") + " &7Not set")
                     );
                 }
                 else {
-                    sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                    sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                             Broadcast.get("commands.player-spawns") + " &a" +
                                     arena.getPlayerSpawns().size())
                     );
@@ -146,36 +146,36 @@ public class CommandCheck extends CrystalQuestCommand {
             }
 
             if (arena.getCrystalSpawns().size() < 1) {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.crystal-spawns") + " &7Not set")
                 );
             }
             else {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.crystal-spawns") + " &a" +
                                 arena.getCrystalSpawns().size())
                 );
             }
 
             if (arena.getItemSpawns().size() < 1) {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.item-spawns") + " &7Not set")
                 );
             }
             else {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.item-spawns") + " &a" + arena.getItemSpawns().size())
                 );
             }
 
             if (arena.getProtection()[0] != null && arena.getProtection()[1] != null) {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.protected") + " " +
                                 Broadcast.get("commands.check-yes"))
                 );
             }
             else {
-                sender.sendMessage(Broadcast.TAG + SMeth.setColours(
+                sender.sendMessage(Broadcast.TAG + SMethods.setColours(
                         Broadcast.get("commands.protected") + " " +
                                 Broadcast.get("commands.check-no"))
                 );

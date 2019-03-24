@@ -3,7 +3,7 @@ package nl.sugcube.crystalquest.io;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.CrystalQuestTeam;
-import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.sba.SMethods;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -39,7 +39,7 @@ public class SaveData {
      */
     public static void saveLobbySpawn() {
         try {
-            plugin.getData().set("lobby-spawn", SMeth.toLocationString(plugin.arenaManager.getLobby()));
+            plugin.getData().set("lobby-spawn", SMethods.toLocationString(plugin.arenaManager.getLobby()));
             plugin.saveData();
         }
         catch (Exception ignored) {
@@ -64,7 +64,7 @@ public class SaveData {
             data.set(pfx + "team-lobby", null);
             for (CrystalQuestTeam team : arena.getTeams()) {
                 Location lobby = arena.getLobbySpawn(team);
-                data.set(pfx + "team-lobby." + team.getName(), SMeth.toLocationString(lobby));
+                data.set(pfx + "team-lobby." + team.getName(), SMethods.toLocationString(lobby));
             }
 
             data.set(pfx + "state", arena.isEnabled());
@@ -76,8 +76,8 @@ public class SaveData {
             if (arena.getProtection() != null) {
                 if (arena.getProtection()[0] != null && arena.getProtection()[1] != null) {
                     List<String> list = new ArrayList<>();
-                    list.add(SMeth.toLocationString(arena.getProtection()[0]));
-                    list.add(SMeth.toLocationString(arena.getProtection()[1]));
+                    list.add(SMethods.toLocationString(arena.getProtection()[0]));
+                    list.add(SMethods.toLocationString(arena.getProtection()[1]));
                     data.set(pfx + "protection", list);
                 }
                 else {
@@ -96,7 +96,7 @@ public class SaveData {
                 }
 
                 List<String> teamSpawnsStrings = teamSpawns.stream()
-                        .map(SMeth::toLocationString)
+                        .map(SMethods::toLocationString)
                         .collect(Collectors.toList());
 
                 data.set(pfx + "team-spawns." + team.getName(), teamSpawnsStrings);
@@ -133,7 +133,7 @@ public class SaveData {
         if (list != null) {
             for (Location loc : list) {
                 if (loc != null) {
-                    stringList.add(SMeth.toLocationString(loc));
+                    stringList.add(SMethods.toLocationString(loc));
                 }
             }
         }
@@ -150,7 +150,7 @@ public class SaveData {
     public static List<String> toStringList(List<Location> list) {
         List<String> stringList = new ArrayList<>();
         for (Location loc : list) {
-            stringList.add(SMeth.toLocationString(loc));
+            stringList.add(SMethods.toLocationString(loc));
         }
         return stringList;
     }
@@ -167,7 +167,7 @@ public class SaveData {
         for (Sign s : list) {
             if (s != null) {
                 Location loc = s.getLocation();
-                stringList.add(SMeth.toLocationStringSign(loc));
+                stringList.add(SMethods.toLocationStringSign(loc));
             }
         }
         return stringList;

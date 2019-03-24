@@ -7,7 +7,7 @@ import org.bukkit.Location;
 /**
  * @author SugarCaney
  */
-public final class SMeth {
+public final class SMethods {
 
     /**
      * Converts a string into a location. Useful if you're using extern data storage.
@@ -129,7 +129,7 @@ public final class SMeth {
                 replace("&r", ChatColor.RESET + "");
     }
 
-    private SMeth() {
+    private SMethods() {
         throw new AssertionError("Noop");
     }
 }

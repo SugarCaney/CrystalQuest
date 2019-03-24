@@ -2,7 +2,7 @@ package nl.sugcube.crystalquest;
 
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.ArenaManager;
-import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.sba.SMethods;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -56,7 +56,7 @@ public class SignHandler {
                     }
                     else if (a.isInGame() && !a.isEndGame()) {
                         s.setLine(3, ChatColor.DARK_RED + "In Game");
-                        s.setLine(2, SMeth.toTime(a.getTimeLeft()) + " left");
+                        s.setLine(2, SMethods.toTime(a.getTimeLeft()) + " left");
                         s.setLine(1, ChatColor.ITALIC + a.getName());
                         s.setLine(0, ChatColor.AQUA + "" + ChatColor.BOLD + "CQ-Spectate");
                     }

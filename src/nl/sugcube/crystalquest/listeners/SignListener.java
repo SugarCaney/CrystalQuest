@@ -4,7 +4,7 @@ import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.CrystalQuestTeam;
-import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.sba.SMethods;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -84,7 +84,7 @@ public class SignListener implements Listener {
                             }
                             else if (a.isInGame()) {
                                 e.setLine(3, ChatColor.DARK_RED + "In Game");
-                                e.setLine(2, SMeth.toTime(a.getTimeLeft()) + " left");
+                                e.setLine(2, SMethods.toTime(a.getTimeLeft()) + " left");
                                 e.setLine(1, ChatColor.ITALIC + a.getName());
                                 e.setLine(0, ChatColor.AQUA + "" + ChatColor.BOLD + "CQ-Spectate");
                             }

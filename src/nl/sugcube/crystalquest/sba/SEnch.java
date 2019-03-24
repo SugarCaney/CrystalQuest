@@ -1,10 +1,13 @@
 package nl.sugcube.crystalquest.sba;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 
 /**
  * @author SugarCaney
+ * @deprecated Use {@link Enchantment#getByKey(NamespacedKey)} instead.
  */
+@Deprecated
 public final class SEnch {
 
     private static final Enchantment[] ENCHANTMENTS = Enchantment.values();

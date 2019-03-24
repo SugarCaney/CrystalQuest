@@ -1,9 +1,9 @@
-package nl.sugcube.crystalquest.sba;
+package nl.sugcube.crystalquest.util;
 
 /**
  * @author SugarCaney
  */
-public enum SDura {
+public enum Durabilities {
 
     WOOD((short)60),
     STONE((short)132),
@@ -40,7 +40,7 @@ public enum SDura {
 
     private final short durability;
 
-    SDura(short durability) {
+    Durabilities(short durability) {
         this.durability = durability;
     }
 

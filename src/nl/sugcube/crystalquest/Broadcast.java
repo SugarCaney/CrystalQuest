@@ -1,6 +1,6 @@
 package nl.sugcube.crystalquest;
 
-import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.sba.SMethods;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -10,8 +10,8 @@ import org.bukkit.command.CommandSender;
 public class Broadcast {
 
     public static CrystalQuest plugin;
-    public static String TAG = SMeth.setColours("&7[&dCrystalQuest&7]: &e");
-    public static String HELP = SMeth.setColours("&7[&dCQ-?&7]: ");
+    public static String TAG = SMethods.setColours("&7[&dCrystalQuest&7]: &e");
+    public static String HELP = SMethods.setColours("&7[&dCQ-?&7]: ");
     public static String HOWDEY = "Howdey!";
     public static String NO_PERMISSION;
     public static String ONLY_IN_GAME;
@@ -37,12 +37,12 @@ public class Broadcast {
     }
 
     public static void setMessages() {
-        NO_PERMISSION = SMeth.setColours(plugin.getLang().getString("broadcast.no-permission"));
-        ONLY_IN_GAME = SMeth.setColours(plugin.getLang().getString("broadcast.only-in-game"));
+        NO_PERMISSION = SMethods.setColours(plugin.getLang().getString("broadcast.no-permission"));
+        ONLY_IN_GAME = SMethods.setColours(plugin.getLang().getString("broadcast.only-in-game"));
     }
 
     public static String get(String s) {
-        return SMeth.setColours(plugin.getLang().getString(s));
+        return SMethods.setColours(plugin.getLang().getString(s));
     }
 
 }

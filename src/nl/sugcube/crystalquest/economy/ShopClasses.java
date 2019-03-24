@@ -3,7 +3,7 @@ package nl.sugcube.crystalquest.economy;
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Classes;
-import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.sba.SMethods;
 import nl.sugcube.crystalquest.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -54,13 +54,13 @@ public class ShopClasses implements Listener {
                         Items.hideAllFlags(icon);
                         ItemMeta im = icon.getItemMeta();
                         String name = plugin.getConfig().getString("kit." + key + ".name");
-                        im.setDisplayName(SMeth.setColours(name));
+                        im.setDisplayName(SMethods.setColours(name));
 
                         if (plugin.getConfig().getString("kit." + key + ".lore") != "") {
                             List<String> lore = new ArrayList<>();
                             String[] lines = plugin.getConfig().getString("kit." + key + ".lore").split("%nl%");
                             for (String str : lines) {
-                                lore.add(SMeth.setColours(str));
+                                lore.add(SMethods.setColours(str));
                             }
 
                             lore.add("");

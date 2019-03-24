@@ -6,7 +6,7 @@ import nl.sugcube.crystalquest.events.ArenaStartEvent;
 import nl.sugcube.crystalquest.events.PlayerJoinArenaEvent;
 import nl.sugcube.crystalquest.events.PlayerLeaveArenaEvent;
 import nl.sugcube.crystalquest.events.TeamWinGameEvent;
-import nl.sugcube.crystalquest.sba.SMeth;
+import nl.sugcube.crystalquest.sba.SMethods;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -623,8 +623,8 @@ public class Arena {
      */
     public void updateTimer() {
         this.points.setDisplayName(
-                SMeth.setColours(
-                        "&c" + Broadcast.get("arena.time-left") + " &f" + SMeth.toTime(timeLeft)
+                SMethods.setColours(
+                        "&c" + Broadcast.get("arena.time-left") + " &f" + SMethods.toTime(timeLeft)
                 )
         );
     }
@@ -1664,7 +1664,7 @@ public class Arena {
             player.sendMessage(Broadcast.TAG + Broadcast.get("arena.started"));
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20F, 20F);
             player.sendMessage(Broadcast.TAG + Broadcast.get("arena.using-class")
-                    .replace("%class%", SMeth.setColours(plugin.getConfig().getString(
+                    .replace("%class%", SMethods.setColours(plugin.getConfig().getString(
                             "kit." + plugin.inventoryManager.playerClass.get(player.getUniqueId()) + ".name"))));
         }
 

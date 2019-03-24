@@ -1,7 +1,7 @@
 package nl.sugcube.crystalquest.items;
 
 import nl.sugcube.crystalquest.Broadcast;
-import nl.sugcube.crystalquest.sba.SDura;
+import nl.sugcube.crystalquest.util.Durabilities;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -11,11 +11,11 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public enum WandType {
 
-    MAGMA(0, Material.GOLDEN_HOE, "wand.magma", SDura.GOLD.getDurability(), "wand.regen-fire"),
-    TELEPORT(1, Material.STONE_HOE, "wand.teleport", SDura.STONE.getDurability(), "wand.regen-teleport"),
-    HEAL(2, Material.WOODEN_HOE, "wand.heal", SDura.WOOD.getDurability(), "wand.regen-healing"),
-    FREEZE(3, Material.DIAMOND_HOE, "wand.freeze", SDura.DIAMOND.getDurability(), "wand.regen-ice"),
-    WITHER(4, Material.STONE_AXE, "wand.wither", SDura.STONE.getDurability(), "wand.regen-wither");
+    MAGMA(0, Material.GOLDEN_HOE, "wand.magma", Durabilities.GOLD.getDurability(), "wand.regen-fire"),
+    TELEPORT(1, Material.STONE_HOE, "wand.teleport", Durabilities.STONE.getDurability(), "wand.regen-teleport"),
+    HEAL(2, Material.WOODEN_HOE, "wand.heal", Durabilities.WOOD.getDurability(), "wand.regen-healing"),
+    FREEZE(3, Material.DIAMOND_HOE, "wand.freeze", Durabilities.DIAMOND.getDurability(), "wand.regen-ice"),
+    WITHER(4, Material.STONE_AXE, "wand.wither", Durabilities.STONE.getDurability(), "wand.regen-wither");
 
     private final int id;
     private final Material material;
