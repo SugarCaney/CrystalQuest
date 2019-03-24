@@ -140,7 +140,7 @@ public class GameLoop implements Runnable {
             }
 
             // Check out of bounds: kill
-            if (!plugin.prot.isInProtectedArenaIgnoreY(player.getLocation())) {
+            if (!plugin.protection.isInProtectedArenaIgnoreY(player.getLocation())) {
                 if (player.getHealth() > 0) {
                     player.setHealth(0);
                 }
@@ -162,11 +162,11 @@ public class GameLoop implements Runnable {
                     Damageable meta = (Damageable)is.getItemMeta();
                     if (meta.getDamage() > 0) {
                         double multiplier = 1;
-                        if (plugin.ab.getAbilities().containsKey(player.getUniqueId())) {
-                            if (plugin.ab.getAbilities().get(player.getUniqueId()).contains("magical_aura")) {
+                        if (plugin.ability.getAbilities().containsKey(player.getUniqueId())) {
+                            if (plugin.ability.getAbilities().get(player.getUniqueId()).contains("magical_aura")) {
                                 multiplier = 2.1;
                             }
-                            else if (plugin.ab.getAbilities().get(player.getUniqueId()).contains("power_loss")) {
+                            else if (plugin.ability.getAbilities().get(player.getUniqueId()).contains("power_loss")) {
                                 multiplier = 0.6;
                             }
                         }

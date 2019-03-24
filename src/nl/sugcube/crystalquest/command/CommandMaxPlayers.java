@@ -25,10 +25,10 @@ public class CommandMaxPlayers extends CrystalQuestCommand {
         try {
             Arena arena;
             try {
-                arena = plugin.am.getArena(Integer.parseInt(arguments[0]) - 1);
+                arena = plugin.arenaManager.getArena(Integer.parseInt(arguments[0]) - 1);
             }
             catch (Exception e) {
-                arena = plugin.am.getArena(arguments[0]);
+                arena = plugin.arenaManager.getArena(arguments[0]);
             }
 
             // Check if the arenas exists.

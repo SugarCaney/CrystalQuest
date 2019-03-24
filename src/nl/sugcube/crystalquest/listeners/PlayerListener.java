@@ -60,7 +60,7 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        if (plugin.prot.isInProtectedArena(p.getLocation())) {
+        if (plugin.protection.isInProtectedArena(p.getLocation())) {
             if (!plugin.getArenaManager().isInGame(p)) {
                 p.teleport(plugin.getArenaManager().getLobby());
             }
@@ -131,7 +131,7 @@ public class PlayerListener implements Listener {
         }
 
         Block block = event.getClickedBlock();
-        if (!plugin.prot.isInProtectedArena(block.getLocation())) {
+        if (!plugin.protection.isInProtectedArena(block.getLocation())) {
             return;
         }
 
@@ -161,7 +161,7 @@ public class PlayerListener implements Listener {
         if (plugin.getArenaManager().isInGame(p)) {
             Location loc = e.getTo();
             if (plugin.getArenaManager().getArena(p.getUniqueId()).getSpectators().contains(p.getUniqueId())) {
-                if (!plugin.prot.isInProtectedArena(loc)) {
+                if (!plugin.protection.isInProtectedArena(loc)) {
                     e.setCancelled(true);
                 }
             }
@@ -239,8 +239,8 @@ public class PlayerListener implements Listener {
 
                         //Check for ability doublejump_boost
                         double addedVelocity = 0.9518;
-                        if (plugin.ab.getAbilities().containsKey(player.getUniqueId())) {
-                            if (plugin.ab.getAbilities().get(player.getUniqueId()).contains
+                        if (plugin.ability.getAbilities().containsKey(player.getUniqueId())) {
+                            if (plugin.ability.getAbilities().get(player.getUniqueId()).contains
                                     ("doublejump_boost")) {
                                 addedVelocity = 1.0982;
                             }
@@ -390,8 +390,8 @@ public class PlayerListener implements Listener {
     public void onEntityDamage(EntityDamageEvent e) {
         if (e.getEntity() instanceof Player) {
             Player p = (Player)e.getEntity();
-            if (plugin.am.isInGame(p)) {
-                if (!plugin.am.getArena(p.getUniqueId()).isInGame() || plugin.am.getArena(p.getUniqueId()).isEndGame()) {
+            if (plugin.arenaManager.isInGame(p)) {
+                if (!plugin.arenaManager.getArena(p.getUniqueId()).isInGame() || plugin.arenaManager.getArena(p.getUniqueId()).isEndGame()) {
                     e.setCancelled(true);
                 }
                 else {
@@ -410,7 +410,7 @@ public class PlayerListener implements Listener {
     public void onFoodLevelChange(FoodLevelChangeEvent e) {
         if (e.getEntity() instanceof Player) {
             Player p = (Player)e.getEntity();
-            if (plugin.am.isInGame(p)) {
+            if (plugin.arenaManager.isInGame(p)) {
                 p.setFoodLevel(20);
                 p.setSaturation(20F);
             }
@@ -420,7 +420,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent e) {
         Player p = e.getPlayer();
-        if (plugin.am.isInGame(p)) {
+        if (plugin.arenaManager.isInGame(p)) {
             e.setCancelled(true);
         }
     }
@@ -428,9 +428,9 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        if (plugin.am.isInGame(player)) {
+        if (plugin.arenaManager.isInGame(player)) {
             player.getInventory().clear();
-            plugin.im.setClassInventory(player);
+            plugin.inventoryManager.setClassInventory(player);
             Random ran = new Random();
             Arena arena = plugin.getArenaManager().getArena(player.getUniqueId());
 
@@ -454,8 +454,8 @@ public class PlayerListener implements Listener {
             player.setLevel(0);
             player.setExp(0);
 
-            if (plugin.ab.getAbilities().containsKey(player.getUniqueId())) {
-                if (plugin.ab.getAbilities().get(player.getUniqueId()).contains("health_boost")) {
+            if (plugin.ability.getAbilities().containsKey(player.getUniqueId())) {
+                if (plugin.ability.getAbilities().get(player.getUniqueId()).contains("health_boost")) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 36000, 0));
                 }
             }
@@ -466,7 +466,7 @@ public class PlayerListener implements Listener {
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
             Player target = (Player)e.getDamager();
-            if (plugin.am.isInGame((Player)e.getDamager())) {
+            if (plugin.arenaManager.isInGame((Player)e.getDamager())) {
                 if (plugin.getArenaManager().getArena(target.getUniqueId()).isEndGame()) {
                     e.setCancelled(true);
                 }
@@ -497,7 +497,7 @@ public class PlayerListener implements Listener {
                 e.getArena().setIsCounting(true);
                 e.getArena().setCountdown(plugin.getConfig().getInt("arena.countdown"));
                 plugin.signHandler.updateSigns();
-                plugin.menuPT.updateMenu(e.getArena());
+                plugin.menuPickTeam.updateMenu(e.getArena());
             }
         }
         else {
@@ -514,7 +514,7 @@ public class PlayerListener implements Listener {
         if (!e.getPlayer().hasPermission("crystalquest.admin") && !e.getPlayer().hasPermission("crystalquest.staff")) {
             if (!e.getMessage().equalsIgnoreCase("/cq quit") && !e.getMessage().equalsIgnoreCase("/cq leave") &&
                     !e.getMessage().equalsIgnoreCase("/cq class")) {
-                if (plugin.am.isInGame(e.getPlayer())) {
+                if (plugin.arenaManager.isInGame(e.getPlayer())) {
                     e.setCancelled(true);
                     e.getPlayer().sendMessage(Broadcast.get("arena.no-commands"));
                 }
@@ -527,7 +527,7 @@ public class PlayerListener implements Listener {
      */
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
-        if (plugin.am.isInGame(e.getPlayer())) {
+        if (plugin.arenaManager.isInGame(e.getPlayer())) {
             e.setCancelled(true);
         }
     }
@@ -537,7 +537,7 @@ public class PlayerListener implements Listener {
      */
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
-        if (plugin.am.isInGame(e.getPlayer())) {
+        if (plugin.arenaManager.isInGame(e.getPlayer())) {
             e.setCancelled(true);
         }
     }
@@ -549,14 +549,14 @@ public class PlayerListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent e) {
         if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
             Player p = e.getPlayer();
-            if (plugin.am.isInGame(p)) {
+            if (plugin.arenaManager.isInGame(p)) {
                 e.setCancelled(true);
             }
         }
 
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Player p = e.getPlayer();
-            if (plugin.am.isInGame(p)) {
+            if (plugin.arenaManager.isInGame(p)) {
                 if (p.getInventory().getItemInMainHand().getType() == Material.TNT) {
                     Location loc = p.getLocation().add(0, 1, 0);
                     TNTPrimed tnt = loc.getWorld().spawn(loc, TNTPrimed.class);

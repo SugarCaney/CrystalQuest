@@ -72,7 +72,7 @@ public class SignListener implements Listener {
                 }
                 else {
                     try {
-                        Arena a = plugin.am.getArena(e.getLine(1).replace(ChatColor.ITALIC + "", ""));
+                        Arena a = plugin.arenaManager.getArena(e.getLine(1).replace(ChatColor.ITALIC + "", ""));
 
                         if (a.isEnabled()) {
                             if (a.isCounting()) {
@@ -154,7 +154,7 @@ public class SignListener implements Listener {
 					 */
                     if (s.getLine(2).equalsIgnoreCase(ChatColor.DARK_PURPLE + "Pick a Class") ||
                             s.getLine(2).equalsIgnoreCase(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Pick a Class")) {
-                        plugin.menuSC.openMenu(e.getPlayer());
+                        plugin.menuSelectClass.openMenu(e.getPlayer());
 
                     }
 					/*
@@ -165,7 +165,7 @@ public class SignListener implements Listener {
                         if (e.getPlayer().hasPermission("crystalquest.admin") ||
                                 e.getPlayer().hasPermission("crystalquest.staff") ||
                                 e.getPlayer().hasPermission("crystalquest.spectate")) {
-                            plugin.menuSA.showMenu(e.getPlayer());
+                            plugin.menuSpectate.showMenu(e.getPlayer());
                         }
                         else {
                             e.getPlayer().sendMessage(Broadcast.get("sign.no-permission"));
@@ -185,7 +185,7 @@ public class SignListener implements Listener {
                     else if (s.getLine(2).equalsIgnoreCase(ChatColor.DARK_RED + "Lobby") ||
                             s.getLine(2).equalsIgnoreCase(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Lobby")) {
                         if (plugin.getArenaManager().isInGame(e.getPlayer())) {
-                            plugin.am.getArena(e.getPlayer().getUniqueId()).removePlayer(e.getPlayer());
+                            plugin.arenaManager.getArena(e.getPlayer().getUniqueId()).removePlayer(e.getPlayer());
                             e.getPlayer().sendMessage(Broadcast.TAG + Broadcast.get("sign.left"));
                         }
                         else {
@@ -226,8 +226,8 @@ public class SignListener implements Listener {
                                 }
 
                                 if (a != null) {
-                                    plugin.menuPT.updateMenu(a);
-                                    plugin.menuPT.showMenu(e.getPlayer(), a);
+                                    plugin.menuPickTeam.updateMenu(a);
+                                    plugin.menuPickTeam.showMenu(e.getPlayer(), a);
                                     break;
                                 }
 
@@ -256,8 +256,8 @@ public class SignListener implements Listener {
                         Arena a = plugin.getArenaManager().getArena(s.getLine(1).replace(ChatColor.ITALIC + "", ""));
                         if (a != null) {
                             if (!a.isFull()) {
-                                plugin.menuPT.updateMenu(a);
-                                plugin.menuPT.showMenu(e.getPlayer(), a);
+                                plugin.menuPickTeam.updateMenu(a);
+                                plugin.menuPickTeam.showMenu(e.getPlayer(), a);
                             }
                             else {
                                 e.getPlayer().sendMessage(Broadcast.get("arena.full"));

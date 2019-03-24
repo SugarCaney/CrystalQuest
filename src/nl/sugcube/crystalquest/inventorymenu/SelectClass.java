@@ -75,7 +75,7 @@ public class SelectClass {
             }
         }
 
-        plugin.im.setPlayerClass(player, chosenClass);
+        plugin.inventoryManager.setPlayerClass(player, chosenClass);
     }
 
     /**
@@ -119,7 +119,7 @@ public class SelectClass {
 		 * Fills the inventory with the avaiable classes.
 		 */
         for (String className : classes) {
-            ItemStack icon = plugin.sh.toItemStack(plugin.getConfig().getString("kit." + className + ".icon"));
+            ItemStack icon = plugin.stringHandler.toItemStack(plugin.getConfig().getString("kit." + className + ".icon"));
             ItemMeta im = icon.getItemMeta();
             String name = plugin.getConfig().getString("kit." + className + ".name");
             im.setDisplayName(SMeth.setColours(name));

@@ -45,7 +45,7 @@ public class LoadData {
      */
     public static void loadLobbySpawn() {
         if (plugin.getData().getString("lobby-spawn") != null) {
-            plugin.am.setLobby(SMeth.toLocation(plugin.getData().getString("lobby-spawn")));
+            plugin.arenaManager.setLobby(SMeth.toLocation(plugin.getData().getString("lobby-spawn")));
         }
     }
 

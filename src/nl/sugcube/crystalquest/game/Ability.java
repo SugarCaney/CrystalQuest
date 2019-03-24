@@ -68,10 +68,10 @@ public class Ability implements Listener {
         if (!plugin.getArenaManager().isInGame(p)) {
             return;
         }
-        if (!plugin.ab.getAbilities().containsKey(p.getUniqueId())) {
+        if (!plugin.ability.getAbilities().containsKey(p.getUniqueId())) {
             return;
         }
-        if (!plugin.ab.getAbilities().get(p.getUniqueId()).contains("last_revenge")) {
+        if (!plugin.ability.getAbilities().get(p.getUniqueId()).contains("last_revenge")) {
             return;
         }
 
@@ -121,17 +121,17 @@ public class Ability implements Listener {
             return;
         }
 
-        if (!plugin.ab.getAbilities().containsKey(p.getUniqueId())) {
+        if (!plugin.ability.getAbilities().containsKey(p.getUniqueId())) {
             return;
         }
 
-        if (!plugin.ab.getAbilities().get(p.getUniqueId()).contains("explosive_arrows")) {
+        if (!plugin.ability.getAbilities().get(p.getUniqueId()).contains("explosive_arrows")) {
             return;
         }
 
         World w = e.getEntity().getWorld();
         Location loc = e.getEntity().getLocation();
-        if (!plugin.prot.isInProtectedArena(loc)) {
+        if (!plugin.protection.isInProtectedArena(loc)) {
             return;
         }
 
@@ -149,8 +149,8 @@ public class Ability implements Listener {
             return;
         }
 
-        List<String> ability = plugin.ab.getAbilities().get(p.getUniqueId());
-        if (!plugin.ab.getAbilities().containsKey(p.getUniqueId())) {
+        List<String> ability = plugin.ability.getAbilities().get(p.getUniqueId());
+        if (!plugin.ability.getAbilities().containsKey(p.getUniqueId())) {
             return;
         }
         if (ability.contains("agility")) {
@@ -168,21 +168,21 @@ public class Ability implements Listener {
         if (ability.contains("jump_boost")) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 160, 1));
         }
-        if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("health_boost")) {
+        if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("health_boost")) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 36000, 0));
         }
-        if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("slowness")) {
+        if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("slowness")) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 0));
         }
-        if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("weakness")) {
+        if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("weakness")) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 160, 0));
         }
-        if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("water_healing")) {
+        if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("water_healing")) {
             if (p.getLocation().getBlock().getType() == Material.WATER) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 2));
             }
         }
-        if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("corroding")) {
+        if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("corroding")) {
             if (p.getLocation().getBlock().getType() == Material.WATER) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, 1));
             }
@@ -203,13 +203,13 @@ public class Ability implements Listener {
             if (!plugin.getArenaManager().isInGame(damager)) {
                 return;
             }
-            if (!plugin.ab.getAbilities().containsKey(damager.getUniqueId())) {
+            if (!plugin.ability.getAbilities().containsKey(damager.getUniqueId())) {
                 return;
             }
-            if (plugin.ab.getAbilities().get(damager.getUniqueId()).contains("poison")) {
+            if (plugin.ability.getAbilities().get(damager.getUniqueId()).contains("poison")) {
                 target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0));
             }
-            else if (plugin.ab.getAbilities().get(damager.getUniqueId()).contains("drain")) {
+            else if (plugin.ability.getAbilities().get(damager.getUniqueId()).contains("drain")) {
                 if (target instanceof Player) {
                     if (plugin.getArenaManager().getTeam((Player)target) ==
                             plugin.getArenaManager().getTeam(damager)) {
@@ -226,13 +226,13 @@ public class Ability implements Listener {
             }
             Player damager = (Player)((Arrow)e.getDamager()).getShooter();
 
-            if (!plugin.getArenaManager().isInGame(damager) || !plugin.ab.getAbilities().containsKey(damager.getUniqueId())) {
+            if (!plugin.getArenaManager().isInGame(damager) || !plugin.ability.getAbilities().containsKey(damager.getUniqueId())) {
                 return;
             }
-            if (plugin.ab.getAbilities().get(damager.getUniqueId()).contains("poison")) {
+            if (plugin.ability.getAbilities().get(damager.getUniqueId()).contains("poison")) {
                 target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 0));
             }
-            else if (plugin.ab.getAbilities().get(damager.getUniqueId()).contains("return_arrow")) {
+            else if (plugin.ability.getAbilities().get(damager.getUniqueId()).contains("return_arrow")) {
                 if (target instanceof Player) {
                     if (plugin.getArenaManager().getTeam((Player)target) == plugin.getArenaManager().getTeam(damager)) {
                         return;

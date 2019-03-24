@@ -183,7 +183,7 @@ public class ItemListener implements Listener {
                 if (fb.getBlockData().getMaterial().equals(Material.ANVIL) ||
                         fb.getBlockData().getMaterial().equals(Material.CHIPPED_ANVIL) ||
                         fb.getBlockData().getMaterial().equals(Material.DAMAGED_ANVIL)) {
-                    if (plugin.prot.isInProtectedArena(fb.getLocation())) {
+                    if (plugin.protection.isInProtectedArena(fb.getLocation())) {
                         fb.getLocation().getWorld().playSound(fb.getLocation(), Sound.BLOCK_ANVIL_LAND,
                                 2F, 2F);
                         fb.remove();
@@ -191,7 +191,7 @@ public class ItemListener implements Listener {
                     }
                 }
                 else if (fb.getBlockData().getMaterial().equals(Material.LAVA)) {
-                    if (plugin.prot.isInProtectedArena(fb.getLocation())) {
+                    if (plugin.protection.isInProtectedArena(fb.getLocation())) {
                         fb.remove();
                         event.setCancelled(true);
                     }

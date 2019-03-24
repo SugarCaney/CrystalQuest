@@ -782,7 +782,7 @@ public class Arena {
             p.sendMessage("    " + winningTeam + " " + Broadcast.get("arena.won"));
             p.sendMessage(colour + "<>---------------------------<>");
 
-            if (plugin.am.getTeam(p).equals(winningTeam)) {
+            if (plugin.arenaManager.getTeam(p).equals(winningTeam)) {
                 winningPlayers.add(p.getUniqueId());
             }
         }
@@ -873,7 +873,7 @@ public class Arena {
                     if ((e instanceof Item || e instanceof ExperienceOrb || e instanceof Arrow ||
                             e instanceof EnderCrystal || e instanceof LivingEntity) &&
                             !(e instanceof Player)) {
-                        if (plugin.prot.isInProtectedArena(e.getLocation())) {
+                        if (plugin.protection.isInProtectedArena(e.getLocation())) {
                             toRemove.add(e);
                         }
                     }
@@ -940,7 +940,7 @@ public class Arena {
         }
 
         try {
-            p.teleport(plugin.am.getLobby());
+            p.teleport(plugin.arenaManager.getLobby());
         }
         catch (Exception e) {
             plugin.getLogger().info("Lobby-spawn not set!");
@@ -952,15 +952,15 @@ public class Arena {
         }
 
         playerTeams.remove(p.getUniqueId());
-        plugin.im.restoreInventory(p);
-        plugin.im.playerClass.remove(p.getUniqueId());
+        plugin.inventoryManager.restoreInventory(p);
+        plugin.inventoryManager.playerClass.remove(p.getUniqueId());
         spectators.remove(p.getUniqueId());
 
         if (p.getGameMode() != GameMode.CREATIVE) {
             p.setAllowFlight(false);
         }
 
-        plugin.ab.getAbilities().remove(p.getUniqueId());
+        plugin.ability.getAbilities().remove(p.getUniqueId());
         p.setFireTicks(0);
         Bukkit.getPluginManager().callEvent(new PlayerLeaveArenaEvent(p, this));
 
@@ -1001,7 +1001,7 @@ public class Arena {
                         }
                         p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                         p.setScoreboard(this.score);
-                        plugin.im.setInGameInventory(p);
+                        plugin.inventoryManager.setInGameInventory(p);
 
                         if (spectate) {
                             preSpecGamemodes.put(p.getUniqueId(), p.getGameMode());
@@ -1034,7 +1034,7 @@ public class Arena {
                             }
                         }
 
-                        plugin.menuPT.updateMenu(this);
+                        plugin.menuPickTeam.updateMenu(this);
 
                         if (!spectate) {
                             for (UUID id : getPlayers()) {
@@ -1072,9 +1072,9 @@ public class Arena {
             Player player = Bukkit.getPlayer(id);
             try {
                 player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-                plugin.im.restoreInventory(player);
+                plugin.inventoryManager.restoreInventory(player);
                 try {
-                    player.teleport(plugin.am.getLobby());
+                    player.teleport(plugin.arenaManager.getLobby());
                 }
                 catch (Exception e) {
                     plugin.getLogger().info("Lobby-spawn not set!");
@@ -1090,11 +1090,11 @@ public class Arena {
             Player player = Bukkit.getPlayer(id);
             try {
                 player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-                plugin.im.restoreInventory(player);
+                plugin.inventoryManager.restoreInventory(player);
                 player.setGameMode(preSpecGamemodes.get(player.getUniqueId()));
                 preSpecGamemodes.remove(player.getUniqueId());
                 try {
-                    player.teleport(plugin.am.getLobby());
+                    player.teleport(plugin.arenaManager.getLobby());
                 }
                 catch (Exception e) {
                     plugin.getLogger().info("Lobby-spawn not set!");
@@ -1532,10 +1532,10 @@ public class Arena {
         catch (Exception ignored) {
         }
 
-        if (plugin.am.getArena(name) == null) {
+        if (plugin.arenaManager.getArena(name) == null) {
             this.name = name;
             this.teamMenu = Bukkit.createInventory(null, 9, "Pick Team: " + this.getName());
-            plugin.menuPT.updateMenu(this);
+            plugin.menuPickTeam.updateMenu(this);
             plugin.signHandler.updateSigns();
             return true;
         }
@@ -1660,12 +1660,12 @@ public class Arena {
 
         for (UUID id : getPlayers()) {
             Player player = Bukkit.getPlayer(id);
-            plugin.im.setClassInventory(player);
+            plugin.inventoryManager.setClassInventory(player);
             player.sendMessage(Broadcast.TAG + Broadcast.get("arena.started"));
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20F, 20F);
             player.sendMessage(Broadcast.TAG + Broadcast.get("arena.using-class")
                     .replace("%class%", SMeth.setColours(plugin.getConfig().getString(
-                            "kit." + plugin.im.playerClass.get(player.getUniqueId()) + ".name"))));
+                            "kit." + plugin.inventoryManager.playerClass.get(player.getUniqueId()) + ".name"))));
         }
 
         setInGame(true);

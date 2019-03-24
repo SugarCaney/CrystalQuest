@@ -45,8 +45,8 @@ public class DeathMessages implements Listener {
             int crystals = ran.nextInt(7) + 2;
             for (int i = 0; i < crystals; i++) {
                 int chance = 0;
-                if (plugin.ab.getAbilities().containsKey(p.getUniqueId())) {
-                    if (plugin.ab.getAbilities().get(p.getUniqueId()).contains("less_death_crystals")) {
+                if (plugin.ability.getAbilities().containsKey(p.getUniqueId())) {
+                    if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("less_death_crystals")) {
                         chance = 1;
                     }
                 }

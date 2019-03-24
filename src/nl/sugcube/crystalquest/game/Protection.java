@@ -210,9 +210,9 @@ public class Protection implements Listener {
             p.sendMessage(Broadcast.TAG + Broadcast.get("commands.pos-set")
                     .replace("%pos%", "1")
                     .replace("%coords%", String.format("(%.1f, %.1f, %.1f)",
-                            plugin.prot.pos1.getX(),
-                            plugin.prot.pos1.getY(),
-                            plugin.prot.pos1.getZ()
+                            plugin.protection.pos1.getX(),
+                            plugin.protection.pos1.getY(),
+                            plugin.protection.pos1.getZ()
                     )));
         }
         else {
@@ -220,9 +220,9 @@ public class Protection implements Listener {
             p.sendMessage(Broadcast.TAG + Broadcast.get("commands.pos-set")
                     .replace("%pos%", "2")
                     .replace("%coords%", String.format("(%.1f, %.1f, %.1f)",
-                            plugin.prot.pos2.getX(),
-                            plugin.prot.pos2.getY(),
-                            plugin.prot.pos2.getZ()
+                            plugin.protection.pos2.getX(),
+                            plugin.protection.pos2.getY(),
+                            plugin.protection.pos2.getZ()
                     )));
         }
     }

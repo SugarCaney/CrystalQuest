@@ -29,10 +29,10 @@ public class CommandTeamLobby extends CrystalQuestCommand {
         try {
             Arena arena;
             try {
-                arena = plugin.am.getArena(Integer.parseInt(arguments[0]) - 1);
+                arena = plugin.arenaManager.getArena(Integer.parseInt(arguments[0]) - 1);
             }
             catch (NumberFormatException nfe) {
-                arena = plugin.am.getArena(arguments[0]);
+                arena = plugin.arenaManager.getArena(arguments[0]);
             }
 
             CrystalQuestTeam team = CrystalQuestTeam.valueOfName(arguments[1]);

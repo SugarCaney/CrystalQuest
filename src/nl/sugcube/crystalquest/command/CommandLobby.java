@@ -19,12 +19,12 @@ public class CommandLobby extends CrystalQuestCommand {
         Player player = (Player)sender;
 
         // Check in game.
-        if (plugin.am.isInGame(player)) {
+        if (plugin.arenaManager.isInGame(player)) {
             sender.sendMessage(Broadcast.get("commands.lobby-already-ingame"));
             return;
         }
 
-        player.teleport(plugin.am.getLobby());
+        player.teleport(plugin.arenaManager.getLobby());
         player.sendMessage(Broadcast.TAG + Broadcast.get("commands.lobby-tp"));
     }
 

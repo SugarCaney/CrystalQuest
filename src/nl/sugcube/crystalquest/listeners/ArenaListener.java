@@ -47,7 +47,7 @@ public class ArenaListener implements Listener {
         Player player = event.getPlayer();
         if (event.getCause() == TeleportCause.ENDER_PEARL) {
             if (plugin.getArenaManager().isInGame(player)) {
-                if (!plugin.prot.isInProtectedArena(event.getTo())) {
+                if (!plugin.protection.isInProtectedArena(event.getTo())) {
                     event.setCancelled(true);
                 }
             }
@@ -59,7 +59,7 @@ public class ArenaListener implements Listener {
         if (!plugin.getConfig().getBoolean("arena.blood") || !(event.getEntity() instanceof LivingEntity)) {
             return;
         }
-        if (!plugin.prot.isInProtectedArena(event.getEntity().getLocation())) {
+        if (!plugin.protection.isInProtectedArena(event.getEntity().getLocation())) {
             return;
         }
 

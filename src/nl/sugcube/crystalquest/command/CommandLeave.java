@@ -23,13 +23,13 @@ public class CommandLeave extends CrystalQuestCommand {
         Player player = (Player)sender;
 
         // Check in game.
-        if (!plugin.am.isInGame(player)) {
+        if (!plugin.arenaManager.isInGame(player)) {
             player.sendMessage(Broadcast.get("commands.not-in-game"));
             return;
         }
 
         // Leave the game.
-        plugin.am.getArena(player.getUniqueId()).removePlayer(player);
+        plugin.arenaManager.getArena(player.getUniqueId()).removePlayer(player);
         player.sendMessage(Broadcast.TAG + Broadcast.get("commands.game-leave"));
     }
 

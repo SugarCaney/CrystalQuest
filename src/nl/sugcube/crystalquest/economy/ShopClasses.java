@@ -50,7 +50,7 @@ public class ShopClasses implements Listener {
             if (plugin.getConfig().isSet("kit." + key + ".price")) {
                 if (plugin.getConfig().getInt("kit." + key + ".price") > 0) {
                     if (!Classes.hasPermission(p, key)) {
-                        ItemStack icon = plugin.sh.toItemStack(plugin.getConfig().getString("kit." + key + ".icon"));
+                        ItemStack icon = plugin.stringHandler.toItemStack(plugin.getConfig().getString("kit." + key + ".icon"));
                         Items.hideAllFlags(icon);
                         ItemMeta im = icon.getItemMeta();
                         String name = plugin.getConfig().getString("kit." + key + ".name");
@@ -127,7 +127,7 @@ public class ShopClasses implements Listener {
                         }
                         else if (!name.contains(ChatColor.GREEN + "Crystals: " + ChatColor.GOLD) &&
                                 item.getType() != Material.EMERALD) {
-                            String techName = plugin.menuSC.getTechnicalClassName(name);
+                            String techName = plugin.menuSelectClass.getTechnicalClassName(name);
                             int price = plugin.getConfig().getInt("kit." + techName + ".price");
 
                             if (economy.getBalance().canAfford(p, price)) {

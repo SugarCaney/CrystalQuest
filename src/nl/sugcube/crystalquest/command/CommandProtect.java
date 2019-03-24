@@ -25,10 +25,10 @@ public class CommandProtect extends CrystalQuestCommand {
     protected void executeImpl(CrystalQuest plugin, CommandSender sender, String... arguments) {
         Arena arena;
         try {
-            arena = plugin.am.getArena(Integer.parseInt(arguments[0]) - 1);
+            arena = plugin.arenaManager.getArena(Integer.parseInt(arguments[0]) - 1);
         }
         catch (Exception e) {
-            arena = plugin.am.getArena(arguments[0]);
+            arena = plugin.arenaManager.getArena(arguments[0]);
         }
 
         // Check if the arenas exists.
@@ -49,7 +49,7 @@ public class CommandProtect extends CrystalQuestCommand {
 
         // Protect
         try {
-            plugin.prot.protectArena(arena);
+            plugin.protection.protectArena(arena);
             sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.protect-succeed")
                     .replace("%arena%", arguments[1]));
         }

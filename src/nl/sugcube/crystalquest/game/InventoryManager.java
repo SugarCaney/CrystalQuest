@@ -117,27 +117,27 @@ public class InventoryManager {
 
             //Checking if there is a piece of team-armour
             if (s.contains("team_helmet")) {
-                ItemStack helmet = plugin.sh.toItemStack(s.replace("team_helmet", "leatherhelmet"));
-                getColourLeather(helmet, plugin.am.getTeam(player));
+                ItemStack helmet = plugin.stringHandler.toItemStack(s.replace("team_helmet", "leatherhelmet"));
+                getColourLeather(helmet, plugin.arenaManager.getTeam(player));
                 player.getInventory().setHelmet(helmet);
             }
             else if (s.contains("team_chestplate")) {
-                ItemStack chestplate = plugin.sh.toItemStack(s.replace("team_chestplate", "leatherchestplate"));
-                getColourLeather(chestplate, plugin.am.getTeam(player));
+                ItemStack chestplate = plugin.stringHandler.toItemStack(s.replace("team_chestplate", "leatherchestplate"));
+                getColourLeather(chestplate, plugin.arenaManager.getTeam(player));
                 player.getInventory().setChestplate(chestplate);
             }
             else if (s.contains("team_leggings")) {
-                ItemStack leggings = plugin.sh.toItemStack(s.replace("team_leggings", "leatherleggings"));
-                getColourLeather(leggings, plugin.am.getTeam(player));
+                ItemStack leggings = plugin.stringHandler.toItemStack(s.replace("team_leggings", "leatherleggings"));
+                getColourLeather(leggings, plugin.arenaManager.getTeam(player));
                 player.getInventory().setLeggings(leggings);
             }
             else if (s.contains("team_boots")) {
-                ItemStack boots = plugin.sh.toItemStack(s.replace("team_boots", "leatherboots"));
-                getColourLeather(boots, plugin.am.getTeam(player));
+                ItemStack boots = plugin.stringHandler.toItemStack(s.replace("team_boots", "leatherboots"));
+                getColourLeather(boots, plugin.arenaManager.getTeam(player));
                 player.getInventory().setBoots(boots);
             }
             else {
-                ItemStack is = plugin.sh.toItemStack(s);
+                ItemStack is = plugin.stringHandler.toItemStack(s);
 
                 //Auto-equip Armour
                 if (Materials.ARMOUR_HELMETS.contains(is.getType()) || is.getType() == Material.PLAYER_HEAD) {
@@ -178,7 +178,7 @@ public class InventoryManager {
         if (plugin.getConfig().getString("kit." + this.playerClass.get(player.getUniqueId()) + ".ability") != null) {
             List<String> abi = plugin.getConfig().getStringList("kit." + this.playerClass.get(player.getUniqueId()) +
                     ".ability");
-            plugin.ab.getAbilities().put(player.getUniqueId(), abi);
+            plugin.ability.getAbilities().put(player.getUniqueId(), abi);
         }
 
     }

@@ -20,7 +20,7 @@ public class CommandSetLobby extends CrystalQuestCommand {
 
     @Override
     protected void executeImpl(CrystalQuest plugin, CommandSender sender, String... arguments) {
-        plugin.am.setLobby(((Player)sender).getLocation());
+        plugin.arenaManager.setLobby(((Player)sender).getLocation());
         sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.lobbyspawn"));
     }
 

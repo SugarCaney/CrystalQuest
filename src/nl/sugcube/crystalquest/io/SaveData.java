@@ -39,7 +39,7 @@ public class SaveData {
      */
     public static void saveLobbySpawn() {
         try {
-            plugin.getData().set("lobby-spawn", SMeth.toLocationString(plugin.am.getLobby()));
+            plugin.getData().set("lobby-spawn", SMeth.toLocationString(plugin.arenaManager.getLobby()));
             plugin.saveData();
         }
         catch (Exception ignored) {
@@ -52,7 +52,7 @@ public class SaveData {
     public static void saveArenas() {
         FileConfiguration data = plugin.getData();
 
-        for (Arena arena : plugin.am.arenas) {
+        for (Arena arena : plugin.arenaManager.arenas) {
             String pfx = "arena." + arena.getId() + ".";
             data.set(pfx + "name", arena.getName());
             data.set(pfx + "teams", arena.getTeams().stream()

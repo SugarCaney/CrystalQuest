@@ -87,8 +87,8 @@ public class SignHandler {
             }
         }
 
-        plugin.menuSA.updateMenu();
-        plugin.menuPT.updateMenus();
+        plugin.menuSpectate.updateMenu();
+        plugin.menuPickTeam.updateMenus();
     }
 
     /**

@@ -26,7 +26,7 @@ public class InventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (plugin.am.isInGame((Player)event.getWhoClicked())) {
+        if (plugin.arenaManager.isInGame((Player)event.getWhoClicked())) {
             event.setCancelled(true);
         }
         if (event.getCurrentItem() == null) {
@@ -56,7 +56,7 @@ public class InventoryListener implements Listener {
 
         if (event.getCurrentItem().hasItemMeta()) {
             if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
-                Arena a = plugin.am.getArena(event.getCurrentItem().getItemMeta().getDisplayName()
+                Arena a = plugin.arenaManager.getArena(event.getCurrentItem().getItemMeta().getDisplayName()
                         .replace(ChatColor.AQUA + "Spectate ", ""));
                 a.addPlayer((Player)event.getWhoClicked(), CrystalQuestTeam.SPECTATOR, true);
             }
@@ -72,14 +72,14 @@ public class InventoryListener implements Listener {
         if (event.getCurrentItem().hasItemMeta()) {
             if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
                 if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("Random Class")) {
-                    plugin.im.playerClass.remove(player.getUniqueId());
+                    plugin.inventoryManager.playerClass.remove(player.getUniqueId());
                     player.sendMessage(Broadcast.TAG + Broadcast.get("arena.random-class"));
                 }
                 else {
-                    String techName = plugin.menuSC.getTechnicalClassName(
+                    String techName = plugin.menuSelectClass.getTechnicalClassName(
                             event.getCurrentItem().getItemMeta().getDisplayName());
                     if (Classes.hasPermission(player, techName)) {
-                        plugin.im.setPlayerClass(player, techName);
+                        plugin.inventoryManager.setPlayerClass(player, techName);
                         player.sendMessage(Broadcast.TAG + Broadcast.get("arena.chosen-class")
                                 .replace("%class%", event.getCurrentItem().getItemMeta().getDisplayName()));
                     }
@@ -98,7 +98,7 @@ public class InventoryListener implements Listener {
                 Player player = (Player)event.getWhoClicked();
                 player.closeInventory();
 
-                Arena a = plugin.am.getArena(event.getInventory().getName().replace("Pick Team: ", ""));
+                Arena a = plugin.arenaManager.getArena(event.getInventory().getName().replace("Pick Team: ", ""));
                 String displayName = "";
                 CrystalQuestTeam team = null;
 
@@ -130,7 +130,7 @@ public class InventoryListener implements Listener {
                 }
 
                 a.addPlayer(player, team, false);
-                plugin.menuPT.updateMenus();
+                plugin.menuPickTeam.updateMenus();
             }
             catch (Exception exeption) {
                 exeption.printStackTrace();

@@ -32,14 +32,14 @@ public class CommandKick extends CrystalQuestCommand {
         }
 
         // Check in game.
-        if (!plugin.am.isInGame(player)) {
+        if (!plugin.arenaManager.isInGame(player)) {
             sender.sendMessage(Broadcast.get("commands.kick-not-ingame")
                     .replace("%player%", player.getName()));
             return;
         }
 
         // Kick player.
-        plugin.am.getArena(player.getUniqueId()).removePlayer(player);
+        plugin.arenaManager.getArena(player.getUniqueId()).removePlayer(player);
         player.sendMessage(Broadcast.TAG + Broadcast.get("commands.kick-kicked"));
         sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.kick-you-kicked")
                 .replace("%player%", player.getName()));

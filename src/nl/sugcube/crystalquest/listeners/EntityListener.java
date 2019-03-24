@@ -60,7 +60,7 @@ public class EntityListener implements Listener {
             }
         }
 
-        if (plugin.prot.isInProtectedArena(ent.getLocation())) {
+        if (plugin.protection.isInProtectedArena(ent.getLocation())) {
             e.getDrops().clear();
         }
     }
@@ -68,13 +68,13 @@ public class EntityListener implements Listener {
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent e) {
         if (e.getEntity() instanceof Fireball) {
-            if (plugin.prot.isInProtectedArena(e.getEntity().getLocation())) {
+            if (plugin.protection.isInProtectedArena(e.getEntity().getLocation())) {
                 e.setCancelled(true);
             }
         }
 
         if (e.getEntity() instanceof EnderCrystal) {
-            if (plugin.prot.isInProtectedArena(e.getEntity().getLocation())) {
+            if (plugin.protection.isInProtectedArena(e.getEntity().getLocation())) {
                 e.setCancelled(true);
                 Location loc = e.getLocation();
                 loc.getWorld().createExplosion(loc.getX(), loc.getY() + 2, loc.getZ(), 5.0F, false, false);
@@ -111,7 +111,7 @@ public class EntityListener implements Listener {
             }
         }
         else if (e.getEntity() instanceof Creeper) {
-            if (plugin.prot.isInProtectedArena(e.getEntity().getLocation())) {
+            if (plugin.protection.isInProtectedArena(e.getEntity().getLocation())) {
                 e.setCancelled(true);
                 Location loc = e.getLocation();
                 loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 4.0F, false, false);
@@ -131,7 +131,7 @@ public class EntityListener implements Listener {
             for (Arena a : plugin.getArenaManager().getArenas()) {
                 Creeper toRemove = null;
                 for (Creeper c : a.getGameCreepers()) {
-                    if (c == e.getEntity() || plugin.prot.isInProtectedArena(c.getLocation())) {
+                    if (c == e.getEntity() || plugin.protection.isInProtectedArena(c.getLocation())) {
                         e.setCancelled(true);
                         Location loc = e.getLocation();
                         loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 4.0F, false, false);
@@ -178,14 +178,14 @@ public class EntityListener implements Listener {
                 if (((Projectile)e.getDamager()).getShooter() instanceof Player) {
                     Projectile proj = (Projectile)e.getDamager();
                     Player player = (Player)proj.getShooter();
-                    if (plugin.am.isInGame(player)) {
+                    if (plugin.arenaManager.isInGame(player)) {
                         isForGame = true;
                         isValid = false;
                     }
                 }
             }
             else if (e.getDamager() instanceof Player) {
-                if (plugin.am.isInGame(((Player)e.getDamager()))) {
+                if (plugin.arenaManager.isInGame(((Player)e.getDamager()))) {
                     isForGame = true;
                     isValid = true;
                 }
@@ -220,7 +220,7 @@ public class EntityListener implements Listener {
                             }
                         }
 
-                        plugin.am.getArena(pl.getUniqueId()).addScore(plugin.am.getTeam(pl), (int)multi);
+                        plugin.arenaManager.getArena(pl.getUniqueId()).addScore(plugin.arenaManager.getTeam(pl), (int)multi);
                         e.getEntity().remove();
 
                         Firework f = e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), Firework.class);
@@ -228,7 +228,7 @@ public class EntityListener implements Listener {
                         fm.setPower(0);
                         FireworkEffect fe = FireworkEffect.builder()
                                 .flicker(true)
-                                .withColor(plugin.am.getTeam(pl).getColour())
+                                .withColor(plugin.arenaManager.getTeam(pl).getColour())
                                 .build();
                         fm.clearEffects();
                         fm.addEffect(fe);

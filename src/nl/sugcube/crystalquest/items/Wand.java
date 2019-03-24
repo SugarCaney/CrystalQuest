@@ -130,7 +130,7 @@ public class Wand implements Listener {
                 Set<Material> targetSet = null;
                 Location loc = player.getTargetBlock(targetSet, 64).getLocation().add(0, 1, 0);
                 if (loc.getBlock().getType() == Material.AIR) {
-                    if (plugin.prot.isInProtectedArena(loc)) {
+                    if (plugin.protection.isInProtectedArena(loc)) {
                         boolean isInBounds = false;
                         double dX = player.getLocation().getX() - loc.getX();
                         double dY = player.getLocation().getY() - loc.getY();

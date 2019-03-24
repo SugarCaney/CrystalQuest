@@ -36,7 +36,7 @@ public class CrystalQuestAPI {
      * @return (boolean) True if within, false if not
      */
     public static boolean isInProtectedArena(Location loc) {
-        return plugin.prot.isInProtectedArena(loc);
+        return plugin.protection.isInProtectedArena(loc);
     }
 
     /**

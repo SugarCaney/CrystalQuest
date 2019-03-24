@@ -38,7 +38,7 @@ public class CommandClass extends CrystalQuestCommand {
 
         // Open class selection menu.
         player.sendMessage(Broadcast.TAG + Broadcast.get("commands.class"));
-        plugin.menuSC.openMenu(player);
+        plugin.menuSelectClass.openMenu(player);
     }
 
     @Override

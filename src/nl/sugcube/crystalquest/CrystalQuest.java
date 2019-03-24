@@ -33,12 +33,12 @@ import java.util.logging.Level;
  */
 public class CrystalQuest extends JavaPlugin {
 
-    public ArenaManager am;
-    public PickTeam menuPT;
-    public InventoryManager im;
-    public StringHandler sh;
-    public SelectClass menuSC;
-    public SpectateArena menuSA;
+    public ArenaManager arenaManager;
+    public PickTeam menuPickTeam;
+    public InventoryManager inventoryManager;
+    public StringHandler stringHandler;
+    public SelectClass menuSelectClass;
+    public SpectateArena menuSpectate;
     public CrystalQuestCommandManager commandExecutor;
     public Broadcast broadcast;
     public SaveData saveData;
@@ -49,19 +49,19 @@ public class CrystalQuest extends JavaPlugin {
     public CurseListener curseListener;
     public Classes classes;
     public Economy economy;
-    public Ability ab;
+    public Ability ability;
 
     public Teams teams;
-    public PluginManager pm;
-    public Protection prot;
+    public PluginManager pluginManager;
+    public Protection protection;
     public DeathMessages deathListener;
-    public EntityListener entityL;
-    public InventoryListener inventoryL;
-    public PlayerListener playerL;
-    public SignListener signL;
-    public ItemListener ppiL;
-    public ProjectileListener projL;
-    public ArenaListener arenaL;
+    public EntityListener entityListener;
+    public InventoryListener inventoryListener;
+    public PlayerListener playerListener;
+    public SignListener signListener;
+    public ItemListener itemListener;
+    public ProjectileListener projectileListener;
+    public ArenaListener arenaListener;
     public Wand wand;
 
     public void onEnable() {
@@ -115,52 +115,52 @@ public class CrystalQuest extends JavaPlugin {
          * END
 		 */
 
-        am = new ArenaManager(this);
-        menuPT = new PickTeam(this);
-        im = new InventoryManager(this);
-        sh = new StringHandler(this);
-        menuSC = new SelectClass(this);
-        menuSA = new SpectateArena(this);
+        arenaManager = new ArenaManager(this);
+        menuPickTeam = new PickTeam(this);
+        inventoryManager = new InventoryManager(this);
+        stringHandler = new StringHandler(this);
+        menuSelectClass = new SelectClass(this);
+        menuSpectate = new SpectateArena(this);
         commandExecutor = new CrystalQuestCommandManager(this);
         broadcast = new Broadcast(this);
         saveData = new SaveData(this);
         loadData = new LoadData(this);
-        signHandler = new SignHandler(this, am);
+        signHandler = new SignHandler(this, arenaManager);
         itemHandler = new ItemHandler(this);
         particleHandler = new ParticleHandler(this);
         classes = new Classes(this);
-        prot = new Protection(this);
+        protection = new Protection(this);
         deathListener = new DeathMessages(this);
-        entityL = new EntityListener(this);
-        inventoryL = new InventoryListener(this);
-        playerL = new PlayerListener(this);
-        signL = new SignListener(this);
-        ppiL = new ItemListener(this);
-        projL = new ProjectileListener(this);
-        arenaL = new ArenaListener(this);
+        entityListener = new EntityListener(this);
+        inventoryListener = new InventoryListener(this);
+        playerListener = new PlayerListener(this);
+        signListener = new SignListener(this);
+        itemListener = new ItemListener(this);
+        projectileListener = new ProjectileListener(this);
+        arenaListener = new ArenaListener(this);
         wand = new Wand(this);
         teams = new Teams(this);
         curseListener = new CurseListener(this);
         PluginDescriptionFile pdfFile = this.getDescription();
-        this.pm = getServer().getPluginManager();
+        this.pluginManager = getServer().getPluginManager();
         this.economy = new Economy(this);
-        this.ab = new Ability(this);
+        this.ability = new Ability(this);
 
 		/*
          * Registering Events:
 		 */
-        pm.registerEvents(entityL, this);
-        pm.registerEvents(inventoryL, this);
-        pm.registerEvents(playerL, this);
-        pm.registerEvents(signL, this);
-        pm.registerEvents(ppiL, this);
-        pm.registerEvents(projL, this);
-        pm.registerEvents(deathListener, this);
-        pm.registerEvents(prot, this);
-        pm.registerEvents(ab, this);
-        pm.registerEvents(wand, this);
-        pm.registerEvents(arenaL, this);
-        this.economy.registerEvents(pm);
+        pluginManager.registerEvents(entityListener, this);
+        pluginManager.registerEvents(inventoryListener, this);
+        pluginManager.registerEvents(playerListener, this);
+        pluginManager.registerEvents(signListener, this);
+        pluginManager.registerEvents(itemListener, this);
+        pluginManager.registerEvents(projectileListener, this);
+        pluginManager.registerEvents(deathListener, this);
+        pluginManager.registerEvents(protection, this);
+        pluginManager.registerEvents(ability, this);
+        pluginManager.registerEvents(wand, this);
+        pluginManager.registerEvents(arenaListener, this);
+        this.economy.registerEvents(pluginManager);
 
 		/*
          * Registering Commands
@@ -174,9 +174,9 @@ public class CrystalQuest extends JavaPlugin {
 		 * Starting the game-loops
 		 * Initialize all arenas
 		 */
-        am.registerGameLoop();
-        am.registerCrystalSpawningSequence();
-        am.registerItemSpawningSequence();
+        arenaManager.registerGameLoop();
+        arenaManager.registerCrystalSpawningSequence();
+        arenaManager.registerItemSpawningSequence();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new ParticleHandler(this), 1L, 1L);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, curseListener, 20L, 20L);
         signHandler.startSignUpdater();
@@ -209,7 +209,7 @@ public class CrystalQuest extends JavaPlugin {
 		/*
 		 * Resets all arenas and makes sure everything is ready to go.
 		 */
-        for (Arena a : am.getArenas()) {
+        for (Arena a : arenaManager.getArenas()) {
             a.resetArena(true);
         }
 
@@ -226,14 +226,14 @@ public class CrystalQuest extends JavaPlugin {
 		/*
 		 * Kicks players from game on reload.
 		 */
-        for (Arena a : am.arenas) {
+        for (Arena a : arenaManager.arenas) {
             a.removePlayers();
         }
 		
 		/*
 		 * Reset all arenas
 		 */
-        for (Arena a : am.getArenas()) {
+        for (Arena a : arenaManager.getArenas()) {
             a.resetArena(false);
         }
 		
@@ -354,7 +354,7 @@ public class CrystalQuest extends JavaPlugin {
      * @return (InventoryManager) The plugin's inventory manager.
      */
     public InventoryManager getInventoryManager() {
-        return this.im;
+        return this.inventoryManager;
     }
 
     /**
@@ -363,7 +363,7 @@ public class CrystalQuest extends JavaPlugin {
      * @return (ArenaManager) The plugin's arenas manager.
      */
     public ArenaManager getArenaManager() {
-        return this.am;
+        return this.arenaManager;
     }
 
 }

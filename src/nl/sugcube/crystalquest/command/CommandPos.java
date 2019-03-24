@@ -27,24 +27,24 @@ public class CommandPos extends CrystalQuestCommand {
 
         // Position 1.
         if ("1".equalsIgnoreCase(position)) {
-            plugin.prot.pos1 = player.getLocation();
+            plugin.protection.pos1 = player.getLocation();
             sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.pos-set")
                     .replace("%pos%", arguments[0])
                     .replace("%coords%", String.format("(%.1f, %.1f, %.1f)",
-                            plugin.prot.pos1.getX(),
-                            plugin.prot.pos1.getY(),
-                            plugin.prot.pos1.getZ()
+                            plugin.protection.pos1.getX(),
+                            plugin.protection.pos1.getY(),
+                            plugin.protection.pos1.getZ()
                     )));
         }
         // Position 2.
         else if ("2".equalsIgnoreCase(position)) {
-            plugin.prot.pos2 = player.getLocation();
+            plugin.protection.pos2 = player.getLocation();
             sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.pos-set")
                     .replace("%pos%", arguments[0])
                     .replace("%coords%", String.format("(%.1f, %.1f, %.1f)",
-                            plugin.prot.pos2.getX(),
-                            plugin.prot.pos2.getY(),
-                            plugin.prot.pos2.getZ()
+                            plugin.protection.pos2.getX(),
+                            plugin.protection.pos2.getY(),
+                            plugin.protection.pos2.getZ()
                     )));
         }
         // Unknown position.
