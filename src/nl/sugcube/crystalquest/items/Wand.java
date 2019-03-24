@@ -17,6 +17,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -94,7 +95,7 @@ public class Wand implements Listener {
          * WAND: MAGMA
          */
         if (getWandType(player.getInventory().getItemInMainHand()) == WandType.MAGMA) {
-            if (((Damageable)player.getInventory().getItemInMainHand()).getDamage() == 0) {
+            if (((Damageable)player.getInventory().getItemInMainHand().getItemMeta()).getDamage() == 0) {
                 Fireball fb = player.launchProjectile(Fireball.class);
                 fb.setVelocity(player.getLocation().getDirection().multiply(3));
 
@@ -116,7 +117,7 @@ public class Wand implements Listener {
                     }
                 }
 
-                ((Damageable)player.getInventory().getItemInMainHand()).setDamage(WandType.MAGMA.getDurability());
+                resetDurability(player.getInventory().getItemInMainHand(), WandType.MAGMA);
             }
 
             return;
@@ -126,7 +127,7 @@ public class Wand implements Listener {
          * WAND: TELEPORT
          */
         if (getWandType(player.getInventory().getItemInMainHand()) == WandType.TELEPORT) {
-            if (((Damageable)player.getInventory().getItemInMainHand()).getDamage() == 0) {
+            if (((Damageable)player.getInventory().getItemInMainHand().getItemMeta()).getDamage() == 0) {
                 Set<Material> targetSet = null;
                 Location loc = player.getTargetBlock(targetSet, 64).getLocation().add(0, 1, 0);
                 if (loc.getBlock().getType() == Material.AIR) {
@@ -148,7 +149,7 @@ public class Wand implements Listener {
                             player.teleport(loc);
                             player.playEffect(player.getLocation(), Effect.ENDER_SIGNAL, null);
                             player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1F, 1F);
-                            ((Damageable)player.getInventory().getItemInMainHand()).setDamage(WandType.TELEPORT.getDurability());
+                            resetDurability(player.getInventory().getItemInMainHand(), WandType.TELEPORT);
                         }
                     }
                 }
@@ -161,7 +162,7 @@ public class Wand implements Listener {
          * WAND: HEAL
          */
         if (getWandType(player.getInventory().getItemInMainHand()) == WandType.HEAL) {
-            if (((Damageable)player.getInventory().getItemInMainHand()).getDamage() != 0) {
+            if (((Damageable)player.getInventory().getItemInMainHand().getItemMeta()).getDamage() != 0) {
                 return;
             }
 
@@ -182,7 +183,7 @@ public class Wand implements Listener {
                 }
             }
 
-            ((Damageable)player.getInventory().getItemInMainHand()).setDamage(WandType.HEAL.getDurability());
+            resetDurability(player.getInventory().getItemInMainHand(), WandType.HEAL);
 
             return;
         }
@@ -191,7 +192,7 @@ public class Wand implements Listener {
          * WAND: FREEZE
          */
         if (getWandType(player.getInventory().getItemInMainHand()) == WandType.FREEZE) {
-            if (((Damageable)player.getInventory().getItemInMainHand()).getDamage() != 0) {
+            if (((Damageable)player.getInventory().getItemInMainHand().getItemMeta()).getDamage() != 0) {
                 return;
             }
 
@@ -213,7 +214,7 @@ public class Wand implements Listener {
                     }
                 }
             }
-            ((Damageable)player.getInventory().getItemInMainHand()).setDamage(WandType.FREEZE.getDurability());
+            resetDurability(player.getInventory().getItemInMainHand(), WandType.FREEZE);
 
             return;
         }
@@ -222,7 +223,7 @@ public class Wand implements Listener {
          * WAND: WITHER
          */
         if (getWandType(player.getInventory().getItemInMainHand()) == WandType.WITHER) {
-            if (((Damageable)player.getInventory().getItemInMainHand()).getDamage() == 0) {
+            if (((Damageable)player.getInventory().getItemInMainHand().getItemMeta()).getDamage() == 0) {
                 WitherSkull ws = player.launchProjectile(WitherSkull.class);
                 ws.setVelocity(player.getLocation().getDirection().multiply(3));
 
@@ -245,9 +246,14 @@ public class Wand implements Listener {
                     }
                 }
 
-                ((Damageable)player.getInventory().getItemInMainHand()).setDamage(WandType.WITHER.getDurability());
+                resetDurability(player.getInventory().getItemInMainHand(), WandType.WITHER);
             }
         }
     }
 
+    private void resetDurability(ItemStack wandItem, WandType wandType) {
+        ItemMeta meta = wandItem.getItemMeta();
+        ((Damageable)meta).setDamage(wandType.getDurability());
+        wandItem.setItemMeta(meta);
+    }
 }

@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Random;
 import java.util.UUID;
@@ -159,8 +160,9 @@ public class GameLoop implements Runnable {
             // Wands
             for (ItemStack is : player.getInventory().getContents()) {
                 if (plugin.wand.getWandType(is) != null) {
-                    Damageable meta = (Damageable)is.getItemMeta();
-                    if (meta.getDamage() > 0) {
+                    ItemMeta meta = is.getItemMeta();
+                    Damageable damageable = (Damageable)meta;
+                    if (damageable.getDamage() > 0) {
                         double multiplier = 1;
                         if (plugin.ability.getAbilities().containsKey(player.getUniqueId())) {
                             if (plugin.ability.getAbilities().get(player.getUniqueId()).contains("magical_aura")) {
@@ -177,14 +179,15 @@ public class GameLoop implements Runnable {
                         WandType type = plugin.wand.getWandType(is);
                         int addedDura = (int)(type.getDurability() / plugin.getConfig().getInt(type.getRegenConfig()) * multiplier);
                         int newDurability;
-                        if (meta.getDamage() - addedDura < 0) {
+                        if (damageable.getDamage() - addedDura < 0) {
                             newDurability = 0;
                         }
                         else {
-                            newDurability = meta.getDamage() - addedDura;
+                            newDurability = damageable.getDamage() - addedDura;
                         }
-                        meta.setDamage(newDurability);
+                        damageable.setDamage(newDurability);
                     }
+                    is.setItemMeta(meta);
                 }
             }
         }

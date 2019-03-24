@@ -5,12 +5,12 @@ arena:
   countdown: 30
   game-length: 600
   after-count: 15
-  crystal-spawn-chance: 18
-  item-spawn-chance: 120
+  crystal-spawn-chance: 20
+  item-spawn-chance: 100
   team-colour-prefix: true
   force-even-teams: true
   blood: true
-  blood-material: redstoneblock
+  blood-material: redstone_block
   chat-silence: false
 wand:
   regen-fire: 6 
@@ -26,102 +26,147 @@ shop:
 kit:
   default:
     name: '&dCrystal Hunter'
-    icon: eyeofender
-    lore: '&7The default class%nl%&f&7Used to smash some butt!'
-    arenas:
-    - -1vs1
+    icon: ender_eye
+    lore: '&7&oThe default class%nl%&f&7&oUses sword and bow.'
     items:
-    - team_helmet
-    - team_chestplate
-    - team_leggings
-    - team_boots
-    - woodsword;Crystal Smasher,1,0,unbreaking,10
-    - bow,1,0,infinity,1,unbreaking,10
-    - arrow,1
+      - team_helmet
+      - team_chestplate
+      - team_leggings
+      - team_boots
+      - wooden_sword;Crystal Smasher,1,[e unbreaking;10]
+      - bow,1,[e infinity;1;unbreaking;10]
+      - arrow,1
   archer:
     name: '&aArcher'
     icon: bow
-    lore: '&2&oRanged Blood'
-    arenas:
-    - -1vs1
+    lore: '&7&oRanged Blood'
     items:
-    - team_helmet
-    - leatherchestplate
-    - leatherleggings
-    - leatherboots
-    - bow,1,0,power,1,punch,2,infinity,1,sharpness,1
-    - arrow,1
+      - team_helmet
+      - leather_chestplate
+      - leather_leggings
+      - leather_boots
+      - bow,1,[e power;1;punch;1;infinity;1;sharpness;1]
+      - arrow,1
   knight:
     name: '&7Knight'
-    icon: stonesword
-    lore: '&b&oMedieval Madness'
-    arenas:
-    - -1vs1
+    icon: stone_sword
+    lore: '&7&oMedieval Madness'
     items:
-     - chainmailhelmet
-     - chainmailchestplate
-     - team_leggings
-     - chainmailboots
-     - stonesword,1,0,unbreaking,10,sharpness,1
+      - chainmail_helmet
+      - chainmail_chestplate
+      - team_leggings
+      - chainmail_boots
+      - stone_sword,1,[e sharpness;1;unbreaking;10]
   fishtfight:
     name: '&bFishtFight'
-    icon: rawfish
-    lore: '&9&oFlippin Heck Mun!%nl%%nl%&9Ability: &bWater Healing'
+    icon: cod
+    lore: '&7&oFlippin Heck Mun!%nl%%nl%&9Ability: &bWater Healing'
     ability:
-     - water_healing
+      - water_healing
     items:
-     - team_helmet
-     - rawfish;&bWay too smelling fish
+      - team_helmet
+      - cod;&bWay too smelly fish,1,[e knockback;1]
   tnt:
-    name: '&a[VIP] &4TNT'
+    name: '&a&l&oVIP &4TNT'
     icon: tnt
-    lore: '&cBLOW IT ALL UP!!!%nl%%nl%&9Ability: &bExplosive Arrows'
+    lore: '&7&oPoofs and booms.%nl%%nl%&9Ability: &bExplosive Arrows'
     ability:
-    - explosive_arrows
-    arenas:
-    - -1vs1
+      - explosive_arrows
     items:
-     - woodsword,1,0,unbreaking,10,knockback,1
-     - bow,1
-     - potion,64,16428
-     - tnt,8
-     - arrow;Flying Bombs,16
-     - goldenhelmet,1,0,blastprotection,2,unbreaking,10
-     - team_boots,1,0,blastprotection,2,unbreaking,10
-     - team_chestplate,1,0,blastprotection,2,unbreaking,10
-     - team_leggings,1,0,blastprotection,2,unbreaking,10
+      - wooden_sword,1,[e knockback;1;unbreaking;10]
+      - bow,1
+      - splash_potion,64,[p instant_damage;0;1]
+      - tnt,8
+      - arrow;Flying Bombs,16
+      - golden_helmet,1,[e blast_protection;2;unbreaking;10]
+      - team_boots,1,[e blast_protection;2;unbreaking;10]
+      - team_chestplate,1,[e blast_protection;2;unbreaking;10]
+      - team_leggings,1,[e blast_protection;2;unbreaking;10]
   ranger:
-    name: '&a[VIP] &2Ranger'
-    icon: leatherchestplate,1,0,protection,5
-    lore: '&aChild of Mother Nature%nl%%nl%&9Ability: &bDouble-Jump Boost%nl%&9Ability: &bAgility'
+    name: '&a&l&oVIP &2Ranger'
+    icon: leather_chestplate
+    lore: '&7&oChild of Mother Nature%nl%%nl%&9Ability: &bDouble-Jump Boost%nl%&9Ability:
+      &bAgility'
     ability:
-    - doublejump_boost
-    - agility
-    arenas:
-    - -1vs1
+      - doublejump_boost
+      - agility
     items:
-     - team_helmet,1,0,protection,5,unbreaking,10
-     - leatherchestplate,1
-     - leatherboots,1
-     - leatherleggings,1
-     - woodsword,1,0
-     - bow,1,0,unbreaking,10,power,2,punch,2,infinity,1
-     - arrow,1
-     - bone;&fWolfie &c<3,3
+      - team_helmet,1,[e protection;5;unbreaking;10]
+      - leather_chestplate,1
+      - leather_boots,1
+      - leather_leggings,1
+      - wooden_sword,1,[e unbreaking;10]
+      - bow,1,[e infinity;1;punch;2;power;2;unbreaking;10]
+      - arrow,1
+      - bone;&fWolfie &c<3,3
   iron-golem:
-    name: '&a[VIP] &6Iron Golem'
-    icon: pumpkin,1,0,sharpness,1
-    lore: '&aOnly the strongest will survive%nl%%nl%&9Ability: &bHealth Boost%nl%&9Weakness: &bWater'
+    name: '&a&l&oVIP &6Iron Golem'
+    icon: carved_pumpkin
+    lore: '&7&oOnly the strongest will survive%nl%%nl%&9Ability: &bHealth Boost%nl%&9Weakness:
+      &bWater'
     ability:
-    - health_boost
-    - corroding
-    arenas:
-    - -1vs1
+      - health_boost
+      - corroding
     items:
-    - team_helmet
-    - ironchestplate,1,0,protection,1
-    - ironleggings,1,0,protection,1
-    - team_boots
-    - ironsword,1,0,unbreaking,10
-    - bow,1,0,infinity,1,unbreaking,10
-    - arrow,1
+      - team_helmet
+      - iron_chestplate,1,[e protection;1]
+      - iron_leggings,1,[e protection;1]
+      - team_boots
+      - iron_sword,1,[e unbreaking;10]
+      - bow,1,[e infinity;1;unbreaking;10]
+      - arrow,1
+  priest:
+    name: '&a&l&oVIP &aPriest'
+    icon: blaze_rod
+    lore: '&7&oBlesses to impress'
+    items:
+      - wand_healing,1,[e sharpness;3;unbreaking;10]
+      - wand_ice,1,[e sharpness;3;unbreaking;10]
+      - wand_ender,1,[e sharpness;3;unbreaking;10]
+      - team_helmet,1,[e protection;2]
+      - team_chestplate,1,[e protection;1]
+      - team_leggings
+      - team_boots
+  fire-wizard:
+    name: '&a&l&oVIP &cFire Wizard'
+    icon: golden_hoe,1,[e sharpness;2]
+    lore: '&7&oUses the magic of fire to slay their opponents%nl%%nl%&9Ability: &bLast Revenge%nl%&9Ability: &bFaster Recharge%nl%%nl%&9Weakness: &bWater'
+    ability:
+      - last_revenge
+      - magical_aura
+      - corroding
+    items:
+      - wand_fire,1,[e sharpness;2;unbreaking;10]
+      - team_helmet,1,[e protection;2;fire_protection;2]
+      - team_chestplate
+      - team_leggings
+      - team_boots
+  voldemort:
+    name: '&a&l&oVIP &2Voldemort'
+    icon: stone_axe,1,[e sharpness;2]
+    lore: '&7&oHe-Who-Must-Not-Be-Named%nl%&7&ocorrupts anyone within his reach%nl%%nl%&9Ability: &bDrain%nl%&9Ability: &bFaster Recharge'
+    ability:
+      - magical_aura
+      - drain
+    items:
+      - wand_wither,1,[e unbreaking;10]
+      - team_helmet
+      - team_chestplate
+      - team_leggings
+      - team_boots
+  multi-wizard:
+    name: '&a&l&oVIP &dMerlin'
+    icon: diamond_hoe,1,[e sharpness;2]
+    lore: '&7&oThe master of the magicians.%nl%&7&oUses all wands, but with longer recharge.%nl%%nl%&9Weakness: &bLonger Recharge'
+    ability:
+      - power_loss
+    items:
+      - wand_fire,1,[e sharpness;2;unbreaking;10]
+      - wand_ender,1,[e sharpness;2;unbreaking;10]
+      - wand_healing,1,[e sharpness;2;unbreaking;10]
+      - wand_ice,1,[e sharpness;2;unbreaking;10]
+      - wand_wither,1,[e unbreaking;10]
+      - team_helmet
+      - team_chestplate
+      - team_leggings
+      - team_boots
