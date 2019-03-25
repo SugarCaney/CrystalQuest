@@ -87,6 +87,16 @@ kit:
       - team_leggings
       - chainmail_boots
       - stone_sword,1,[e sharpness;1;unbreaking;10]
+  caveman:
+    name: '&eCaveman'
+    icon: bone
+    lore: '&7&oThe way of the ancients%nl%%nl%&9Ability: &bStrength'
+    ability:
+      - strength
+    items:
+      - team_chestplate,1,[e unbreaking;10]
+      - stick;Club,1,[e sharpness;6]
+      - sugar_cane;&2Poison &aDart,4
   fishtfight:
     name: '&bFishtFight'
     icon: cod
