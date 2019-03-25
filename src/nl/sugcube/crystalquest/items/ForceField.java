@@ -14,6 +14,8 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.util.Objects;
+
 import static java.lang.Math.*;
 
 /**
@@ -36,12 +38,8 @@ public class ForceField extends ItemExecutor {
         final CrystalQuestTeam teamId = arena.getTeam(player);
 
         world.getEntities().stream()
+                .filter(Objects::nonNull)
                 .filter(ent -> {
-                    // No null entities.
-                    if (ent == null) {
-                        return false;
-                    }
-
                     // Don't nudge your own species.
                     if (ent instanceof Player) {
                         if (arena.getTeam((Player)ent) == teamId) {
@@ -58,6 +56,12 @@ public class ForceField extends ItemExecutor {
 
                     // We only want to target living basta'ds.
                     return ent instanceof LivingEntity;
+                })
+                // Only consider entities within 15 blocks range.
+                .filter(ent -> {
+                    Location a = player.getLocation();
+                    Location b = ent.getLocation();
+                    return a.distance(b) <= 15;
                 })
                 .forEach(ent -> applyForce(source, (LivingEntity)ent));
 
@@ -78,11 +82,11 @@ public class ForceField extends ItemExecutor {
         double z = 1d / (tz - sz == 0 ? 0.0001 : ((tz - sz) * 1.25));
 
         // Apply limits.
-        x = (x < 0 ? max(-FORCE_LIMIT, x) : max(FORCE_LIMIT, x)) / 1.2d;
-        z = (z < 0 ? max(-FORCE_LIMIT, z) : max(FORCE_LIMIT, z)) / 1.2d;
+        x = (x < 0 ? max(-FORCE_LIMIT, x) : max(FORCE_LIMIT, x));
+        z = (z < 0 ? max(-FORCE_LIMIT, z) : max(FORCE_LIMIT, z));
 
         // Determine y velocity to make a 45 degree swoop.
-        double y = sqrt(x * x + z * z);
+        double y = sqrt(x * x + z * z) * 0.8;
 
         // Apply velocity
         Vector velocity = new Vector(x, y, z);

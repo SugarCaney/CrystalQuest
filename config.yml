@@ -6,7 +6,7 @@ arena:
   game-length: 600
   after-count: 15
   crystal-spawn-chance: 20
-  item-spawn-chance: 100
+  item-spawn-chance: 120
   team-colour-prefix: true
   force-even-teams: true
   blood: true
@@ -91,7 +91,7 @@ kit:
       - doublejump_boost
       - agility
     items:
-      - team_helmet,1,[e protection;5;unbreaking;10]
+      - team_helmet,1,[e protection;3;unbreaking;10]
       - leather_chestplate,1
       - leather_boots,1
       - leather_leggings,1
