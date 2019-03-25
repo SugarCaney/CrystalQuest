@@ -17,10 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -35,6 +32,11 @@ public class ItemHandler {
     public ConcurrentHashMap<Entity, Integer> cursed;
     private List<ItemStack> items;
     private List<ItemExecutor> executors;
+
+    /**
+     * Map that stores each item by their configuration key.
+     */
+    private Map<String, ItemStack> keyLookup = new HashMap<>();
 
     public ItemHandler(CrystalQuest instance) {
         plugin = instance;
@@ -96,6 +98,7 @@ public class ItemHandler {
         addPoisonDart();
         addForceField();
         addSugar();
+        addSmartBomb();
 
         if (plugin.getConfig().isSet("arena.banned-items")) {
             List<ItemStack> toRemove = new ArrayList<>();
@@ -146,6 +149,19 @@ public class ItemHandler {
     }
 
     /**
+     * Adds the Smart Bomb-item to the items-list.
+     */
+    public void addSmartBomb() {
+        ItemStack is = new ItemStack(Material.CLAY_BALL, 1);
+        ItemMeta im = is.getItemMeta();
+        im.setDisplayName(Broadcast.get("items.smart-bomb"));
+        is.setItemMeta(im);
+        this.items.add(is);
+        keyLookup.put("smart-bomb", is);
+        executors.add(new SmartBomb());
+    }
+
+    /**
      * Adds the Sugar-item to the items-list.
      */
     public void addSugar() {
@@ -154,6 +170,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.sugar"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("sugar", is);
         executors.add(new Sugar());
     }
 
@@ -166,6 +183,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.force-field"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("force-field", is);
         executors.add(new ForceField());
     }
 
@@ -178,6 +196,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.poison-dart"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("poison-dart", is);
         executors.add(new PoisonDart());
     }
 
@@ -190,6 +209,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.curse"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("curse", is);
         executors.add(new Curse());
     }
 
@@ -204,6 +224,7 @@ public class ItemHandler {
         im.addCustomEffect(new PotionEffect(PotionEffectType.HARM, 300, 10), true);
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("bomb", is);
     }
 
     /**
@@ -217,6 +238,7 @@ public class ItemHandler {
         this.items.add(is);
         executors.add(new BloodBunny());
         carrot = is;
+        keyLookup.put("bunny", is);
     }
 
     /**
@@ -228,6 +250,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.tnt"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("tnt", is);
     }
 
     /**
@@ -240,6 +263,7 @@ public class ItemHandler {
         is.setItemMeta(im);
         is.addUnsafeEnchantment(Enchantment.WATER_WORKER, 1);
         this.items.add(is);
+        keyLookup.put("telepearl", is);
     }
 
     /**
@@ -251,6 +275,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.anvil"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("anvil", is);
         executors.add(new Anvil());
     }
 
@@ -263,6 +288,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.lightning-bolt"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("lightning-bolt", is);
         executors.add(new LightningBolt());
     }
 
@@ -275,6 +301,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.glue"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("glue", is);
         executors.add(new Glue());
     }
 
@@ -287,6 +314,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.landmine"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("landmine", is);
         executors.add(new Landmine());
     }
 
@@ -299,6 +327,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.wolf") + ChatColor.RED + " <3");
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("wolf", is);
         executors.add(new WolfHeart());
     }
 
@@ -308,9 +337,10 @@ public class ItemHandler {
     public void addCreeperEgg() {
         ItemStack is = new ItemStack(Material.CREEPER_SPAWN_EGG, 1);
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.DARK_GREEN + "Creeper Egg");
+        im.setDisplayName(Broadcast.get("items.creeper-egg"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("creeper-egg", is);
         executors.add(new CreeperEgg());
     }
 
@@ -327,6 +357,7 @@ public class ItemHandler {
         is.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 3);
         is.addUnsafeEnchantment(Enchantment.KNOCKBACK, 10);
         this.items.add(is);
+        keyLookup.put("hammer", is);
     }
 
     /**
@@ -338,6 +369,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.wither"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("wither", is);
         executors.add(new Wither());
     }
 
@@ -349,6 +381,7 @@ public class ItemHandler {
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(Broadcast.get("items.shield"));
         is.setItemMeta(im);
+        keyLookup.put("shield", is);
         this.items.add(is);
     }
 
@@ -363,6 +396,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.strength"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("strength", is);
     }
 
     /**
@@ -374,6 +408,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.flower"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("flower", is);
         executors.add(new FireFlower());
     }
 
@@ -386,6 +421,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.apple"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("apple", is);
     }
 
     /**
@@ -397,6 +433,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.railgun"));
         is.setItemMeta(im);
         items.add(is);
+        keyLookup.put("railgun", is);
         executors.add(new Railgun());
     }
 
@@ -409,6 +446,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.blooper"));
         is.setItemMeta(im);
         items.add(is);
+        keyLookup.put("blooper", is);
         executors.add(new Blooper());
     }
 
@@ -424,6 +462,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.speed"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("speed", is);
     }
 
     /**
@@ -437,6 +476,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.health"));
         is.setItemMeta(im);
         this.items.add(is);
+        keyLookup.put("health", is);
     }
 
     /**
@@ -448,6 +488,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.grenade"));
         is.setItemMeta(im);
         items.add(is);
+        keyLookup.put("grenade", is);
     }
 
     /**
@@ -460,6 +501,7 @@ public class ItemHandler {
         is.setItemMeta(im);
         is.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
         items.add(is);
+        keyLookup.put("shiny-crystal", is);
     }
 
     /**
@@ -471,6 +513,7 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.small-crystal"));
         is.setItemMeta(im);
         items.add(is);
+        keyLookup.put("small-crystal", is);
     }
 
     /**
@@ -482,14 +525,15 @@ public class ItemHandler {
         im.setDisplayName(Broadcast.get("items.crystal-shard"));
         is.setItemMeta(im);
         items.add(is);
+        keyLookup.put("crystal-shard", is);
     }
 
     /**
      * Gets a specific item using the name
      *
      * @param name
-     *         (String) The name of the item
-     * @return (ItemStack) The itemstack the item represents
+     *         The name of the item
+     * @return The itemstack the item represents
      */
     public ItemStack getItemByName(String name) {
         for (ItemStack item : this.items) {
@@ -498,6 +542,20 @@ public class ItemHandler {
             }
         }
         return null;
+    }
+
+    /**
+     * Get a specific item by its configuration key.
+     */
+    public ItemStack getItemByKey(String key) {
+        return keyLookup.get(key);
+    }
+
+    /**
+     * Get the configuration keys of all registered items.
+     */
+    public Collection<String> getAllItemKeys() {
+        return keyLookup.keySet();
     }
 
     /**

@@ -148,14 +148,19 @@ public class Arena {
     private List<Location> itemSpawns = new ArrayList<>();
 
     /**
-     * List of all the wolfs that have been spawned in the arenas.
+     * List of all the wolfs that have been spawned in the arena.
      */
     private List<Wolf> gameWolfs = new ArrayList<>();
 
     /**
-     * List of all creepers that have been spawned in the arenas.
+     * List of all creepers that have been spawned in the arena.
      */
     private List<Creeper> gameCreepers = new ArrayList<>();
+
+    /**
+     * List of all smart bombs that have been spawned in the arena.
+     */
+    private List<Silverfish> gameSmartBombs = new ArrayList<>();
 
     /**
      * List of all crystals that have been spawned in the arenas.
@@ -370,6 +375,16 @@ public class Arena {
      */
     public List<Creeper> getGameCreepers() {
         return gameCreepers;
+    }
+
+    /**
+     * Gets the smart bombs which are spawned in-game
+     *
+     * @return List containing all the smart bombs in-game.
+     * @see Arena#gameSmartBombs
+     */
+    public List<Silverfish> getGameSmartBombs() {
+        return gameSmartBombs;
     }
 
     /**
@@ -896,6 +911,8 @@ public class Arena {
         initializeScoreboard();
         gameWolfs.clear();
         landmines.clear();
+        gameCreepers.clear();
+        gameSmartBombs.clear();
         removePlayers();
 
         plugin.signHandler.updateSigns();

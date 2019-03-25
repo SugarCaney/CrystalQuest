@@ -60,6 +60,13 @@ public class EntityListener implements Listener {
             }
         }
 
+        // Smart bomb.
+        if (ent instanceof Silverfish) {
+            for (Arena a : plugin.getArenaManager().getArenas()) {
+                a.getGameSmartBombs().remove(ent);
+            }
+        }
+
         if (plugin.protection.isInProtectedArena(ent.getLocation())) {
             e.getDrops().clear();
         }
@@ -171,6 +178,26 @@ public class EntityListener implements Listener {
             }
         }
 
+        /*
+         * Detonate smart bombs.
+         */
+        if (e.getDamager() instanceof Silverfish) {
+            Silverfish silverfish = (Silverfish)e.getDamager();
+            for (Arena a : plugin.arenaManager.getArenas()) {
+                if (!a.getGameSmartBombs().contains(silverfish)) {
+                    continue;
+                }
+
+                a.getGameSmartBombs().remove(silverfish);
+                silverfish.setHealth(0.0);
+                Location loc = silverfish.getLocation();
+                loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), 4f, false, false);
+            }
+        }
+
+        /*
+         * Yielding crystals.
+         */
         if (e.getEntity() instanceof EnderCrystal) {
             boolean isForGame = false;
             boolean isValid = true;

@@ -75,7 +75,7 @@ kit:
     items:
       - wooden_sword,1,[e knockback;1;unbreaking;10]
       - bow,1
-      - splash_potion,64,[p instant_damage;0;1]
+      - splash_potion,32,[p instant_damage;0;1]
       - tnt,8
       - arrow;Flying Bombs,16
       - golden_helmet,1,[e blast_protection;2;unbreaking;10]
