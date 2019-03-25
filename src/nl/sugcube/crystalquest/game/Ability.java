@@ -169,7 +169,7 @@ public class Ability implements Listener {
             p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 160, 1));
         }
         if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("health_boost")) {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 160, 0));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 600, 0));
         }
         if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("slowness")) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 0));
