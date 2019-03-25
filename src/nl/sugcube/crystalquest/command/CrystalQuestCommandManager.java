@@ -57,7 +57,8 @@ public class CrystalQuestCommandManager implements CommandExecutor, TabCompleter
                 new CommandDoubleJump(),
                 new CommandTp(),
                 new CommandSetLobby(),
-                new CommandSetCount()
+                new CommandSetCount(),
+                new CommandItem()
         );
     }
 

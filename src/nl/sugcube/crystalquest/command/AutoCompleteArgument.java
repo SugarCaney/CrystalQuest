@@ -113,6 +113,16 @@ public enum AutoCompleteArgument {
                 add("2");
             }};
         }
+    },
+
+    /**
+     * All registered crystalquest item keys.
+     */
+    ITEMS {
+        @Override
+        protected List<String> optionsBase(CrystalQuest plugin) {
+            return new ArrayList<>(plugin.itemHandler.getAllItemKeys());
+        }
     };
 
     public List<String> options(String typed, CrystalQuest plugin) {

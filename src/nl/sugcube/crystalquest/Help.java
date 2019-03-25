@@ -83,9 +83,9 @@ public class Help {
         if (s.hasPermission("crystalquest.admin")) {
             s.sendMessage(Broadcast.HELP + "/cq money <player> <amount>" + ChatColor.YELLOW + " " + Broadcast.get("help.money"));
         }
-        //if (s.hasPermission("crystalquest.admin")) {
-        //	s.sendMessage(Broadcast.HELP + "/cq removearena" + ChatColor.YELLOW + " " + Broadcast.get("help.remove"));
-        //}
+        if (s.hasPermission("crystalquest.admin")) {
+        	s.sendMessage(Broadcast.HELP + "/cq item <item-key>" + ChatColor.YELLOW + " " + Broadcast.get("help.item"));
+        }
         if (s.hasPermission("crystalquest.admin")) {
             s.sendMessage(Broadcast.HELP + "/cq reload" + ChatColor.YELLOW + " " + Broadcast.get("help.reload"));
             s.sendMessage(Broadcast.HELP + ChatColor.YELLOW + Broadcast.get("help.other"));
