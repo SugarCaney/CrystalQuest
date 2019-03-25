@@ -174,7 +174,14 @@ public class InventoryManager {
                     canCheck = false;
                 }
             }
-            player.getInventory().addItem(bonus);
+
+            // put totem of undying in offhand
+            if (bonus.getType() == Material.TOTEM_OF_UNDYING) {
+                player.getInventory().setItemInOffHand(bonus);
+            }
+            else {
+                player.getInventory().addItem(bonus);
+            }
         }
 
         player.updateInventory();
