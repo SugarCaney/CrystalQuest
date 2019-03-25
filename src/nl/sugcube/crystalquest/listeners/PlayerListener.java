@@ -14,6 +14,7 @@ import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Wolf;
@@ -29,6 +30,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -153,6 +155,24 @@ public class PlayerListener implements Listener {
                 e.setCancelled(true);
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerPickupTotemOfUndying(EntityPickupItemEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        Player player = (Player)event.getEntity();
+        Item item = event.getItem();
+        ItemStack itemStack = item.getItemStack();
+        if (itemStack.getType() != Material.TOTEM_OF_UNDYING) {
+            return;
+        }
+
+        item.remove();
+        event.setCancelled(true);
+        player.getInventory().setItemInOffHand(itemStack);
     }
 
     @EventHandler

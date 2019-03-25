@@ -3,6 +3,7 @@ package nl.sugcube.crystalquest.command;
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.util.BukkitUtil;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -37,12 +38,22 @@ public class CommandItem extends CrystalQuestCommand {
         if (arguments.length >= 2) {
             Player target = BukkitUtil.getPlayerByName(arguments[1]);
             if (target != null) {
-                target.getInventory().addItem(item);
+                if (item.getType() == Material.TOTEM_OF_UNDYING) {
+                    target.getInventory().setItemInOffHand(item);
+                }
+                else {
+                    target.getInventory().addItem(item);
+                }
                 return;
             }
         }
 
-        player.getInventory().addItem(item);
+        if (item.getType() == Material.TOTEM_OF_UNDYING) {
+            player.getInventory().setItemInOffHand(item);
+        }
+        else {
+            player.getInventory().addItem(item);
+        }
     }
 
     @Override

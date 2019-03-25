@@ -53,6 +53,7 @@ rarity:
   force-field: 1
   sugar: 1
   smart-bomb: 1
+  totem-of-undying: 12
 kit:
   default:
     name: '&dCrystal Hunter'

@@ -47,6 +47,7 @@ items:
   force-field: "&dForce &bField"
   sugar: "Sugar"
   smart-bomb: "&cSmart &7Bomb"
+  totem-of-undying: "&eTotem of &6Undying"
 item-use:
   blooper: "&7You blooped %team%"
   rabbit: "&7You summoned the killer rabbit at %player%"

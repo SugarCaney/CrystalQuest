@@ -132,11 +132,14 @@ public class ItemListener implements Listener {
                     Arena a = plugin.getArenaManager().getArena(p.getUniqueId());
                     if (a != null) {
                         a.getGameBlocks().remove(b);
-                        DeathMessages.fired = true;
-                        a.sendDeathMessage(p, " stood on a landmine");
-                        if (p.getHealth() > 0) {
-                            p.setHealth(0);
+
+                        // Do not show death messages when the player has a totem of undying.
+                        ItemStack offhand = p.getInventory().getItemInOffHand();
+                        if (offhand == null || offhand.getType() != Material.TOTEM_OF_UNDYING) {
+                            DeathMessages.fired = true;
+                            a.sendDeathMessage(p, " stood on a landmine");
                         }
+                        p.damage(9999999);
 
                         if (a.getLandmines().containsKey(b.getLocation())) {
                             Player killer = Bukkit.getPlayer(a.getLandmines().get(b.getLocation()));

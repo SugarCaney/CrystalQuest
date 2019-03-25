@@ -105,6 +105,7 @@ public class ItemHandler {
         addForceField();
         addSugar();
         addSmartBomb();
+        addTotemOfUndying();
 
         if (plugin.getConfig().isSet("arena.banned-items")) {
             List<ItemStack> toRemove = new ArrayList<>();
@@ -182,6 +183,18 @@ public class ItemHandler {
         // Fallback: ignore rarity.
         List<String> items = new ArrayList<>(getAllItemKeys());
         return items.get(ran.nextInt(items.size()));
+    }
+
+    /**
+     * Adds the Smart Bomb-item to the items-list.
+     */
+    public void addTotemOfUndying() {
+        ItemStack is = new ItemStack(Material.TOTEM_OF_UNDYING, 1);
+        ItemMeta im = is.getItemMeta();
+        im.setDisplayName(Broadcast.get("items.totem-of-undying"));
+        is.setItemMeta(im);
+        this.items.add(is);
+        keyLookup.put("totem-of-undying", is);
     }
 
     /**
