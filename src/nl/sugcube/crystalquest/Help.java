@@ -15,7 +15,7 @@ public class Help {
             s.sendMessage(Broadcast.HELP + ChatColor.YELLOW + "<>--------------" + ChatColor.LIGHT_PURPLE +
                     "SETUP-HELP" + ChatColor.YELLOW + "--------------<>");
             s.sendMessage(Broadcast.HELP + "/cq setlobby" + ChatColor.YELLOW + " " + Broadcast.get("help.setlobby"));
-            s.sendMessage(Broadcast.HELP + "/cq createarena" + ChatColor.YELLOW + " " + Broadcast.get("help.createarena"));
+            s.sendMessage(Broadcast.HELP + "/cq createarena [name]" + ChatColor.YELLOW + " " + Broadcast.get("help.createarena"));
             s.sendMessage(Broadcast.HELP + "/cq setname <arena> <name>" + ChatColor.YELLOW + " " + Broadcast.get("help.setname"));
             s.sendMessage(Broadcast.HELP + "/cq teamlobby <arena> <teamID>" + ChatColor.YELLOW + " " + Broadcast.get("help.teamlobby"));
             s.sendMessage(Broadcast.HELP + "/cq setteams <arena> <amount>" + ChatColor.YELLOW +

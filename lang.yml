@@ -111,6 +111,7 @@ commands:
   money-add: "Added &7%amount%&e to &7%player%&e's balance."
   balance: "&7%player%&e's balance is &7%balance%&e."
   createarena: "Arena &7%arena%&e has been created."
+  createarena-named: "Arena &7%arena%&e has been created with name &7%name%&e."
   enable-succeed: "Enabled Arena &7%arena%&e."
   enable-error: "&c[!!] Could not enable the arena!"
   enable-usage: "&c[!!] Usage: /cq enable <arena>"
@@ -215,6 +216,7 @@ commands:
   setcount-set: "Countdown of arena &7%arena%&e has been set to &7%seconds%&e seconds."
   item-usage: "&c[!!] Usage: /cq item <item-name> [player]"
   item-unknown: "&c[!!] There is no item with key '%s'"
+  createarena-usage: "&c[!!] Usage: /cq createarena [name]"
 help:
   remove: "Deletes an arena"
   setlobby: "Set the main lobbyspawn"
