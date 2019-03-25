@@ -403,7 +403,7 @@ public class ItemHandler {
      * Adds the SpeedPotion-item to the items-list
      */
     public void addSpeedPotion() {
-        PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 360, 1);
+        PotionEffect effect = new PotionEffect(PotionEffectType.SPEED, 400, 1);
         ItemStack is = new ItemStack(Material.SPLASH_POTION, 1);
         PotionMeta im = (PotionMeta)is.getItemMeta();
         im.setColor(Color.fromRGB(79, 215, 242));
