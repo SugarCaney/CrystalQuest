@@ -2,6 +2,7 @@ package nl.sugcube.crystalquest.command;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -24,7 +25,13 @@ public class CommandLobby extends CrystalQuestCommand {
             return;
         }
 
-        player.teleport(plugin.arenaManager.getLobby());
+        Location lobby = plugin.arenaManager.getLobby();
+        if (lobby == null) {
+            sender.sendMessage(Broadcast.get("commands.lobby-not-set"));
+            return;
+        }
+
+        player.teleport(lobby);
         player.sendMessage(Broadcast.TAG + Broadcast.get("commands.lobby-tp"));
     }
 

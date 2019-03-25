@@ -181,6 +181,7 @@ commands:
   check-usage: "&c[!!] Usage: /cq check <arena>"
   lobby-tp: "Teleported you to the lobby!"
   lobby-already-ingame: "&c[!!] You are already in-game!"
+  lobby-not-set: "&c[!!] No lobby has been set, cannot teleport!"
   reload-kicked: "&c[!!] You have been kicked because CrystalQuest has been reloaded!"
   reload-reloaded: "The configuration file has been reloaded!"
   reset-reset: "Arena &7%arena%&e has been reset!"
