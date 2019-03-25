@@ -573,7 +573,13 @@ public class PlayerListener implements Listener {
                 }
             }
         }
+    }
 
-
+    @EventHandler
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        Player player = event.getPlayer();
+        if (plugin.arenaManager.isInGame(player)) {
+            event.setCancelled(true);
+        }
     }
 }
