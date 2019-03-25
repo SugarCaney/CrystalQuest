@@ -25,21 +25,21 @@ shop:
   crystal-message: '%teamcolour%+%amount% Crystal(s)'
 rarity:
   crystal-shard: 1
-  small-crystal: 2
-  shiny-crystal: 4
-  lightning-bolt: 3
-  glue: 3
+  small-crystal: 1.5
+  shiny-crystal: 2.5
+  lightning-bolt: 2.5
+  glue: 2.5
   landmine: 1
   wolf: 1
   creeper-egg: 1
   hammer: 1
-  wither: 3
+  wither: 2.5
   shield: 1
   strength: 1
   flower: 1
   apple: 1
   railgun: 1
-  blooper: 3
+  blooper: 2.5
   speed: 1
   health: 1
   grenade: 1
@@ -48,12 +48,12 @@ rarity:
   telepearl: 1
   bunny: 2
   bomb: 1
-  curse: 3
+  curse: 2.5
   poison-dart: 1
   force-field: 1
   sugar: 1
   smart-bomb: 1
-  totem-of-undying: 12
+  totem-of-undying: 4
 kit:
   default:
     name: '&dCrystal Hunter'

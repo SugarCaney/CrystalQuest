@@ -172,11 +172,11 @@ public class Wand implements Listener {
             for (OfflinePlayer pl : scoreboardTeam.getPlayers()) {
                 Player target = BukkitUtil.getPlayerByName(pl.getName());
 
-                target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 8, 5));
+                target.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 8, 5), true);
 
                 for (int i = 0; i < 3; i++) {
                     Wolf w = target.getWorld().spawn(target.getLocation(), Wolf.class);
-                    w.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1000, 100));
+                    w.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 1000, 100), true);
                     w.playEffect(EntityEffect.WOLF_HEARTS);
                     w.playEffect(EntityEffect.WOLF_HEARTS);
                     w.remove();
