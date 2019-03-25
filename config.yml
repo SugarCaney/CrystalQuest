@@ -85,9 +85,10 @@ kit:
     items:
       - chainmail_helmet
       - chainmail_chestplate
-      - team_leggings
+      - team_leggings,[e unbreaking;10]
       - chainmail_boots
-      - stone_sword,1,[e sharpness;1;unbreaking;10]
+      - stone_sword,1,[e unbreaking;10]
+      - shield,1,[d 317]
   caveman:
     name: '&eCaveman'
     icon: bone
@@ -98,6 +99,16 @@ kit:
       - team_chestplate,1,[e unbreaking;10]
       - stick;Club,1,[e sharpness;6]
       - sugar_cane;&2Poison &aDart,4
+  poseidon:
+    name: '&9Poseidon'
+    icon: trident
+    lore: '&7&oThe god of the sea and other waters,%nl%&7&oearthquakes, and horses.%nl%%nl%&9Ability: &bWater Healing'
+    ability:
+      - water_healing
+    items:
+      - trident,1,[e loyalty;2;unbreaking;10]
+      - team_leggings,1,[e protection;1;unbreaking;10]
+      - team_boots,1,[e depth_strider;2;protection;1;unbreaking;10]
   fishtfight:
     name: '&bFishtFight'
     icon: cod
@@ -108,7 +119,7 @@ kit:
       - team_helmet
       - cod;&bWay too smelly fish,1,[e knockback;1]
   tnt:
-    name: '&a&l&oVIP &4TNT'
+    name: '&a&l&oPRO &4TNT'
     icon: tnt
     lore: '&7&oPoofs and booms.%nl%%nl%&9Ability: &bExplosive Arrows'
     ability:
@@ -124,7 +135,7 @@ kit:
       - team_chestplate,1,[e blast_protection;2;unbreaking;10]
       - team_leggings,1,[e blast_protection;2;unbreaking;10]
   ranger:
-    name: '&a&l&oVIP &2Ranger'
+    name: '&a&l&oPRO &2Ranger'
     icon: leather_chestplate
     lore: '&7&oChild of Mother Nature%nl%%nl%&9Ability: &bDouble-Jump Boost%nl%&9Ability:
       &bAgility'
@@ -141,7 +152,7 @@ kit:
       - arrow,1
       - bone;&fWolfie &c<3,3
   iron-golem:
-    name: '&a&l&oVIP &6Iron Golem'
+    name: '&a&l&oPRO &6Iron Golem'
     icon: carved_pumpkin
     lore: '&7&oOnly the strongest will survive%nl%%nl%&9Ability: &bHealth Boost%nl%&9Weakness:
       &bWater'
@@ -157,7 +168,7 @@ kit:
       - bow,1,[e infinity;1;unbreaking;10]
       - arrow,1
   priest:
-    name: '&a&l&oVIP &aPriest'
+    name: '&a&l&oPRO &aPriest'
     icon: blaze_rod
     lore: '&7&oBlesses to impress'
     items:
@@ -170,7 +181,7 @@ kit:
       - team_boots
       - totem_of_undying
   fire-wizard:
-    name: '&a&l&oVIP &cFire Wizard'
+    name: '&a&l&oPRO &cFire Wizard'
     icon: golden_hoe,1,[e sharpness;2]
     lore: '&7&oUses the magic of fire to slay their opponents%nl%%nl%&9Ability: &bLast Revenge%nl%&9Ability: &bFaster Recharge%nl%%nl%&9Weakness: &bWater'
     ability:
@@ -184,7 +195,7 @@ kit:
       - team_leggings
       - team_boots
   voldemort:
-    name: '&a&l&oVIP &2Voldemort'
+    name: '&a&l&oPRO &2Voldemort'
     icon: stone_axe,1,[e sharpness;2]
     lore: '&7&oHe-Who-Must-Not-Be-Named%nl%&7&ocorrupts anyone within his reach%nl%%nl%&9Ability: &bDrain%nl%&9Ability: &bFaster Recharge'
     ability:
@@ -197,7 +208,7 @@ kit:
       - team_leggings
       - team_boots
   multi-wizard:
-    name: '&a&l&oVIP &dMerlin'
+    name: '&a&l&oPRO &dMerlin'
     icon: diamond_hoe,1,[e sharpness;2]
     lore: '&7&oThe master of the magicians.%nl%&7&oUses all wands, but with longer recharge.%nl%%nl%&9Weakness: &bLonger Recharge'
     ability:
