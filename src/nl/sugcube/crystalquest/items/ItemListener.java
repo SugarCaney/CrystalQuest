@@ -120,7 +120,8 @@ public class ItemListener implements Listener {
          */
         else if (e.getAction() == Action.PHYSICAL) {
             if (e.getClickedBlock().getType() == Material.STONE_PRESSURE_PLATE) {
-                if (!plugin.getArenaManager().getArena(p.getUniqueId()).getSpectators().contains(p.getUniqueId())) {
+                Arena arena = plugin.getArenaManager().getArena(p.getUniqueId());
+                if (!arena.isEndGame() && !arena.getSpectators().contains(p.getUniqueId())) {
                     final Block b = e.getClickedBlock();
                     b.setType(Material.AIR);
 
