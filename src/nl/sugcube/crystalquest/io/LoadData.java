@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -68,7 +69,10 @@ public class LoadData {
             String pfx = "arena." + id + ".";
 
             arena.setName(data.getString(pfx + "name"));
-            arena.setTeams(parseTeams(data, pfx + "teams"));
+            Collection<CrystalQuestTeam> teams = parseTeams(data, pfx + "teams");
+            if (teams.size() >= 2 && teams.size() <=8) {
+                arena.setTeams(teams);
+            }
             arena.setMinPlayers(data.getInt(pfx + "min-players"));
             arena.setMaxPlayers(data.getInt(pfx + "max-players"));
             arena.setDoubleJump(data.getBoolean(pfx + "double-jump"));
@@ -83,11 +87,13 @@ public class LoadData {
             // Otherwise, use team names.
             else {
                 ConfigurationSection section = data.getConfigurationSection(teamLobbySection);
-                for (String key : section.getKeys(false)) {
-                    CrystalQuestTeam team = CrystalQuestTeam.valueOfName(key);
-                    String locationString = data.getString(teamLobbySection + "." + key);
-                    Location location = SMethods.toLocation(locationString);
-                    arena.setLobbySpawn(team, location);
+                if (section != null) {
+                    for (String key : section.getKeys(false)) {
+                        CrystalQuestTeam team = CrystalQuestTeam.valueOfName(key);
+                        String locationString = data.getString(teamLobbySection + "." + key);
+                        Location location = SMethods.toLocation(locationString);
+                        arena.setLobbySpawn(team, location);
+                    }
                 }
             }
 
