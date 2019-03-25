@@ -167,6 +167,7 @@ kit:
       - team_chestplate,1,[e protection;1]
       - team_leggings
       - team_boots
+      - totem_of_undying
   fire-wizard:
     name: '&a&l&oVIP &cFire Wizard'
     icon: golden_hoe,1,[e sharpness;2]
