@@ -153,23 +153,23 @@ public class Ability implements Listener {
         if (!plugin.ability.getAbilities().containsKey(p.getUniqueId())) {
             return;
         }
-        if (ability.contains("agility")) {
+        if (ability.contains("agility") && !p.hasPotionEffect(PotionEffectType.SPEED)) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 160, 0));
         }
-        if (ability.contains("super_speed")) {
+        if (ability.contains("super_speed") && !p.hasPotionEffect(PotionEffectType.SPEED)) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 160, 1));
         }
-        if (ability.contains("strength")) {
+        if (ability.contains("strength") && !p.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 160, 0));
         }
-        if (ability.contains("resistance")) {
+        if (ability.contains("resistance") && !p.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 160, 0));
         }
-        if (ability.contains("jump_boost")) {
+        if (ability.contains("jump_boost") && !p.hasPotionEffect(PotionEffectType.JUMP)) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 160, 1));
         }
         if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("health_boost")) {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 36000, 0));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 160, 0));
         }
         if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("slowness")) {
             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 160, 0));

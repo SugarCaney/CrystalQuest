@@ -95,6 +95,7 @@ public class ItemHandler {
         addCurse();
         addPoisonDart();
         addForceField();
+        addSugar();
 
         if (plugin.getConfig().isSet("arena.banned-items")) {
             List<ItemStack> toRemove = new ArrayList<>();
@@ -142,6 +143,18 @@ public class ItemHandler {
             is.setAmount(ran.nextInt(3) + 1);
         }
         return is;
+    }
+
+    /**
+     * Adds the Sugar-item to the items-list.
+     */
+    public void addSugar() {
+        ItemStack is = new ItemStack(Material.SUGAR, 1);
+        ItemMeta im = is.getItemMeta();
+        im.setDisplayName(Broadcast.get("items.sugar"));
+        is.setItemMeta(im);
+        this.items.add(is);
+        executors.add(new Sugar());
     }
 
     /**

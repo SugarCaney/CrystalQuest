@@ -45,6 +45,7 @@ items:
   curse: "&5C&eurse"
   poison-dart: "&2Poison &aDart"
   force-field: "&dForce &bField"
+  sugar: "Sugar"
 item-use:
   blooper: "&7You blooped %team%"
   rabbit: "&7You summoned the killer rabbit at %player%"
