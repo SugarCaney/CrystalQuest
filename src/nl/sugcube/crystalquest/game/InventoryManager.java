@@ -139,7 +139,7 @@ public class InventoryManager {
             else {
                 ItemStack is = plugin.stringHandler.toItemStack(s);
 
-                //Auto-equip Armour
+                // Auto-equip Armour
                 if (Materials.ARMOUR_HELMETS.contains(is.getType()) || is.getType() == Material.PLAYER_HEAD) {
                     player.getInventory().setHelmet(is);
                 }
@@ -152,7 +152,11 @@ public class InventoryManager {
                 else if (Materials.ARMOUR_BOOTS.contains(is.getType())) {
                     player.getInventory().setBoots(is);
                 }
-                //Add other items.
+                // Auto-equip offhand
+                else if (Materials.OFF_HAND.contains(is.getType())) {
+                    player.getInventory().setItemInOffHand(is);
+                }
+                // Add other items.
                 else {
                     player.getInventory().addItem(is);
                 }

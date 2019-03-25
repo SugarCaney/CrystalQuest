@@ -66,7 +66,8 @@ public class Materials {
             Material.IRON_CHESTPLATE,
             Material.GOLDEN_CHESTPLATE,
             Material.CHAINMAIL_CHESTPLATE,
-            Material.DIAMOND_CHESTPLATE
+            Material.DIAMOND_CHESTPLATE,
+            Material.ELYTRA
     ));
 
     /**
@@ -89,6 +90,14 @@ public class Materials {
             Material.GOLDEN_BOOTS,
             Material.CHAINMAIL_BOOTS,
             Material.DIAMOND_BOOTS
+    ));
+
+    /**
+     * A list of all materials that must be put in the off hand.
+     */
+    public static List<Material> OFF_HAND = Collections.unmodifiableList(Arrays.asList(
+            Material.SHIELD,
+            Material.TOTEM_OF_UNDYING
     ));
 
     /**
