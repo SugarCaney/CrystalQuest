@@ -1,6 +1,7 @@
 package nl.sugcube.crystalquest.items;
 
 import nl.sugcube.crystalquest.CrystalQuest;
+import nl.sugcube.crystalquest.economy.Multipliers;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -23,11 +24,17 @@ public class Sugar extends ItemExecutor {
 
     @Override
     boolean execute(CrystalQuest plugin, Player player, ItemStack itemStack) {
-        PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, (int)(DURATION_IN_SECONDS * 20), SPEED_AMPLIFIER);
+        double multiplier = Multipliers.getMultiplier(
+                "buff",
+                plugin.economy.getLevel(player, "buff", "upgrade"),
+                false
+        );
+
+        PotionEffect speed = new PotionEffect(PotionEffectType.SPEED, (int)(DURATION_IN_SECONDS * 20 * multiplier), SPEED_AMPLIFIER);
         player.removePotionEffect(PotionEffectType.SPEED);
         player.addPotionEffect(speed, true);
 
-        PotionEffect jumpBoost = new PotionEffect(PotionEffectType.JUMP, (int)(DURATION_IN_SECONDS * 20), JUMP_AMPLIFIER);
+        PotionEffect jumpBoost = new PotionEffect(PotionEffectType.JUMP, (int)(DURATION_IN_SECONDS * 20 * multiplier), JUMP_AMPLIFIER);
         player.removePotionEffect(PotionEffectType.JUMP);
         player.addPotionEffect(jumpBoost, true);
 
