@@ -30,7 +30,7 @@ public class ItemSpawner implements Runnable {
 
             for (Location loc : a.getItemSpawns()) {
                 if (ran.nextInt(10 * plugin.getConfig().getInt("arena.item-spawn-chance")) == 0) {
-                    loc.getWorld().dropItemNaturally(loc, plugin.itemHandler.getRandomItem());
+                    loc.getWorld().dropItemNaturally(loc, plugin.itemHandler.getRandomItemStack());
                 }
 
                 if (ran.nextInt(15 * plugin.getConfig().getInt("arena.item-spawn-chance")) == 0) {

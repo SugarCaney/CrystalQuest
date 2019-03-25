@@ -32,11 +32,17 @@ public class ItemHandler {
     public ConcurrentHashMap<Entity, Integer> cursed;
     private List<ItemStack> items;
     private List<ItemExecutor> executors;
+    private Random ran = new Random();
 
     /**
      * Map that stores each item by their configuration key.
      */
     private Map<String, ItemStack> keyLookup = new HashMap<>();
+
+    /**
+     * Maps each item configuration key to their rarity (1 is regular, 2 is twice as common etc).
+     */
+    private Map<String, Double> rarityLookup = new HashMap<>();
 
     public ItemHandler(CrystalQuest instance) {
         plugin = instance;
@@ -117,6 +123,14 @@ public class ItemHandler {
             }
         }
 
+        initializeRarities();
+    }
+
+    private void initializeRarities() {
+        for (String key : getAllItemKeys()) {
+            double rarity = plugin.getConfig().getDouble("rarity." + key);
+            rarityLookup.put(key, 1.0 / rarity);
+        }
     }
 
     /**
@@ -133,9 +147,9 @@ public class ItemHandler {
      *
      * @return (ItemStack) A random item.
      */
-    public ItemStack getRandomItem() {
-        Random ran = new Random();
-        ItemStack is = this.items.get(ran.nextInt(this.items.size()));
+    public ItemStack getRandomItemStack() {
+        String itemKey = getRandomItemKey();
+        ItemStack is = getItemByKey(itemKey);
         if (is.getType() == Material.EGG) {
             is.setAmount(ran.nextInt(3) + 1);
         }
@@ -146,6 +160,28 @@ public class ItemHandler {
             is.setAmount(ran.nextInt(3) + 1);
         }
         return is;
+    }
+
+    /**
+     * Get a random item key from all registered keys.
+     * Takes rarities into account.
+     */
+    public String getRandomItemKey() {
+        double total = rarityLookup.values().stream().reduce(0.0, (a, d) -> a + d);
+        double targetPointer = ran.nextDouble() * total;
+
+        double passed = 0.0;
+        for (Map.Entry<String, Double> entry : rarityLookup.entrySet()) {
+            double newPassed = entry.getValue() + passed;
+            if (targetPointer <= newPassed) {
+                return entry.getKey();
+            }
+            passed = newPassed;
+        }
+
+        // Fallback: ignore rarity.
+        List<String> items = new ArrayList<>(getAllItemKeys());
+        return items.get(ran.nextInt(items.size()));
     }
 
     /**
@@ -549,6 +585,14 @@ public class ItemHandler {
      */
     public ItemStack getItemByKey(String key) {
         return keyLookup.get(key);
+    }
+
+    /**
+     * Get the rarity of the item with the given configuration key.
+     * 1.0 is regular rarity, 2.0 is twice as common etc.
+     */
+    public double getRarityByKey(String key) {
+        return rarityLookup.getOrDefault(key, 0.0);
     }
 
     /**

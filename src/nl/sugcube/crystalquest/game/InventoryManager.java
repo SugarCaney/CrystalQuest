@@ -164,7 +164,7 @@ public class InventoryManager {
             boolean canCheck = true;
             ItemStack bonus = null;
             while (canCheck) {
-                bonus = plugin.itemHandler.getRandomItem();
+                bonus = plugin.itemHandler.getRandomItemStack();
                 if (bonus.getType() != Material.DIAMOND && bonus.getType() != Material.EMERALD &&
                         bonus.getType() != Material.CHAINMAIL_CHESTPLATE) {
                     canCheck = false;

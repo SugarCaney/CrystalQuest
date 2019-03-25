@@ -6,7 +6,7 @@ arena:
   game-length: 600
   after-count: 15
   crystal-spawn-chance: 20
-  item-spawn-chance: 120
+  item-spawn-chance: 100
   team-colour-prefix: true
   force-even-teams: true
   blood: true
@@ -23,6 +23,36 @@ shop:
   multiplier: 1.75
   crystal-multiplier: 1
   crystal-message: '%teamcolour%+%amount% Crystal(s)'
+rarity:
+  crystal-shard: 1
+  small-crystal: 2
+  shiny-crystal: 4
+  lightning-bolt: 3
+  glue: 3
+  landmine: 1
+  wolf: 1
+  creeper-egg: 1
+  hammer: 1
+  wither: 3
+  shield: 1
+  strength: 1
+  flower: 1
+  apple: 1
+  railgun: 1
+  blooper: 3
+  speed: 1
+  health: 1
+  grenade: 1
+  anvil: 1
+  tnt: 1
+  telepearl: 1
+  bunny: 2
+  bomb: 1
+  curse: 3
+  poison-dart: 1
+  force-field: 1
+  sugar: 1
+  smart-bomb: 1
 kit:
   default:
     name: '&dCrystal Hunter'

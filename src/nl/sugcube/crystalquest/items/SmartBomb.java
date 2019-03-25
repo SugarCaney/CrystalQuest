@@ -42,8 +42,8 @@ public class SmartBomb extends ItemExecutor {
 
         Silverfish bomb = world.spawn(targetLocation, Silverfish.class);
         bomb.setTarget(victim);
-
         bomb.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 999999, 3), true);
+
         player.playSound(targetLocation, Sound.ENTITY_TNT_PRIMED, 10L, 10L);
 
         // Register creeper
