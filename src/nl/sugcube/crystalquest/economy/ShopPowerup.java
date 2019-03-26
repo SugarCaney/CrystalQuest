@@ -1,6 +1,5 @@
 package nl.sugcube.crystalquest.economy;
 
-import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,156 +24,149 @@ public class ShopPowerup implements Listener {
     private static final String PREFIX = "" + ChatColor.GREEN + ChatColor.BOLD + ChatColor.ITALIC;
     private static final String PREFIX_RED = "" + ChatColor.RED + ChatColor.BOLD + ChatColor.ITALIC;
 
-    public static CrystalQuest plugin;
-    public static Economy economy;
+    private Economy economy;
 
-    public ShopPowerup(CrystalQuest instance, Economy eco) {
-        plugin = instance;
-        economy = eco;
+    public ShopPowerup(Economy economy) {
+        this.economy = economy;
     }
 
     /**
      * Updates the item's names and lores.
      *
-     * @param p
-     *         (Player) The player who has opened the shop.
-     * @param inv
-     *         (Inventory) The inventory to update.
+     * @param player
+     *         The player who has opened the shop.
+     * @param inventory
+     *         The inventory to update.
      */
-    public void updateMenu(Player p, Inventory inv) {
-        ItemStack[] contents = inv.getContents();
+    public void updateMenu(Player player, Inventory inventory) {
+        ItemStack[] contents = inventory.getContents();
 
         //STATUS BAR
-        contents[8] = getItemStatusBuff(p);
-        contents[17] = getItemStatusDebuff(p);
-        contents[26] = getItemStatusExplosives(p);
-        contents[35] = getItemStatusAmmo(p);
-        contents[44] = getItemStatusCreeper(p);
-        contents[53] = getItemStatusWolf(p);
+        contents[8] = getItemStatusBuff(player);
+        contents[17] = getItemStatusDebuff(player);
+        contents[26] = getItemStatusExplosives(player);
+        contents[35] = getItemStatusAmmo(player);
+        contents[44] = getItemStatusCreeper(player);
+        contents[53] = getItemStatusWolf(player);
 
         //ITEMS TO BUY
-        contents[10] = getItemBuyBuff(p);
-        contents[12] = getItemBuyDebuff(p);
-        contents[14] = getItemBuyExplosive(p);
-        contents[28] = getItemBuyAmmo(p);
-        contents[30] = getItemBuyCreeper(p);
-        contents[32] = getItemBuyWolf(p);
+        contents[10] = getItemBuyBuff(player);
+        contents[12] = getItemBuyDebuff(player);
+        contents[14] = getItemBuyExplosive(player);
+        contents[28] = getItemBuyAmmo(player);
+        contents[30] = getItemBuyCreeper(player);
+        contents[32] = getItemBuyWolf(player);
 
         //NAVIGATION
         contents[45] = getItemMainMenu();
-        contents[49] = economy.getItemBalance(p);
+        contents[49] = economy.getItemBalance(player);
 
-        inv.setContents(contents);
+        inventory.setContents(contents);
     }
 
     /**
      * Shows the powerup menu of the CrystalQuest-Shop.
      *
-     * @param p
-     *         (Player) The player to show the menu to.
+     * @param player
+     *         The player to show the menu to.
      */
-    public void showMenu(Player p) {
-        p.closeInventory();
+    public void showMenu(Player player) {
+        player.closeInventory();
 
-        Inventory inv = Bukkit.createInventory(null, 54,
+        Inventory inventory = Bukkit.createInventory(null, 54,
                 ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Powerups"
         );
 
-        updateMenu(p, inv);
-        p.openInventory(inv);
+        updateMenu(player, inventory);
+        player.openInventory(inventory);
     }
 
     /*
      * Inventory handling for the main menu
      */
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        Inventory inv = e.getInventory();
-        if (inv.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Powerups")) {
-
-            if (e.isLeftClick()) {
-                if (e.getCurrentItem() != null) {
-                    ItemStack item = e.getCurrentItem();
-
-                    if (item.hasItemMeta()) {
-                        ItemMeta im = item.getItemMeta();
-                        if (im.hasDisplayName()) {
-                            String name = im.getDisplayName();
-                            Player p = (Player)e.getWhoClicked();
-
-							/*
-							 * MAIN MENU
-							 */
-                            if (name.equalsIgnoreCase(ChatColor.GREEN + "Main Menu")) {
-                                economy.getMainMenu().showMenu((Player)e.getWhoClicked());
-                                e.setCancelled(true);
-                                return;
-                            }
-							/*
-							 * BUY BUFF
-							 */
-                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Buffs")) {
-                                buyClass(p, "buff", e.getInventory());
-                            }
-							/*
-							 * BUY DEBUFF
-							 */
-                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.RED + "Debuffs")) {
-                                buyClass(p, "debuff", e.getInventory());
-                            }
-							/*
-							 * BUY EXPLOSIVE
-							 */
-                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.YELLOW + "Explosives")) {
-                                buyClass(p, "explosive", e.getInventory());
-                            }
-							/*
-							 * BUY AMMO
-							 */
-                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.AQUA + "Weaponry")) {
-                                buyClass(p, "weaponry", e.getInventory());
-                            }
-							/*
-							 * BUY CREEPERS
-							 */
-                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.DARK_GREEN + "Creepers")) {
-                                buyClass(p, "creepers", e.getInventory());
-                            }
-							/*
-							 * BUY WOLF
-							 */
-                            else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥")) {
-                                buyClass(p, "wolf", e.getInventory());
-                            }
-
-                            e.setCancelled(true);
-                        }
-                    }
-                }
-            }
+    public void onInventoryClick(InventoryClickEvent event) {
+        Inventory inventory = event.getInventory();
+        if (!inventory.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Powerups")) {
+            return;
         }
+
+        if (!event.isLeftClick()) {
+            return;
+        }
+
+        if (event.getCurrentItem() == null) {
+            return;
+        }
+
+        ItemStack item = event.getCurrentItem();
+        if (!item.hasItemMeta()) {
+            return;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (!meta.hasDisplayName()) {
+            return;
+        }
+
+        String upgradeItemName = meta.getDisplayName();
+        Player player = (Player)event.getWhoClicked();
+
+        // Main menu.
+        if (upgradeItemName.equalsIgnoreCase(ChatColor.GREEN + "Main Menu")) {
+            economy.getMainMenu().showMenu(player);
+            event.setCancelled(true);
+            return;
+        }
+        // Buy buff.
+        else if (upgradeItemName.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Buffs")) {
+            buyClass(player, ShopUpgrade.POWERUP_BUFF, event.getInventory());
+        }
+        // Buy debuff.
+        else if (upgradeItemName.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.RED + "Debuffs")) {
+            buyClass(player, ShopUpgrade.POWERUP_DEBUFF, event.getInventory());
+        }
+        // Buy explosive.
+        else if (upgradeItemName.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.YELLOW + "Explosives")) {
+            buyClass(player, ShopUpgrade.POWERUP_EXPLOSIVE, event.getInventory());
+        }
+        // Buy ammo.
+        else if (upgradeItemName.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.AQUA + "Weaponry")) {
+            buyClass(player, ShopUpgrade.POWERUP_WEAPONRY, event.getInventory());
+        }
+        // Buy creepers.
+        else if (upgradeItemName.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.DARK_GREEN + "Creepers")) {
+            buyClass(player, ShopUpgrade.POWERUP_CREEPERS, event.getInventory());
+        }
+        // Buy wolves.
+        else if (upgradeItemName.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥")) {
+            buyClass(player, ShopUpgrade.POWERUP_WOLF, event.getInventory());
+        }
+
+        event.setCancelled(true);
     }
 
     /**
      * Let the player buy the chosen class.
      *
-     * @param p
-     *         (Player) The buyer.
-     * @param Class
-     *         (String) The item-class the player buys.
-     * @param inv
-     *         (Inventory) The inventory-instance of the shop.
-     * @return (boolean) True if able to, false if he/she couldn't buy the class.
+     * @param player
+     *         The buyer.
+     * @param upgrade
+     *         The item-class the player buys.
+     * @param inventory
+     *         The inventory-instance of the shop.
+     * @return True if able to, false if he/she couldn't buy the class.
      */
-    public boolean buyClass(Player p, String Class, Inventory inv) {
-        int level = economy.getLevel(p, Class, "upgrade") + 1;
-        Balance bal = economy.getBalance();
+    public boolean buyClass(Player player, ShopUpgrade upgrade, Inventory inventory) {
+        Balance balance = economy.getBalance();
+        Upgrades upgrades = economy.getUpgrades();
+        int level = upgrades.getLevel(player, upgrade) + 1;
 
-        if (bal.canAfford(p, economy.getCosts(level))) {
-            bal.addBalance(p, -economy.getCosts(level), false);
-            updateMenu(p, inv);
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + "." + Class, level);
-            showMenu(p);
+        if (balance.canAfford(player, economy.getUpgradeCosts(level))) {
+            balance.addBalance(player, -economy.getUpgradeCosts(level), false);
+            updateMenu(player, inventory);
+            upgrades.setLevel(player, upgrade, level);
+            showMenu(player);
             return true;
         }
 
@@ -183,59 +175,46 @@ public class ShopPowerup implements Listener {
 
     /**
      * Gets the item showing CREEPER buyable item
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemBuyCreeper(Player p) {
-        ItemStack is = new ItemStack(Material.CREEPER_SPAWN_EGG, 1);
-        ItemMeta im = is.getItemMeta();
-        if (economy.getLevel(p, "creepers", "upgrade") < 5) {
-            im.setDisplayName(PREFIX + "BUY " + ChatColor.DARK_GREEN + "Creepers");
-        }
-        else {
-            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.DARK_GREEN + "Creepers");
-        }
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".creepers")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".creepers");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".creepers", 0);
-        }
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+    public ItemStack getItemBuyCreeper(Player player) {
+        ItemStack item = new ItemStack(Material.CREEPER_SPAWN_EGG, 1);
+        ItemMeta meta = item.getItemMeta();
 
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_CREEPERS);
+        if (level < 5) {
+            meta.setDisplayName(PREFIX + "BUY " + ChatColor.DARK_GREEN + "Creepers");
+        }
+        else {
+            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.DARK_GREEN + "Creepers");
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus chance: " + ChatColor.GREEN + "+12.5%");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Extra gems-drop: " + ChatColor.GREEN + "+1");
         lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getCosts(level + 1));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing WOLF buyable item
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemBuyWolf(Player p) {
-        ItemStack is = new ItemStack(Material.BONE, 1);
-        ItemMeta im = is.getItemMeta();
-        if (economy.getLevel(p, "wolf", "upgrade") < 5) {
-            im.setDisplayName(PREFIX + "BUY " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
+    public ItemStack getItemBuyWolf(Player player) {
+        ItemStack item = new ItemStack(Material.BONE, 1);
+        ItemMeta meta = item.getItemMeta();
+
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_WOLF);
+        if (level < 5) {
+            meta.setDisplayName(PREFIX + "BUY " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
         }
         else {
-            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
+            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
         }
+
         List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".wolf")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".wolf");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".wolf", 0);
-        }
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
 
         if (level + 1 == 1 || level + 1 == 2 || level + 1 == 4) {
@@ -246,159 +225,124 @@ public class ShopPowerup implements Listener {
         }
 
         lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getCosts(level + 1));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing AMMO buyable item
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemBuyAmmo(Player p) {
-        ItemStack is = new ItemStack(Material.DIAMOND_AXE, 1);
-        Items.hideAllFlags(is);
-        ItemMeta im = is.getItemMeta();
-        if (economy.getLevel(p, "weaponry", "upgrade") < 5) {
-            im.setDisplayName(PREFIX + "BUY " + ChatColor.AQUA + "Weaponry");
-        }
-        else {
-            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.AQUA + "Weaponry");
-        }
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".weaponry")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".weaponry");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".weaponry", 0);
-        }
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+    public ItemStack getItemBuyAmmo(Player player) {
+        ItemStack item = new ItemStack(Material.DIAMOND_AXE, 1);
+        Items.hideAllFlags(item);
+        ItemMeta meta = item.getItemMeta();
 
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_WEAPONRY);
+        if (level < 5) {
+            meta.setDisplayName(PREFIX + "BUY " + ChatColor.AQUA + "Weaponry");
+        }
+        else {
+            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.AQUA + "Weaponry");
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus chance: " + ChatColor.GREEN + "+10%");
         lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getCosts(level + 1));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing EXPLOSIVE buyable item
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemBuyExplosive(Player p) {
-        ItemStack is = new ItemStack(Material.EGG, 1);
-        ItemMeta im = is.getItemMeta();
-        if (economy.getLevel(p, "explosive", "upgrade") < 5) {
-            im.setDisplayName(PREFIX + "BUY " + ChatColor.YELLOW + "Explosives");
-        }
-        else {
-            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.YELLOW + "Explosives");
-        }
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".explosive")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".explosive");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".explosive", 0);
-        }
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+    public ItemStack getItemBuyExplosive(Player player) {
+        ItemStack item = new ItemStack(Material.EGG, 1);
+        ItemMeta meta = item.getItemMeta();
 
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_EXPLOSIVE);
+        if (level < 5) {
+            meta.setDisplayName(PREFIX + "BUY " + ChatColor.YELLOW + "Explosives");
+        }
+        else {
+            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.YELLOW + "Explosives");
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus size: " + ChatColor.GREEN + "+10%");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Lightning explosion: " + ChatColor.GREEN + "+0.5");
         lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getCosts(level + 1));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing DEBUFF buyable item
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemBuyDebuff(Player p) {
-        ItemStack is = new ItemStack(Material.WITHER_SKELETON_SKULL, 1);
-        ItemMeta im = is.getItemMeta();
-        if (economy.getLevel(p, "debuff", "upgrade") < 5) {
-            im.setDisplayName(PREFIX + "BUY " + ChatColor.RED + "Debuffs");
-        }
-        else {
-            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RED + "Debuffs");
-        }
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".debuff")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".debuff");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".debuff", 0);
-        }
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+    public ItemStack getItemBuyDebuff(Player player) {
+        ItemStack item = new ItemStack(Material.WITHER_SKELETON_SKULL, 1);
+        ItemMeta meta = item.getItemMeta();
 
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_DEBUFF);
+        if (level < 5) {
+            meta.setDisplayName(PREFIX + "BUY " + ChatColor.RED + "Debuffs");
+        }
+        else {
+            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RED + "Debuffs");
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus length: " + ChatColor.GREEN + "+10%");
         lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getCosts(level + 1));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing BUFF buyable item
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemBuyBuff(Player p) {
-        ItemStack is = new ItemStack(Material.GLISTERING_MELON_SLICE, 1);
-        ItemMeta im = is.getItemMeta();
-        if (economy.getLevel(p, "buff", "upgrade") < 5) {
-            im.setDisplayName(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Buffs");
-        }
-        else {
-            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.LIGHT_PURPLE + "Buffs");
-        }
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".buff")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".buff");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".buff", 0);
-        }
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+    public ItemStack getItemBuyBuff(Player player) {
+        ItemStack item = new ItemStack(Material.GLISTERING_MELON_SLICE, 1);
+        ItemMeta meta = item.getItemMeta();
 
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_BUFF);
+        if (level < 5) {
+            meta.setDisplayName(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Buffs");
+        }
+        else {
+            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.LIGHT_PURPLE + "Buffs");
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus length: " + ChatColor.GREEN + "+10%");
         lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getCosts(level + 1));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing WOLF status
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemStatusWolf(Player p) {
-        ItemStack is = new ItemStack(Material.BONE, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
+    public ItemStack getItemStatusWolf(Player player) {
+        ItemStack item = new ItemStack(Material.BONE, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_WOLF);
+
         List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".wolf")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".wolf");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".wolf", 0);
-        }
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
         String multiplier = "" + Multipliers.getMultiplier("wolfstrength", level, false);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Strength level: " + ChatColor.GREEN +
@@ -409,28 +353,20 @@ public class ShopPowerup implements Listener {
         lore.add("");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Buff your wolf-army with strength");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "and resistance!");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing CREEPER status
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemStatusCreeper(Player p) {
-        ItemStack is = new ItemStack(Material.CREEPER_SPAWN_EGG, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.DARK_GREEN + "Creepers");
+    public ItemStack getItemStatusCreeper(Player player) {
+        ItemStack item = new ItemStack(Material.CREEPER_SPAWN_EGG, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.DARK_GREEN + "Creepers");
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_CREEPERS);
         List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".creepers")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".creepers");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".creepers", 0);
-        }
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
         String multiplier = "" + Multipliers.getMultiplier("creeper", level, true);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Chance Charged Creeper: " + ChatColor.GREEN +
@@ -443,29 +379,21 @@ public class ShopPowerup implements Listener {
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "a charged creeper. Also increases");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "the amount of crystals a creeper");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "drops on death.");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing AMMO status
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemStatusAmmo(Player p) {
-        ItemStack is = new ItemStack(Material.DIAMOND_AXE, 1);
-        Items.hideAllFlags(is);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.AQUA + "Weaponry");
+    public ItemStack getItemStatusAmmo(Player player) {
+        ItemStack item = new ItemStack(Material.DIAMOND_AXE, 1);
+        Items.hideAllFlags(item);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.AQUA + "Weaponry");
         List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".weaponry")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".weaponry");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".weaponry", 0);
-        }
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_WEAPONRY);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
         String multiplier = "" + Multipliers.getMultiplier("ammo", level, true);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Chance to double: " + ChatColor.GREEN +
@@ -473,28 +401,20 @@ public class ShopPowerup implements Listener {
         lore.add("");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Increase the chance of getting");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "double durability/ammo on weapons.");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing EXPLOSIVES status
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemStatusExplosives(Player p) {
-        ItemStack is = new ItemStack(Material.EGG, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.YELLOW + "Explosives");
+    public ItemStack getItemStatusExplosives(Player player) {
+        ItemStack item = new ItemStack(Material.EGG, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.YELLOW + "Explosives");
         List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".explosive")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".explosive");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".explosive", 0);
-        }
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_EXPLOSIVE);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
         String multiplier = "" + Multipliers.getMultiplier("explosive", level, true);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Explosion size: " + ChatColor.GREEN +
@@ -504,28 +424,20 @@ public class ShopPowerup implements Listener {
         lore.add("");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Increase the size of your explosives");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "and let lightning explode when hit.");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing DEBUFF status
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemStatusDebuff(Player p) {
-        ItemStack is = new ItemStack(Material.WITHER_SKELETON_SKULL, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.RED + "Debuffs");
+    public ItemStack getItemStatusDebuff(Player player) {
+        ItemStack item = new ItemStack(Material.WITHER_SKELETON_SKULL, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.RED + "Debuffs");
         List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".debuff")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".debuff");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".debuff", 0);
-        }
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_DEBUFF);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
         String multiplier = "" + Multipliers.getMultiplier("debuff", level, true);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Debuff length: " + ChatColor.GREEN +
@@ -533,53 +445,44 @@ public class ShopPowerup implements Listener {
         lore.add("");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Let the debuffs apply");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "longer to your oppontents.");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing BUFF status
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemStatusBuff(Player p) {
-        ItemStack is = new ItemStack(Material.GLISTERING_MELON_SLICE, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.LIGHT_PURPLE + "Buffs");
+    public ItemStack getItemStatusBuff(Player player) {
+        ItemStack item = new ItemStack(Material.GLISTERING_MELON_SLICE, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Buffs");
         List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.upgrade." + p.getUniqueId().toString() + ".buff")) {
-            level = plugin.getData().getInt("shop.upgrade." + p.getUniqueId().toString() + ".buff");
-        }
-        else {
-            plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + ".buff", 0);
-        }
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_BUFF);
         String multiplier = "" + Multipliers.getMultiplier("buff", level, true);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Buff length: " + ChatColor.GREEN +
                 multiplier.substring(0, 3) + "%");
         lore.add("");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Let your buff-powerups last longer.");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item linking to the Main Menu
-     *
-     * @return (ItemStack)
      */
     public ItemStack getItemMainMenu() {
-        ItemStack is = new ItemStack(Material.ARROW, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.GREEN + "Main Menu");
-        is.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
+        ItemStack item = new ItemStack(Material.ARROW, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.GREEN + "Main Menu");
+        item.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
+
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Go back to the Main Menu!");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 }

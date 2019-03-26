@@ -25,12 +25,12 @@ import java.util.List;
  */
 public class ShopClasses implements Listener {
 
-    public static CrystalQuest plugin;
-    public static Economy economy;
+    private CrystalQuest plugin;
+    private Economy economy;
 
-    public ShopClasses(CrystalQuest instance, Economy eco) {
-        plugin = instance;
-        economy = eco;
+    public ShopClasses(CrystalQuest plugin, Economy economy) {
+        this.plugin = plugin;
+        this.economy = economy;
     }
 
     /**

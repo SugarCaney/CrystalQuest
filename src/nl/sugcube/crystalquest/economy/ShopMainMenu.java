@@ -1,6 +1,5 @@
 package nl.sugcube.crystalquest.economy;
 
-import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,128 +21,116 @@ import java.util.List;
  */
 public class ShopMainMenu implements Listener {
 
-    public static CrystalQuest plugin;
-    public static Economy economy;
+    private Economy economy;
 
-    public ShopMainMenu(CrystalQuest instance, Economy eco) {
-        plugin = instance;
-        economy = eco;
+    public ShopMainMenu(Economy economy) {
+        this.economy = economy;
     }
 
     /**
      * Shows the main menu of the CrystalQuest-Shop.
      *
-     * @param p
-     *         (Player) The player to show the menu to.
+     * @param player
+     *         The player to show the menu to.
      */
-    public void showMenu(Player p) {
-        p.closeInventory();
+    public void showMenu(Player player) {
+        player.closeInventory();
 
-        Inventory inv = Bukkit.createInventory(null, 9,
+        Inventory inventory = Bukkit.createInventory(null, 9,
                 ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Menu"
         );
 
-        ItemStack[] contents = inv.getContents();
+        ItemStack[] contents = inventory.getContents();
         contents[0] = getItemClass();
         contents[1] = getItemPowerUp();
         contents[2] = getItemCrystals();
-        contents[8] = economy.getItemBalance(p);
-        inv.setContents(contents);
+        contents[8] = economy.getItemBalance(player);
+        inventory.setContents(contents);
 
-        p.openInventory(inv);
+        player.openInventory(inventory);
     }
 
     /*
      * Inventory handling for the main menu
      */
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        Inventory inv = e.getInventory();
-        if (inv.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Menu")) {
+    public void onInventoryClick(InventoryClickEvent event) {
+        Inventory inventory = event.getInventory();
+        if (!inventory.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Menu")) {
+            return;
+        }
 
-            if (e.getCurrentItem() != null) {
-                ItemStack item = e.getCurrentItem();
+        if (event.getCurrentItem() == null) {
+            event.setCancelled(true);
+            return;
+        }
 
-                if (item.hasItemMeta()) {
-                    ItemMeta im = item.getItemMeta();
-                    if (im.hasDisplayName()) {
-                        String name = im.getDisplayName();
+        ItemStack item = event.getCurrentItem();
+        if (!item.hasItemMeta()) {
+            return;
+        }
 
-						/*
-						 * POWERUP MENU
-						 */
-                        if (name.equalsIgnoreCase(ChatColor.GREEN + "Power-Up-Grades")) {
-                            economy.getPowerupMenu().showMenu((Player)e.getWhoClicked());
-                        }
-						/*
-						 * CRYSTALS MENU
-						 */
-                        else if (name.equalsIgnoreCase(ChatColor.AQUA + "More Crystals")) {
-                            economy.getCrystalMenu().showMenu((Player)e.getWhoClicked());
-                        }
-						/*
-						 * CLASSES MENU
-						 */
-                        else if (name.equalsIgnoreCase(ChatColor.GOLD + "Buy Classes")) {
-                            economy.getClassesMenu().showMenu((Player)e.getWhoClicked());
-                        }
+        ItemMeta meta = item.getItemMeta();
+        if (!meta.hasDisplayName()) {
+            return;
+        }
 
-                    }
-                }
-            }
-
-
-            e.setCancelled(true);
+        String name = meta.getDisplayName();
+        if (name.equalsIgnoreCase(ChatColor.GREEN + "Power-Up-Grades")) {
+            economy.getPowerupMenu().showMenu((Player)event.getWhoClicked());
+        }
+        else if (name.equalsIgnoreCase(ChatColor.AQUA + "More Crystals")) {
+            economy.getCrystalMenu().showMenu((Player)event.getWhoClicked());
+        }
+        else if (name.equalsIgnoreCase(ChatColor.GOLD + "Buy Classes")) {
+            economy.getClassesMenu().showMenu((Player)event.getWhoClicked());
         }
     }
 
     /**
      * Gets the item linking to the More Crystals-Menu
-     *
-     * @return (ItemStack)
      */
     public ItemStack getItemCrystals() {
-        ItemStack is = new ItemStack(Material.DIAMOND, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.AQUA + "More Crystals");
-        is.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
-        List<String> lore = new ArrayList<String>();
+        ItemStack item = new ItemStack(Material.DIAMOND, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.AQUA + "More Crystals");
+        item.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
+
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gimme money!");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item linking to the Power-Up-Grade-Menu
-     *
-     * @return (ItemStack)
      */
     public ItemStack getItemPowerUp() {
-        ItemStack is = new ItemStack(Material.SLIME_BALL, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.GREEN + "Power-Up-Grades");
-        List<String> lore = new ArrayList<String>();
+        ItemStack item = new ItemStack(Material.SLIME_BALL, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.GREEN + "Power-Up-Grades");
+
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade your Power-Ups");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item linking to the Buy Class-Menu
-     *
-     * @return (ItemStack)
      */
     public ItemStack getItemClass() {
-        ItemStack is = new ItemStack(Material.GOLDEN_SWORD, 1);
-        Items.hideAllFlags(is);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.GOLD + "Buy Classes");
-        List<String> lore = new ArrayList<String>();
+        ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
+        Items.hideAllFlags(item);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.GOLD + "Buy Classes");
+
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Buy extra classes to play with!");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 }

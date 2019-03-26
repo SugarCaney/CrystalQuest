@@ -3,6 +3,7 @@ package nl.sugcube.crystalquest.economy;
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.ArenaManager;
+import nl.sugcube.crystalquest.util.CrystalQuestException;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,15 +19,15 @@ import java.util.List;
  */
 public class Economy {
 
-    public static CrystalQuest plugin;
+    private CrystalQuest plugin;
 
-    public static int COST_LVL_1 = 518;
-    public static int COST_LVL_2 = 1090;
-    public static int COST_LVL_3 = 2376;
-    public static int COST_LVL_4 = 5180;
-    public static int COST_LVL_5 = 11292;
+    /**
+     * How many crystals each upgrade level costs. Index i means upgrade to level i+1.
+     */
+    private int[] UPGRADE_COSTS = new int[5];
 
     private Balance balance;
+    private Upgrades upgrades;
     private ShopMainMenu shopMainMenu;
     private ShopPowerup shopPowerupMenu;
     private ShopCrystals shopCrystals;
@@ -35,23 +36,25 @@ public class Economy {
     public Economy(CrystalQuest instance) {
         new Multipliers(plugin);
         plugin = instance;
-        shopMainMenu = new ShopMainMenu(plugin, this);
-        shopPowerupMenu = new ShopPowerup(plugin, this);
-        shopCrystals = new ShopCrystals(plugin, this);
+        shopMainMenu = new ShopMainMenu(this);
+        shopPowerupMenu = new ShopPowerup(this);
+        shopCrystals = new ShopCrystals(this);
         shopClasses = new ShopClasses(plugin, this);
 
         if (instance.getConfig().getBoolean("mysql.enabled")) {
             balance = new DatabaseBalance(plugin.queryEconomy);
+            upgrades = new DatabaseUpgrades(plugin.queryEconomy);
         }
         else {
             balance = new YamlBalance(plugin);
+            upgrades = new YamlUpgrades(plugin);
         }
 
-        COST_LVL_1 = plugin.getConfig().getInt("shop.start-price");
-        COST_LVL_2 = (int)(COST_LVL_1 * plugin.getConfig().getDouble("shop.multiplier"));
-        COST_LVL_3 = (int)(COST_LVL_2 * plugin.getConfig().getDouble("shop.multiplier"));
-        COST_LVL_4 = (int)(COST_LVL_3 * plugin.getConfig().getDouble("shop.multiplier"));
-        COST_LVL_5 = (int)(COST_LVL_4 * plugin.getConfig().getDouble("shop.multiplier"));
+        UPGRADE_COSTS[0] = plugin.getConfig().getInt("shop.start-price");
+        double multiplier = plugin.getConfig().getDouble("shop.multiplier");
+        for (int i = 1; i < 5; i++) {
+            UPGRADE_COSTS[i] = (int)(UPGRADE_COSTS[i - 1] * multiplier);
+        }
     }
 
     /**
@@ -72,6 +75,13 @@ public class Economy {
      */
     public Balance getBalance() {
         return this.balance;
+    }
+
+    /**
+     * Gets the instance managing the upgrades.
+     */
+    public Upgrades getUpgrades() {
+        return this.upgrades;
     }
 
     /**
@@ -124,42 +134,43 @@ public class Economy {
      * Gets how many crystals the upgrade will cost
      *
      * @param lvl
-     *         (int) The level to upgrade to.
+     *         The level to upgrade to.
      */
-    public int getCosts(int lvl) {
-        switch (lvl) {
-            case 1:
-                return COST_LVL_1;
-            case 2:
-                return COST_LVL_2;
-            case 3:
-                return COST_LVL_3;
-            case 4:
-                return COST_LVL_4;
-            case 5:
-                return COST_LVL_5;
-            default:
-                return 0;
+    public int getUpgradeCosts(int lvl) {
+        if (lvl < 1 || lvl > 5) {
+            return 0;
         }
+        return UPGRADE_COSTS[lvl - 1];
     }
 
     /**
      * Gets the level a player has for a certain upgrade.
      *
-     * @param p
-     *         (Player) The player to check for.
+     * @param player
+     *         The player to check for.
      * @param upgrade
-     *         (String) The upgrade's name.
-     * @return (int) The level of the player for a certain upgrade.
+     *         The upgrade's name.
+     * @return The level of the player for a certain upgrade.
      */
-    public int getLevel(Player p, String upgrade, String type) {
-        String node = "shop." + type + "." + p.getUniqueId().toString() + "." + upgrade;
-        if (plugin.getData().isSet(node)) {
-            return plugin.getData().getInt(node);
+    public int getLevel(Player player, String upgrade, String type) {
+        // MySQL database.
+        if (plugin.getConfig().getBoolean("mysql.enabled")) {
+            ShopUpgrade shopUpgrade = ShopUpgrade.getById(upgrade);
+            if (shopUpgrade == null) {
+                throw new CrystalQuestException("Unknown upgrade " + upgrade);
+            }
+            return plugin.queryEconomy.getUpgradeLevel(player.getUniqueId(), shopUpgrade);
         }
+        // Yml configuration lookup
         else {
-            plugin.getData().set(node, 0);
-            return 0;
+            String node = "shop." + type + "." + player.getUniqueId().toString() + "." + upgrade;
+            if (plugin.getData().isSet(node)) {
+                return plugin.getData().getInt(node);
+            }
+            else {
+                plugin.getData().set(node, 0);
+                return 0;
+            }
         }
     }
 
@@ -167,11 +178,10 @@ public class Economy {
      * Gets the message to be sent when a player earns crystals
      *
      * @param p
-     *         (Player) The targeted player.
+     *         The targeted player.
      * @param amount
-     *         (int) The amount of crystals to add.
-     * @return (String) The message to be displayed to the player. OR null when there is no message
-     * set.
+     *         The amount of crystals to add.
+     * @return The message to be displayed to the player. OR null when there is no message set.
      */
     public String getCoinMessage(Player p, int amount) {
         if (plugin.getConfig().isSet("shop.crystal-message")) {

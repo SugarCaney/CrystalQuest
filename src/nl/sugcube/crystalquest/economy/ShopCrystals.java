@@ -1,6 +1,5 @@
 package nl.sugcube.crystalquest.economy;
 
-import nl.sugcube.crystalquest.CrystalQuest;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,12 +23,10 @@ public class ShopCrystals implements Listener {
     private static final String PREFIX = "" + ChatColor.GREEN + ChatColor.BOLD + ChatColor.ITALIC;
     private static final String PREFIX_RED = "" + ChatColor.RED + ChatColor.BOLD + ChatColor.ITALIC;
 
-    public static CrystalQuest plugin;
-    public static Economy economy;
+    private Economy economy;
 
-    public ShopCrystals(CrystalQuest instance, Economy eco) {
-        plugin = instance;
-        economy = eco;
+    public ShopCrystals(Economy economy) {
+        this.economy = economy;
     }
 
     /**
@@ -65,250 +62,211 @@ public class ShopCrystals implements Listener {
     /**
      * Shows the crystal menu of the CrystalQuest-Shop.
      *
-     * @param p
-     *         (Player) The player to show the menu to.
+     * @param player
+     *         The player to show the menu to.
      */
-    public void showMenu(Player p) {
-        p.closeInventory();
+    public void showMenu(Player player) {
+        player.closeInventory();
 
         Inventory inv = Bukkit.createInventory(null, 54,
                 ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Crystals"
         );
 
-        updateMenu(p, inv);
-        p.openInventory(inv);
+        updateMenu(player, inv);
+        player.openInventory(inv);
     }
 
     /*
      * Inventory handling for the main menu
      */
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        Inventory inv = e.getInventory();
-        if (inv.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Crystals")) {
-
-            if (e.getCurrentItem() != null) {
-                ItemStack item = e.getCurrentItem();
-
-                if (item.hasItemMeta()) {
-                    ItemMeta im = item.getItemMeta();
-                    if (im.hasDisplayName()) {
-                        String name = im.getDisplayName();
-                        Player p = (Player)e.getWhoClicked();
-
-						/*
-						 * MAIN MENU
-						 */
-                        if (name.equalsIgnoreCase(ChatColor.GREEN + "Main Menu")) {
-                            economy.getMainMenu().showMenu((Player)e.getWhoClicked());
-                        }
-						/*
-						 * BUY EXP
-						 */
-                        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.GREEN + "Xp-Bonus")) {
-                            buyClass(p, "xp", e.getInventory());
-                        }
-						/*
-						 * BUY SMASH
-						 */
-                        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Smash-Bonus")) {
-                            buyClass(p, "smash", e.getInventory());
-                        }
-						/*
-						 * BUY WIN
-						 */
-                        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.YELLOW + "Win-Cash")) {
-                            buyClass(p, "win", e.getInventory());
-                        }
-						/*
-						 * BUY BLOOD
-						 */
-                        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.RED + "Blood Diamonds")) {
-                            buyClass(p, "blood", e.getInventory());
-                        }
-
-                        e.setCancelled(true);
-                    }
-                }
-            }
-
-            e.setCancelled(true);
+    public void onInventoryClick(InventoryClickEvent event) {
+        Inventory inventory = event.getInventory();
+        if (!inventory.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Crystals")) {
+            return;
         }
+
+        if (event.getCurrentItem() == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        ItemStack item = event.getCurrentItem();
+        if (!item.hasItemMeta()) {
+            return;
+        }
+
+        ItemMeta im = item.getItemMeta();
+        if (!im.hasDisplayName()) {
+            return;
+        }
+
+        String name = im.getDisplayName();
+        Player buyer = (Player)event.getWhoClicked();
+
+        // Main Menu.
+        if (name.equalsIgnoreCase(ChatColor.GREEN + "Main Menu")) {
+            economy.getMainMenu().showMenu((Player)event.getWhoClicked());
+        }
+        // Buy XP.
+        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.GREEN + "Xp-Bonus")) {
+            buyClass(buyer, ShopUpgrade.CRYSTALS_XP, event.getInventory());
+        }
+        // Buy smash.
+        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Smash-Bonus")) {
+            buyClass(buyer, ShopUpgrade.CRYSTALS_SMASH, event.getInventory());
+        }
+        // Buy win.
+        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.YELLOW + "Win-Cash")) {
+            buyClass(buyer, ShopUpgrade.CRYSTALS_WIN, event.getInventory());
+        }
+        // buy blood.
+        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.RED + "Blood Diamonds")) {
+            buyClass(buyer, ShopUpgrade.CRYSTALS_BLOOD, event.getInventory());
+        }
+
+        event.setCancelled(true);
     }
 
     /**
      * Let the player buy the chosen crystal-upgrade.
      *
-     * @param p
-     *         (Player) The buyer.
-     * @param Class
-     *         (String) The upgrade the player buys.
-     * @param inv
-     *         (Inventory) The inventory-instance of the shop.
-     * @return (boolean) True if able to, false if he/she couldn't buy the upgrade.
+     * @param player
+     *         The buyer.
+     * @param upgrade
+     *         The upgrade the player buys.
+     * @param inventory
+     *         The inventory-instance of the shop.
+     * @return True if able to, false if they couldn't buy the upgrade.
      */
-    public boolean buyClass(Player p, String Class, Inventory inv) {
-        int level = economy.getLevel(p, Class, "crystals") + 1;
-        Balance bal = economy.getBalance();
+    public boolean buyClass(Player player, ShopUpgrade upgrade, Inventory inventory) {
+        Balance balance = economy.getBalance();
+        Upgrades upgrades = economy.getUpgrades();
 
-        if (bal.canAfford(p, economy.getCosts(level))) {
-            bal.addBalance(p, -economy.getCosts(level), false);
-            updateMenu(p, inv);
-            plugin.getData().set("shop.crystals." + p.getUniqueId().toString() + "." + Class, level);
-            showMenu(p);
+        int level = upgrades.getLevel(player, upgrade) + 1;
+        if (balance.canAfford(player, economy.getUpgradeCosts(level))) {
+            balance.addBalance(player, -economy.getUpgradeCosts(level), false);
+            updateMenu(player, inventory);
+            upgrades.setLevel(player, upgrade, level);
+            showMenu(player);
             return true;
         }
-        else {
-            return false;
-        }
+
+        return false;
     }
 
     /**
      * Gets the item showing BLOOD buyable item
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemBuyKill(Player p) {
-        ItemStack is = new ItemStack(Material.PLAYER_HEAD, 1);
-        ItemMeta im = is.getItemMeta();
-        if (economy.getLevel(p, "blood", "crystals") < 5) {
-            im.setDisplayName(PREFIX + "BUY " + ChatColor.RED + "Blood Diamonds");
-        }
-        else {
-            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RED + "Blood Diamonds");
-        }
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".blood")) {
-            level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".blood");
-        }
-        else {
-            plugin.getData().set("shop.crystals." + p.getUniqueId().toString() + ".blood", 0);
-        }
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+    public ItemStack getItemBuyKill(Player player) {
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
+        ItemMeta meta = item.getItemMeta();
 
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_BLOOD);
+        if (level < 5) {
+            meta.setDisplayName(PREFIX + "BUY " + ChatColor.RED + "Blood Diamonds");
+        }
+        else {
+            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RED + "Blood Diamonds");
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Double chance: " + ChatColor.GREEN + "+20%");
         lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getCosts(level + 1));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing WIN buyable item
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemBuyWin(Player p) {
-        ItemStack is = new ItemStack(Material.GOLD_INGOT, 1);
-        ItemMeta im = is.getItemMeta();
-        if (economy.getLevel(p, "win", "crystals") < 5) {
-            im.setDisplayName(PREFIX + "BUY " + ChatColor.YELLOW + "Win-Cash");
-        }
-        else {
-            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.YELLOW + "Win-Cash");
-        }
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".win")) {
-            level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".win");
-        }
-        else {
-            plugin.getData().set("shop.crystals." + p.getUniqueId().toString() + ".win", 0);
-        }
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+    public ItemStack getItemBuyWin(Player player) {
+        ItemStack item = new ItemStack(Material.GOLD_INGOT, 1);
+        ItemMeta meta = item.getItemMeta();
 
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_WIN);
+        if (level < 5) {
+            meta.setDisplayName(PREFIX + "BUY " + ChatColor.YELLOW + "Win-Cash");
+        }
+        else {
+            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.YELLOW + "Win-Cash");
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Cash on win: " + ChatColor.GREEN + "+10%");
         lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getCosts(level + 1));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing SMASH buyable item
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemBuySmash(Player p) {
-        ItemStack is = new ItemStack(Material.NETHER_STAR, 1);
-        ItemMeta im = is.getItemMeta();
-        if (economy.getLevel(p, "smash", "crystals") < 5) {
-            im.setDisplayName(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
-        }
-        else {
-            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
-        }
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".smash")) {
-            level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".smash");
-        }
-        else {
-            plugin.getData().set("shop.crystals." + p.getUniqueId().toString() + ".smash", 0);
-        }
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+    public ItemStack getItemBuySmash(Player player) {
+        ItemStack item = new ItemStack(Material.NETHER_STAR, 1);
+        ItemMeta meta = item.getItemMeta();
 
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_SMASH);
+        if (level < 5) {
+            meta.setDisplayName(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
+        }
+        else {
+            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Double chance: " + ChatColor.GREEN + "+10%");
         lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getCosts(level + 1));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing XP buyable item
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemBuyExp(Player p) {
-        ItemStack is = new ItemStack(Material.EXPERIENCE_BOTTLE, 1);
-        ItemMeta im = is.getItemMeta();
-        if (economy.getLevel(p, "xp", "crystals") < 5) {
-            im.setDisplayName(PREFIX + "BUY " + ChatColor.GREEN + "Xp-Bonus");
-        }
-        else {
-            im.setDisplayName(PREFIX_RED + "MAX " + ChatColor.GREEN + "Xp-Bonus");
-        }
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".xp")) {
-            level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".xp");
-        }
-        else {
-            plugin.getData().set("shop.crystals." + p.getUniqueId().toString() + ".xp", 0);
-        }
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+    public ItemStack getItemBuyExp(Player player) {
+        ItemStack item = new ItemStack(Material.EXPERIENCE_BOTTLE, 1);
+        ItemMeta meta = item.getItemMeta();
 
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_XP);
+        if (level < 5) {
+            meta.setDisplayName(PREFIX + "BUY " + ChatColor.GREEN + "Xp-Bonus");
+        }
+        else {
+            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.GREEN + "Xp-Bonus");
+        }
+
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Crystals: " + ChatColor.GREEN + "+1");
         lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getCosts(level + 1));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing Kill status
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemStatusKill(Player p) {
-        ItemStack is = new ItemStack(Material.PLAYER_HEAD, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.RED + "Blood Diamonds");
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".blood")) {
-            level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".blood");
-        }
-        else {
-            plugin.getData().set("shop.crystals." + p.getUniqueId().toString() + ".blood", 0);
-        }
+    public ItemStack getItemStatusKill(Player player) {
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.RED + "Blood Diamonds");
+
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_BLOOD);
         String multiplier = "" + Multipliers.getMultiplier("blood", level, true);
+
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Chance double cash: " + ChatColor.GREEN +
                 multiplier.replace(".0", "") + "%");
@@ -316,58 +274,46 @@ public class ShopCrystals implements Listener {
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Increase the chance of getting");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "double crystals (balance) when you");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "kill someone");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing Crystal-Win status
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemStatusWin(Player p) {
-        ItemStack is = new ItemStack(Material.GOLD_INGOT, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.YELLOW + "Win-Cash");
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".win")) {
-            level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".win");
-        }
-        else {
-            plugin.getData().set("shop.crystals." + p.getUniqueId().toString() + ".win", 0);
-        }
+    public ItemStack getItemStatusWin(Player player) {
+        ItemStack item = new ItemStack(Material.GOLD_INGOT, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.YELLOW + "Win-Cash");
+
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_WIN);
         String multiplier = "" + Multipliers.getMultiplier("win", level, true);
+
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Win-Cash multiplier: " + ChatColor.GREEN +
                 multiplier.substring(0, 3) + "%");
         lore.add("");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Increase the amount of crystals");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "you get when you win a quest.");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing Crystal-Smash status
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemStatusSmash(Player p) {
-        ItemStack is = new ItemStack(Material.NETHER_STAR, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.LIGHT_PURPLE + "Smash-Bonus");
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".smash")) {
-            level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".smash");
-        }
-        else {
-            plugin.getData().set("shop.crystals." + p.getUniqueId().toString() + ".smash", 0);
-        }
+    public ItemStack getItemStatusSmash(Player player) {
+        ItemStack item = new ItemStack(Material.NETHER_STAR, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Smash-Bonus");
+
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_SMASH);
         String multiplier = "" + Multipliers.getMultiplier("smash", level, true);
+
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Chance double crystals: " + ChatColor.GREEN +
                 multiplier.replace(".0", "") + "%");
@@ -375,44 +321,36 @@ public class ShopCrystals implements Listener {
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Increase the chance of");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "doubling the crystals you");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "get when you smash a crystal.");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item showing Crystal-XP status
-     *
-     * @return (ItemStack)
      */
-    public ItemStack getItemStatusExp(Player p) {
-        ItemStack is = new ItemStack(Material.EXPERIENCE_BOTTLE, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.GREEN + "Xp-Bonus");
-        List<String> lore = new ArrayList<>();
-        int level = 0;
-        if (plugin.getData().isSet("shop.crystals." + p.getUniqueId().toString() + ".xp")) {
-            level = plugin.getData().getInt("shop.crystals." + p.getUniqueId().toString() + ".xp");
-        }
-        else {
-            plugin.getData().set("shop.crystals." + p.getUniqueId().toString() + ".xp", 0);
-        }
+    public ItemStack getItemStatusExp(Player player) {
+        ItemStack item = new ItemStack(Material.EXPERIENCE_BOTTLE, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.GREEN + "Xp-Bonus");
+
+        int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_XP);
         String multiplier = "" + Multipliers.getMultiplier("xp", level, false);
+
+        List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Crystals per XP-Level: " + ChatColor.GREEN +
                 multiplier.replace(".0", ""));
         lore.add("");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Increase the amount of crystals");
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "you get when you reach 1 LVL.");
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**
      * Gets the item linking to the Main Menu
-     *
-     * @return (ItemStack)
      */
     public ItemStack getItemMainMenu() {
         ItemStack is = new ItemStack(Material.ARROW, 1);
