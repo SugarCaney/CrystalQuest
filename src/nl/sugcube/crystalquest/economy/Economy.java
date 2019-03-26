@@ -39,7 +39,13 @@ public class Economy {
         shopPowerupMenu = new ShopPowerup(plugin, this);
         shopCrystals = new ShopCrystals(plugin, this);
         shopClasses = new ShopClasses(plugin, this);
-        balance = new Balance(plugin, this);
+
+        if (instance.getConfig().getBoolean("mysql.enabled")) {
+            balance = new DatabaseBalance(plugin.queryEconomy);
+        }
+        else {
+            balance = new YamlBalance(plugin);
+        }
 
         COST_LVL_1 = plugin.getConfig().getInt("shop.start-price");
         COST_LVL_2 = (int)(COST_LVL_1 * plugin.getConfig().getDouble("shop.multiplier"));
@@ -51,20 +57,18 @@ public class Economy {
     /**
      * Registers all events in the menus.
      *
-     * @param plma
-     *         (PluginManager) The plugin manager of the plugin.
+     * @param pluginManager
+     *         The plugin manager of the plugin.
      */
-    public void registerEvents(PluginManager plma) {
-        plma.registerEvents(shopMainMenu, plugin);
-        plma.registerEvents(shopPowerupMenu, plugin);
-        plma.registerEvents(shopCrystals, plugin);
-        plma.registerEvents(shopClasses, plugin);
+    public void registerEvents(PluginManager pluginManager) {
+        pluginManager.registerEvents(shopMainMenu, plugin);
+        pluginManager.registerEvents(shopPowerupMenu, plugin);
+        pluginManager.registerEvents(shopCrystals, plugin);
+        pluginManager.registerEvents(shopClasses, plugin);
     }
 
     /**
      * Gets the instance managing the balances.
-     *
-     * @return (Balance)
      */
     public Balance getBalance() {
         return this.balance;
@@ -72,8 +76,6 @@ public class Economy {
 
     /**
      * Gets the class menu of the shop.
-     *
-     * @return (ShopClasses)
      */
     public ShopClasses getClassesMenu() {
         return this.shopClasses;
@@ -81,8 +83,6 @@ public class Economy {
 
     /**
      * Gets the powerup menu of the shop.
-     *
-     * @return (ShopPowerup)
      */
     public ShopPowerup getPowerupMenu() {
         return this.shopPowerupMenu;
@@ -90,8 +90,6 @@ public class Economy {
 
     /**
      * Gets the crystal-section of the shop.
-     *
-     * @return (ShopCrystals)
      */
     public ShopCrystals getCrystalMenu() {
         return this.shopCrystals;
@@ -99,8 +97,6 @@ public class Economy {
 
     /**
      * Gets the main menu of the shop.
-     *
-     * @return (ShopMainMenu)
      */
     public ShopMainMenu getMainMenu() {
         return this.shopMainMenu;
@@ -109,14 +105,13 @@ public class Economy {
     /**
      * Gets the item representing your balance.
      *
-     * @param p
-     *         (Player) The player to show the menu to.
-     * @return (ItemStack)
+     * @param player
+     *         The player to show the menu to.
      */
-    public ItemStack getItemBalance(Player p) {
+    public ItemStack getItemBalance(Player player) {
         ItemStack is = new ItemStack(Material.EMERALD, 1);
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.GREEN + "Crystals: " + ChatColor.GOLD + ChatColor.BOLD + getBalance().getBalance(p, false));
+        im.setDisplayName(ChatColor.GREEN + "Crystals: " + ChatColor.GOLD + ChatColor.BOLD + getBalance().getBalance(player, false));
         List<String> lore = new ArrayList<String>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.spend-lore1"));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.spend-lore2"));

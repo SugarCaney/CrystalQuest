@@ -18,7 +18,7 @@ public class BukkitUtil {
      */
     public static Player getPlayerByName(String name) {
         return Bukkit.getOnlinePlayers().stream()
-                .filter(player -> ((Player)player).getName() == name)
+                .filter(player -> ((Player)player).getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
     }

@@ -166,7 +166,7 @@ public class ItemListener implements Listener {
                                 else if (killer.hasPermission("crystalquest.doublecash")) {
                                     vip = 2;
                                 }
-                                plugin.economy.getBalance().addCrystals(killer, money * multiplier * vip, false);
+                                plugin.economy.getBalance().addBalance(killer, money * multiplier * vip, false);
                                 String message = plugin.economy.getCoinMessage(killer, money * multiplier * vip);
                                 if (message != null) {
                                     killer.sendMessage(message);

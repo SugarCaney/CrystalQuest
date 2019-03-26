@@ -96,6 +96,7 @@ shop:
   spend-lore2: "great extras in the shop!"
   price: "Price"
   main-menu: "Go back to the main menu"
+  crystals-added: "&7%d crystals&e have been added to your account."
 broadcast:
   no-permission: "&c[!!] Sorry, you don't have permission to perform this command!"
   only-in-game: "Only in-game players can perform this command!"

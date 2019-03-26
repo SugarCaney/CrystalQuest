@@ -171,7 +171,7 @@ public class ShopPowerup implements Listener {
         Balance bal = economy.getBalance();
 
         if (bal.canAfford(p, economy.getCosts(level))) {
-            bal.addCrystals(p, -economy.getCosts(level), false);
+            bal.addBalance(p, -economy.getCosts(level), false);
             updateMenu(p, inv);
             plugin.getData().set("shop.upgrade." + p.getUniqueId().toString() + "." + Class, level);
             showMenu(p);

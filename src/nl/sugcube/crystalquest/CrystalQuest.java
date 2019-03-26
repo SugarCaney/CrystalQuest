@@ -7,7 +7,6 @@ import nl.sugcube.crystalquest.data.LoadData;
 import nl.sugcube.crystalquest.data.QueryEconomy;
 import nl.sugcube.crystalquest.data.SaveData;
 import nl.sugcube.crystalquest.economy.Economy;
-import nl.sugcube.crystalquest.economy.ShopUpgrade;
 import nl.sugcube.crystalquest.game.*;
 import nl.sugcube.crystalquest.inventorymenu.PickTeam;
 import nl.sugcube.crystalquest.inventorymenu.SelectClass;
@@ -110,6 +109,23 @@ public class CrystalQuest extends JavaPlugin {
             }
         }
 
+        /*
+         * Establishing database connection
+         */
+        if (getConfig().getBoolean("mysql.enabled")) {
+            database = new Database(
+                    getConfig().getString("mysql.username"),
+                    getConfig().getString("mysql.password"),
+                    getConfig().getString("mysql.database"),
+                    getConfig().getString("mysql.host"),
+                    getConfig().getInt("mysql.port")
+            );
+            database.initialize();
+
+            queryEconomy = new QueryEconomy(this);
+            queryEconomy.createTable();
+        }
+
 		/*
          * SPECIAL FOR THE 1.7.5/1.8 UPDATE:
 		 * CHANGING FROM PLAYER NAMES TO UUIDs
@@ -171,28 +187,6 @@ public class CrystalQuest extends JavaPlugin {
         this.getCommand("cq").setExecutor(commandExecutor);
         this.getCommand("cq").setTabCompleter(commandExecutor);
 
-        this.getLogger().info("CrystalQuest v" + pdfFile.getVersion() + " has been enabled!");
-
-        /*
-         * Establishing database connection
-         */
-        if (getConfig().getBoolean("mysql.enabled")) {
-            database = new Database(
-                    getConfig().getString("mysql.username"),
-                    getConfig().getString("mysql.password"),
-                    getConfig().getString("mysql.database"),
-                    getConfig().getString("mysql.host"),
-                    getConfig().getInt("mysql.port")
-            );
-            database.initialize();
-
-            queryEconomy = new QueryEconomy(this);
-            queryEconomy.createTable();
-            queryEconomy.setBalance("test", 231);
-            queryEconomy.setUpgradeLevel("test", ShopUpgrade.POWERUP_CREEPERS, 2);
-            queryEconomy.setUpgradeLevel("clone", ShopUpgrade.POWERUP_CREEPERS, 3);
-        }
-
 		/*
 		 * Starting the game-loops
 		 * Initialize all arenas
@@ -240,6 +234,9 @@ public class CrystalQuest extends JavaPlugin {
 
         Broadcast.setMessages();
         itemHandler.addAllItems();
+
+        // Finally done enabling :)
+        this.getLogger().info("CrystalQuest v" + pdfFile.getVersion() + " has been enabled!");
     }
 
     public void onDisable() {

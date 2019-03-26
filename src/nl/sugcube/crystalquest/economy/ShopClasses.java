@@ -141,7 +141,7 @@ public class ShopClasses implements Listener {
                                     list.add(techName);
                                     plugin.getData().set("shop.classes." + p.getUniqueId().toString(), list);
                                 }
-                                economy.getBalance().addCrystals(p, -price, false);
+                                economy.getBalance().addBalance(p, -price, false);
 
                                 showMenu(p);
                             }

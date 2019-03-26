@@ -240,7 +240,7 @@ public class PlayerListener implements Listener {
             String message = plugin.economy.getCoinMessage(p, crystalEvent.getAmount());
 
             if (!crystalEvent.isCancelled()) {
-                plugin.economy.getBalance().addCrystals(p, crystalEvent.getAmount(), false);
+                plugin.economy.getBalance().addBalance(p, crystalEvent.getAmount(), false);
 
                 if (crystalEvent.showMessage() && message != null) {
                     p.sendMessage(message);

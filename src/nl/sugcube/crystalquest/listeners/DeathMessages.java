@@ -138,7 +138,7 @@ public class DeathMessages implements Listener {
                                     String message = plugin.economy.getCoinMessage(shooter, event.getAmount());
 
                                     if (!event.isCancelled()) {
-                                        plugin.economy.getBalance().addCrystals(shooter, event.getAmount(), false);
+                                        plugin.economy.getBalance().addBalance(shooter, event.getAmount(), false);
 
                                         if (event.showMessage() && message != null) {
                                             shooter.sendMessage(message);
@@ -205,7 +205,7 @@ public class DeathMessages implements Listener {
                                 String message = plugin.economy.getCoinMessage(len, event.getAmount());
 
                                 if (!event.isCancelled()) {
-                                    plugin.economy.getBalance().addCrystals(len, event.getAmount(), false);
+                                    plugin.economy.getBalance().addBalance(len, event.getAmount(), false);
 
                                     if (event.showMessage() && message != null) {
                                         len.sendMessage(message);

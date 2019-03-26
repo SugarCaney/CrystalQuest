@@ -88,7 +88,7 @@ public class ProjectileListener implements Listener {
         String message = plugin.economy.getCoinMessage(shooter, event.getAmount());
 
         if (!event.isCancelled()) {
-            plugin.economy.getBalance().addCrystals(shooter, event.getAmount(), false);
+            plugin.economy.getBalance().addBalance(shooter, event.getAmount(), false);
 
             if (event.showMessage() && message != null) {
                 shooter.sendMessage(message);
