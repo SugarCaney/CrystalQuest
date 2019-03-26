@@ -1,6 +1,14 @@
 updates:
   check-for-updates: true
   show-admin: true
+mysql:
+  enabled: false
+  username: 'root'
+  password: 'root'
+  database: 'database'
+  host: 'localhost'
+  port: 3306
+  table-prefix: 'cq_'
 arena:
   countdown: 30
   game-length: 450

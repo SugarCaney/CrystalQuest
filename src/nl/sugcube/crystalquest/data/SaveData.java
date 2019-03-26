@@ -1,4 +1,4 @@
-package nl.sugcube.crystalquest.io;
+package nl.sugcube.crystalquest.data;
 
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;

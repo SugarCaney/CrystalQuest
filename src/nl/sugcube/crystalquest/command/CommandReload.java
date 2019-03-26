@@ -3,7 +3,7 @@ package nl.sugcube.crystalquest.command;
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
-import nl.sugcube.crystalquest.io.SaveData;
+import nl.sugcube.crystalquest.data.SaveData;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
