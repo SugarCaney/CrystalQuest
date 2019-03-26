@@ -3,7 +3,7 @@ updates:
   show-admin: true
 arena:
   countdown: 30
-  game-length: 600
+  game-length: 450
   after-count: 15
   crystal-spawn-chance: 20
   item-spawn-chance: 100
@@ -183,7 +183,7 @@ kit:
   fire-wizard:
     name: '&a&l&oPRO &cFire Wizard'
     icon: golden_hoe,1,[e sharpness;2]
-    lore: '&7&oUses the magic of fire to slay their opponents%nl%%nl%&9Ability: &bLast Revenge%nl%&9Ability: &bFaster Recharge%nl%%nl%&9Weakness: &bWater'
+    lore: '&7&oUses the magic of fire to slay their opponents%nl%%nl%&9Ability: &bLast Revenge%nl%&9Ability: &bFaster Recharge%nl%&9Weakness: &bWater'
     ability:
       - last_revenge
       - magical_aura

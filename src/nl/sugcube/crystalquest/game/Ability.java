@@ -184,7 +184,7 @@ public class Ability implements Listener {
         }
         if (plugin.ability.getAbilities().get(p.getUniqueId()).contains("corroding")) {
             if (p.getLocation().getBlock().getType() == Material.WATER) {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, 1));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 30, 2));
             }
         }
     }
