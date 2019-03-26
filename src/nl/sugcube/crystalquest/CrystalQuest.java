@@ -123,7 +123,7 @@ public class CrystalQuest extends JavaPlugin {
             database.initialize();
 
             queryEconomy = new QueryEconomy(this);
-            queryEconomy.createTable();
+            queryEconomy.createTables();
         }
 
 		/*

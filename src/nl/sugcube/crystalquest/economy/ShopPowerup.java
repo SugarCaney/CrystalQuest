@@ -183,18 +183,19 @@ public class ShopPowerup implements Listener {
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_CREEPERS);
         if (level < 5) {
             meta.setDisplayName(PREFIX + "BUY " + ChatColor.DARK_GREEN + "Creepers");
+
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus chance: " + ChatColor.GREEN + "+12.5%");
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Extra gems-drop: " + ChatColor.GREEN + "+1");
+            lore.add("");
+            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            meta.setLore(lore);
         }
         else {
             meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.DARK_GREEN + "Creepers");
         }
 
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus chance: " + ChatColor.GREEN + "+12.5%");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Extra gems-drop: " + ChatColor.GREEN + "+1");
-        lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -209,24 +210,25 @@ public class ShopPowerup implements Listener {
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_WOLF);
         if (level < 5) {
             meta.setDisplayName(PREFIX + "BUY " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
+
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+
+            if (level + 1 == 1 || level + 1 == 2 || level + 1 == 4) {
+                lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Resistance level: " + ChatColor.GREEN + "+1");
+            }
+            else {
+                lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Strength level: " + ChatColor.GREEN + "+1");
+            }
+
+            lore.add("");
+            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            meta.setLore(lore);
         }
         else {
             meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RESET + "Wolfie " + ChatColor.RED + "♥");
         }
 
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-
-        if (level + 1 == 1 || level + 1 == 2 || level + 1 == 4) {
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Resistance level: " + ChatColor.GREEN + "+1");
-        }
-        else {
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Strength level: " + ChatColor.GREEN + "+1");
-        }
-
-        lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -242,17 +244,18 @@ public class ShopPowerup implements Listener {
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_WEAPONRY);
         if (level < 5) {
             meta.setDisplayName(PREFIX + "BUY " + ChatColor.AQUA + "Weaponry");
+
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus chance: " + ChatColor.GREEN + "+10%");
+            lore.add("");
+            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            meta.setLore(lore);
         }
         else {
             meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.AQUA + "Weaponry");
         }
 
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus chance: " + ChatColor.GREEN + "+10%");
-        lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -267,18 +270,19 @@ public class ShopPowerup implements Listener {
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_EXPLOSIVE);
         if (level < 5) {
             meta.setDisplayName(PREFIX + "BUY " + ChatColor.YELLOW + "Explosives");
+
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus size: " + ChatColor.GREEN + "+10%");
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Lightning explosion: " + ChatColor.GREEN + "+0.5");
+            lore.add("");
+            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            meta.setLore(lore);
         }
         else {
             meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.YELLOW + "Explosives");
         }
 
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus size: " + ChatColor.GREEN + "+10%");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Lightning explosion: " + ChatColor.GREEN + "+0.5");
-        lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -293,17 +297,18 @@ public class ShopPowerup implements Listener {
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_DEBUFF);
         if (level < 5) {
             meta.setDisplayName(PREFIX + "BUY " + ChatColor.RED + "Debuffs");
+
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus length: " + ChatColor.GREEN + "+10%");
+            lore.add("");
+            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            meta.setLore(lore);
         }
         else {
             meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RED + "Debuffs");
         }
 
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus length: " + ChatColor.GREEN + "+10%");
-        lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -318,17 +323,18 @@ public class ShopPowerup implements Listener {
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.POWERUP_BUFF);
         if (level < 5) {
             meta.setDisplayName(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Buffs");
+
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus length: " + ChatColor.GREEN + "+10%");
+            lore.add("");
+            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            meta.setLore(lore);
         }
         else {
             meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.LIGHT_PURPLE + "Buffs");
         }
 
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Bonus length: " + ChatColor.GREEN + "+10%");
-        lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }

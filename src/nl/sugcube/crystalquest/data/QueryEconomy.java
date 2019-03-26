@@ -26,9 +26,9 @@ public class QueryEconomy {
     }
 
     /**
-     * Creates all table necessary for the economy queries to work, if they do not exist yet.
+     * Creates all tables necessary for the economy queries to work, if they do not exist yet.
      */
-    public void createTable() {
+    public void createTables() {
         String sql = "CREATE TABLE IF NOT EXISTS `" + tableName + "`" +
                 "(" +
                 "  `uuid`      VARCHAR(36) NOT NULL," +
@@ -38,6 +38,7 @@ public class QueryEconomy {
                 "  `explosive` INT         NOT NULL DEFAULT '0'," +
                 "  `weaponry`  INT         NOT NULL DEFAULT '0'," +
                 "  `creepers`  INT         NOT NULL DEFAULT '0'," +
+                "  `wolf`      INT         NOT NULL DEFAULT '0'," +
                 "  `xp`        INT         NOT NULL DEFAULT '0'," +
                 "  `smash`     INT         NOT NULL DEFAULT '0'," +
                 "  `win`       INT         NOT NULL DEFAULT '0'," +

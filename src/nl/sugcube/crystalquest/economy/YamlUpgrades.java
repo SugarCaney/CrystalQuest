@@ -28,6 +28,6 @@ public class YamlUpgrades implements Upgrades {
 
     @Override
     public void setLevel(Player player, ShopUpgrade upgrade, int newLevel) {
-        plugin.getData().set("shop.crystals." + player.getUniqueId().toString() + "." + upgrade, newLevel);
+        plugin.getData().set("shop." + upgrade.getType() + "." + player.getUniqueId().toString() + "." + upgrade.getId(), newLevel);
     }
 }

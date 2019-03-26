@@ -165,17 +165,18 @@ public class ShopCrystals implements Listener {
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_BLOOD);
         if (level < 5) {
             meta.setDisplayName(PREFIX + "BUY " + ChatColor.RED + "Blood Diamonds");
+
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Double chance: " + ChatColor.GREEN + "+20%");
+            lore.add("");
+            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            meta.setLore(lore);
         }
         else {
             meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RED + "Blood Diamonds");
         }
 
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Double chance: " + ChatColor.GREEN + "+20%");
-        lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -190,17 +191,18 @@ public class ShopCrystals implements Listener {
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_WIN);
         if (level < 5) {
             meta.setDisplayName(PREFIX + "BUY " + ChatColor.YELLOW + "Win-Cash");
+
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Cash on win: " + ChatColor.GREEN + "+10%");
+            lore.add("");
+            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            meta.setLore(lore);
         }
         else {
             meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.YELLOW + "Win-Cash");
         }
 
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Cash on win: " + ChatColor.GREEN + "+10%");
-        lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -215,17 +217,18 @@ public class ShopCrystals implements Listener {
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_SMASH);
         if (level < 5) {
             meta.setDisplayName(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
+
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Double chance: " + ChatColor.GREEN + "+10%");
+            lore.add("");
+            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            meta.setLore(lore);
         }
         else {
             meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
         }
 
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Double chance: " + ChatColor.GREEN + "+10%");
-        lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
@@ -240,17 +243,18 @@ public class ShopCrystals implements Listener {
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_XP);
         if (level < 5) {
             meta.setDisplayName(PREFIX + "BUY " + ChatColor.GREEN + "Xp-Bonus");
+
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Crystals: " + ChatColor.GREEN + "+1");
+            lore.add("");
+            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            meta.setLore(lore);
         }
         else {
             meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.GREEN + "Xp-Bonus");
         }
 
-        List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Crystals: " + ChatColor.GREEN + "+1");
-        lore.add("");
-        lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }
