@@ -239,6 +239,8 @@ public class Arena {
      */
     private Team spectatorTeam;
 
+    private Random random = new Random();
+
     /**
      * @param instance
      *         Instance of the plugin
@@ -1687,16 +1689,12 @@ public class Arena {
 
         setInGame(true);
 
-        Random ran = new Random();
+        boolean isTeamSpawns = getTeamSpawns().entrySet().stream()
+                .map(entry -> entry.getValue().size())
+                .anyMatch(amount -> amount > 0);
 
         for (UUID id : getPlayers()) {
             Player player = Bukkit.getPlayer(id);
-            boolean isTeamSpawns = false;
-            for (int i = 0; i < getTeamCount(); i++) {
-                if (getTeamSpawns().get(CrystalQuestTeam.valueOf(i)).size() > 0) {
-                    isTeamSpawns = true;
-                }
-            }
             if (isTeamSpawns) {
                 CrystalQuestTeam team = getTeam(player);
                 player.teleport(getTeamSpawns().get(team).get(ran.nextInt(getTeamSpawns().get(team).size())));
