@@ -68,7 +68,7 @@ kit:
     icon: ender_eye
     lore: '&7&oThe default class%nl%&f&7&oUses sword and bow.'
     items:
-      - team_helmet
+      - team_helmet,1,[e unbreaking;10]
       - team_chestplate
       - team_leggings
       - team_boots
@@ -168,10 +168,10 @@ kit:
       - health_boost
       - corroding
     items:
-      - team_helmet
+      - team_helmet,1,[e unbreaking;10]
       - iron_chestplate,1,[e protection;1]
       - iron_leggings,1,[e protection;1]
-      - team_boots
+      - team_boots,1,[e unbreaking;10]
       - iron_sword,1,[e unbreaking;10]
       - bow,1,[e infinity;1;unbreaking;10]
       - arrow,1
@@ -183,8 +183,8 @@ kit:
       - wand_healing,1,[e sharpness;3;unbreaking;10]
       - wand_ice,1,[e sharpness;3;unbreaking;10]
       - wand_ender,1,[e sharpness;3;unbreaking;10]
-      - team_helmet,1,[e protection;2]
-      - team_chestplate,1,[e protection;1]
+      - team_helmet,1,[e protection;2;unbreaking;10]
+      - team_chestplate,1,[e protection;1;unbreaking;10]
       - team_leggings
       - team_boots
       - totem_of_undying
@@ -198,7 +198,7 @@ kit:
       - corroding
     items:
       - wand_fire,1,[e sharpness;2;unbreaking;10]
-      - team_helmet,1,[e protection;2;fire_protection;2]
+      - team_helmet,1,[e protection;2;fire_protection;2;unbreaking;10]
       - team_chestplate
       - team_leggings
       - team_boots
@@ -211,7 +211,7 @@ kit:
       - drain
     items:
       - wand_wither,1,[e unbreaking;10]
-      - team_helmet
+      - team_helmet,1,[e unbreaking;10]
       - team_chestplate
       - team_leggings
       - team_boots
@@ -227,7 +227,7 @@ kit:
       - wand_healing,1,[e sharpness;2;unbreaking;10]
       - wand_ice,1,[e sharpness;2;unbreaking;10]
       - wand_wither,1,[e unbreaking;10]
-      - team_helmet
+      - team_helmet,1,[e unbreaking;10]
       - team_chestplate
       - team_leggings
       - team_boots
