@@ -18,7 +18,7 @@ public class Help {
             s.sendMessage(Broadcast.HELP + "/cq createarena [name]" + ChatColor.YELLOW + " " + Broadcast.get("help.createarena"));
             s.sendMessage(Broadcast.HELP + "/cq setname <arena> <name>" + ChatColor.YELLOW + " " + Broadcast.get("help.setname"));
             s.sendMessage(Broadcast.HELP + "/cq teamlobby <arena> <teamID>" + ChatColor.YELLOW + " " + Broadcast.get("help.teamlobby"));
-            s.sendMessage(Broadcast.HELP + "/cq setteams <arena> <amount>" + ChatColor.YELLOW +
+            s.sendMessage(Broadcast.HELP + "/cq setteams <arena> [teams...]" + ChatColor.YELLOW +
                     " " + Broadcast.get("help.setteams"));
             s.sendMessage(Broadcast.HELP + "/cq minplayers <arena> <amount>" + ChatColor.YELLOW +
                     " " + Broadcast.get("help.minplayers"));
@@ -51,7 +51,7 @@ public class Help {
                 "CQ-HELP" + ChatColor.YELLOW + "--------------<>");
         s.sendMessage(Broadcast.HELP + "/cq lobby" + ChatColor.YELLOW + " " + Broadcast.get("help.lobby"));
         s.sendMessage(Broadcast.HELP + "/cq quit" + ChatColor.YELLOW + " " + Broadcast.get("help.quit"));
-        s.sendMessage(Broadcast.HELP + "/cq balance <player>" + ChatColor.YELLOW + " " + Broadcast.get("help.balance"));
+        s.sendMessage(Broadcast.HELP + "/cq balance [player]" + ChatColor.YELLOW + " " + Broadcast.get("help.balance"));
         s.sendMessage(Broadcast.HELP + "/cq shop" + ChatColor.YELLOW + " " + Broadcast.get("help.shop"));
 
         if (s.hasPermission("crystalquest.join")) {
@@ -74,14 +74,14 @@ public class Help {
         }
         if (s.hasPermission("crystalquest.forcestart") || s.hasPermission("crystalquest.staff") ||
                 s.hasPermission("crystalquest.admin")) {
-            s.sendMessage(Broadcast.HELP + "/cq forcestart <arena>" + ChatColor.YELLOW + " " + Broadcast.get("help.forcestart"));
+            s.sendMessage(Broadcast.HELP + "/cq forcestart [arena]" + ChatColor.YELLOW + " " + Broadcast.get("help.forcestart"));
         }
         if (s.hasPermission("crystalquest.kick") || s.hasPermission("crystalquest.staff") ||
                 s.hasPermission("crystalquest.admin")) {
             s.sendMessage(Broadcast.HELP + "/cq kick <player>" + ChatColor.YELLOW + " " + Broadcast.get("help.kick"));
         }
         if (s.hasPermission("crystalquest.admin")) {
-            s.sendMessage(Broadcast.HELP + "/cq money <player> <amount>" + ChatColor.YELLOW + " " + Broadcast.get("help.money"));
+            s.sendMessage(Broadcast.HELP + "/cq money <set|give> <player> <amount>" + ChatColor.YELLOW + " " + Broadcast.get("help.money"));
         }
         if (s.hasPermission("crystalquest.admin")) {
         	s.sendMessage(Broadcast.HELP + "/cq item <item-key>" + ChatColor.YELLOW + " " + Broadcast.get("help.item"));
