@@ -1004,8 +1004,8 @@ public class Arena {
         PlayerJoinArenaEvent event = new PlayerJoinArenaEvent(p, this, spectate);
         Bukkit.getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
-            if (!isFull() || plugin.getArenaManager().getArena(p.getUniqueId()).getSpectators()
-                    .contains(p.getUniqueId())) {
+            Arena arena = plugin.getArenaManager().getArena(p.getUniqueId());
+            if (!isFull() || (arena != null && arena.getSpectators().contains(p.getUniqueId()))) {
                 if (isEnabled()) {
                     try {
                         if (!spectate) {
