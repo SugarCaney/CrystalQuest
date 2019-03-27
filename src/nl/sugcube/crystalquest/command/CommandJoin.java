@@ -58,6 +58,12 @@ public class CommandJoin extends CrystalQuestCommand {
             return;
         }
 
+        // Check if the player is not already in game.
+        if (plugin.arenaManager.isInGame(player)) {
+            player.sendMessage(Broadcast.get("commands.lobby-already-ingame"));
+            return;
+        }
+
         // Join arenas.
         plugin.menuPickTeam.updateMenu(arena);
         plugin.menuPickTeam.showMenu(player, arena);

@@ -18,7 +18,8 @@ import java.util.Random;
  */
 public class InventoryListener implements Listener {
 
-    public static CrystalQuest plugin;
+    private CrystalQuest plugin;
+    private Random ran = new Random();
 
     public InventoryListener(CrystalQuest instance) {
         plugin = instance;
@@ -92,49 +93,56 @@ public class InventoryListener implements Listener {
     }
 
     public void pickTeam(InventoryClickEvent event) {
-        if (event.getCurrentItem().getAmount() > 0) {
-            try {
-                event.setCancelled(true);
-                Player player = (Player)event.getWhoClicked();
-                player.closeInventory();
+        if (event.getCurrentItem().getAmount() <= 0) {
+            return;
+        }
 
-                Arena a = plugin.arenaManager.getArena(event.getInventory().getName().replace("Pick Team: ", ""));
-                String displayName = "";
-                CrystalQuestTeam team = null;
+        try {
+            event.setCancelled(true);
+            Player player = (Player)event.getWhoClicked();
+            player.closeInventory();
 
-                if (event.getCurrentItem().hasItemMeta()) {
-                    if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
-                        displayName = event.getCurrentItem().getItemMeta().getDisplayName();
-                    }
+            String arenaName = event.getInventory().getName().replace("Pick Team: ", "");
+            Arena arena = plugin.arenaManager.getArena(arenaName);
+            String displayName = "";
+            CrystalQuestTeam team = null;
+
+            if (event.getCurrentItem().hasItemMeta()) {
+                if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+                    displayName = event.getCurrentItem().getItemMeta().getDisplayName();
                 }
+            }
 
-                if (displayName.contains("Random Team")) {
-                    try {
-                        if (a.getSmallestTeams().size() > 0) {
-                            Random ran = new Random();
-                            boolean isNotOk = true;
-                            while (isNotOk) {
-                                team = a.getSmallestTeams().get(ran.nextInt(a.getSmallestTeams().size()));
-                                if (a.getSmallestTeams().contains(team)) {
-                                    isNotOk = false;
-                                }
+            if (displayName.contains("Random Team")) {
+                try {
+                    if (arena.getSmallestTeams().size() > 0) {
+                        boolean isNotOk = true;
+                        while (isNotOk) {
+                            team = arena.getSmallestTeams().get(ran.nextInt(arena.getSmallestTeams().size()));
+                            if (arena.getSmallestTeams().contains(team)) {
+                                isNotOk = false;
                             }
                         }
                     }
-                    catch (Exception exep) {
-                        exep.printStackTrace();
-                    }
                 }
-                else {
-                    team = CrystalQuestTeam.valueOfName(displayName.replace("Join ", ""));
+                catch (Exception exep) {
+                    exep.printStackTrace();
                 }
+            }
+            else {
+                team = CrystalQuestTeam.valueOfName(displayName.replace("Join ", ""));
+            }
 
-                a.addPlayer(player, team, false);
-                plugin.menuPickTeam.updateMenus();
+            if (plugin.arenaManager.isInGame(player)) {
+                player.sendMessage(Broadcast.get("commands.lobby-already-ingame"));
+                return;
             }
-            catch (Exception exeption) {
-                exeption.printStackTrace();
-            }
+
+            arena.addPlayer(player, team, false);
+            plugin.menuPickTeam.updateMenus();
+        }
+        catch (Exception exeption) {
+            exeption.printStackTrace();
         }
     }
 }

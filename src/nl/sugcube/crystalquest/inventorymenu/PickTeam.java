@@ -20,13 +20,6 @@ public class PickTeam {
     public static CrystalQuest plugin;
     public Inventory menu;
 
-    /**
-     * CONSTRUCTOR
-     * Passes through the instance of the plugin.
-     *
-     * @param instance
-     *         (CrystalQuest) The instance of the plugin.
-     */
     public PickTeam(CrystalQuest instance) {
         plugin = instance;
         this.menu = Bukkit.createInventory(null, 9, "Pick Team");

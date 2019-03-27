@@ -124,7 +124,7 @@ kit:
     ability:
       - water_healing
     items:
-      - team_helmet
+      - team_helmet,1,[e unbreaking;10]
       - cod;&bWay too smelly fish,1,[e knockback;1]
   tnt:
     name: '&a&l&oPRO &4TNT'

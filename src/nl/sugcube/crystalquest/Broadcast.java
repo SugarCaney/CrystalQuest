@@ -42,6 +42,9 @@ public class Broadcast {
     }
 
     public static String get(String s) {
+        if (s == null) {
+            throw new IllegalArgumentException("Cannot get the message for null key.");
+        }
         return SMethods.setColours(plugin.getLang().getString(s));
     }
 
