@@ -28,6 +28,7 @@ public class Economy {
 
     private Balance balance;
     private Upgrades upgrades;
+    private Classes classes;
     private ShopMainMenu shopMainMenu;
     private ShopPowerup shopPowerupMenu;
     private ShopCrystals shopCrystals;
@@ -44,10 +45,12 @@ public class Economy {
         if (instance.getConfig().getBoolean("mysql.enabled")) {
             balance = new DatabaseBalance(plugin.queryEconomy);
             upgrades = new DatabaseUpgrades(plugin.queryEconomy);
+            classes = new DatabaseClasses(plugin.queryEconomy);
         }
         else {
             balance = new YamlBalance(plugin);
             upgrades = new YamlUpgrades(plugin);
+            classes = new YamlClasses(plugin);
         }
 
         UPGRADE_COSTS[0] = plugin.getConfig().getInt("shop.start-price");
@@ -82,6 +85,13 @@ public class Economy {
      */
     public Upgrades getUpgrades() {
         return this.upgrades;
+    }
+
+    /**
+     * Gets the instance managing bought classes.
+     */
+    public Classes getClasses() {
+        return classes;
     }
 
     /**

@@ -105,7 +105,7 @@ public class InventoryManager {
 
                 int random = ran.nextInt(list.size());
                 String ranClass = list.get(random);
-                if (Classes.hasPermission(player, ranClass)) {
+                if (ClassUtils.hasPermission(player, ranClass)) {
                     playerClass.put(player.getUniqueId(), ranClass);
                     isNotOk = false;
                 }

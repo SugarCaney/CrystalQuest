@@ -52,7 +52,7 @@ public class CrystalQuest extends JavaPlugin {
     public ItemHandler itemHandler;
     public ParticleHandler particleHandler;
     public CurseListener curseListener;
-    public Classes classes;
+    public ClassUtils classes;
     public Economy economy;
     public Ability ability;
 
@@ -147,7 +147,7 @@ public class CrystalQuest extends JavaPlugin {
         signHandler = new SignHandler(this, arenaManager);
         itemHandler = new ItemHandler(this);
         particleHandler = new ParticleHandler(this);
-        classes = new Classes(this);
+        classes = new ClassUtils(this);
         protection = new Protection(this);
         deathListener = new DeathMessages(this);
         entityListener = new EntityListener(this);

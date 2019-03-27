@@ -17,7 +17,7 @@ public class CommandJoin extends CrystalQuestCommand {
         addPermissions(
                 "crystalquest.admin",
                 "crystalquest.staff",
-                "crystalquest.spectate"
+                "crystalquest.join"
         );
 
         addAutoCompleteMeta(0, AutoCompleteArgument.ARENA);

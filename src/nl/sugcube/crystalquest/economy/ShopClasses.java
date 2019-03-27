@@ -2,7 +2,7 @@ package nl.sugcube.crystalquest.economy;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import nl.sugcube.crystalquest.game.Classes;
+import nl.sugcube.crystalquest.game.ClassUtils;
 import nl.sugcube.crystalquest.sba.SMethods;
 import nl.sugcube.crystalquest.util.Items;
 import org.bukkit.Bukkit;
@@ -36,140 +36,139 @@ public class ShopClasses implements Listener {
     /**
      * Updates the item's names and lores.
      *
-     * @param p
-     *         (Player) The player who has opened the shop.
-     * @param inv
-     *         (Inventory) The inventory to update.
+     * @param player
+     *         The player who has opened the shop.
+     * @param inventory
+     *         The inventory to update.
      */
-    public void updateMenu(Player p, Inventory inv) {
-        ItemStack[] contents = inv.getContents();
+    public void updateMenu(Player player, Inventory inventory) {
+        ItemStack[] contents = inventory.getContents();
 
         //CLASSES TO BUY
         int i = 0;
         for (String key : plugin.getConfig().getConfigurationSection("kit").getKeys(false)) {
-            if (plugin.getConfig().isSet("kit." + key + ".price")) {
-                if (plugin.getConfig().getInt("kit." + key + ".price") > 0) {
-                    if (!Classes.hasPermission(p, key)) {
-                        ItemStack icon = plugin.stringHandler.toItemStack(plugin.getConfig().getString("kit." + key + ".icon"));
-                        Items.hideAllFlags(icon);
-                        ItemMeta im = icon.getItemMeta();
-                        String name = plugin.getConfig().getString("kit." + key + ".name");
-                        im.setDisplayName(SMethods.setColours(name));
-
-                        if (plugin.getConfig().getString("kit." + key + ".lore") != "") {
-                            List<String> lore = new ArrayList<>();
-                            String[] lines = plugin.getConfig().getString("kit." + key + ".lore").split("%nl%");
-                            for (String str : lines) {
-                                lore.add(SMethods.setColours(str));
-                            }
-
-                            lore.add("");
-                            lore.add(ChatColor.RESET + "" + ChatColor.RED + Broadcast.get("shop.price") + ": " +
-                                    ChatColor.GOLD + plugin.getConfig().getInt("kit." + key + ".price"));
-
-                            im.setLore(lore);
-                        }
-
-                        icon.setItemMeta(im);
-                        contents[i] = icon;
-                        i++;
-                    }
-                }
+            if (!plugin.getConfig().isSet("kit." + key + ".price")) {
+                continue;
             }
+
+            if (plugin.getConfig().getInt("kit." + key + ".price") <= 0) {
+                continue;
+            }
+
+            if (ClassUtils.hasPermission(player, key)) {
+                continue;
+            }
+
+            ItemStack icon = plugin.stringHandler.toItemStack(plugin.getConfig().getString("kit." + key + ".icon"));
+            Items.hideAllFlags(icon);
+            ItemMeta meta = icon.getItemMeta();
+            String name = plugin.getConfig().getString("kit." + key + ".name");
+            meta.setDisplayName(SMethods.setColours(name));
+
+            if (!plugin.getConfig().getString("kit." + key + ".lore").isEmpty()) {
+                List<String> lore = new ArrayList<>();
+                String[] lines = plugin.getConfig().getString("kit." + key + ".lore").split("%nl%");
+                for (String str : lines) {
+                    lore.add(SMethods.setColours(str));
+                }
+
+                lore.add("");
+                lore.add(ChatColor.RESET + "" + ChatColor.RED + Broadcast.get("shop.price") + ": " +
+                        ChatColor.GOLD + plugin.getConfig().getInt("kit." + key + ".price"));
+
+                meta.setLore(lore);
+            }
+
+            icon.setItemMeta(meta);
+            contents[i] = icon;
+            i++;
         }
 
         //NAVIGATION
         contents[45] = getItemMainMenu();
-        contents[49] = economy.getItemBalance(p);
+        contents[49] = economy.getItemBalance(player);
 
-        inv.setContents(contents);
+        inventory.setContents(contents);
     }
 
     /**
      * Shows the classes menu of the CrystalQuest-Shop.
      *
-     * @param p
-     *         (Player) The player to show the menu to.
+     * @param player
+     *         The player to show the menu to.
      */
-    public void showMenu(Player p) {
-        p.closeInventory();
+    public void showMenu(Player player) {
+        player.closeInventory();
 
-        Inventory inv = Bukkit.createInventory(null, 54,
+        Inventory inventory = Bukkit.createInventory(null, 54,
                 ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Classes"
         );
 
-        updateMenu(p, inv);
-        p.openInventory(inv);
+        updateMenu(player, inventory);
+        player.openInventory(inventory);
     }
 
     /*
      * Inventory handling for the main menu
      */
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        Inventory inv = e.getInventory();
-        if (inv.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Classes")) {
-
-            if (e.getCurrentItem() != null) {
-                ItemStack item = e.getCurrentItem();
-
-                if (item.hasItemMeta()) {
-                    ItemMeta im = item.getItemMeta();
-                    if (im.hasDisplayName()) {
-                        String name = im.getDisplayName();
-                        Player p = (Player)e.getWhoClicked();
-
-						/*
-                         * MAIN MENU
-						 */
-                        if (name.equalsIgnoreCase(ChatColor.GREEN + "Main Menu")) {
-                            economy.getMainMenu().showMenu(p);
-                        }
-                        else if (!name.contains(ChatColor.GREEN + "Crystals: " + ChatColor.GOLD) &&
-                                item.getType() != Material.EMERALD) {
-                            String techName = plugin.menuSelectClass.getTechnicalClassName(name);
-                            int price = plugin.getConfig().getInt("kit." + techName + ".price");
-
-                            if (economy.getBalance().canAfford(p, price)) {
-                                if (plugin.getData().isSet("shop.classes." + p.getUniqueId().toString())) {
-                                    List<String> list = plugin.getData().getStringList("shop.classes." + p.getUniqueId().toString());
-                                    list.add(techName);
-                                    plugin.getData().set("shop.classes." + p.getUniqueId().toString(), list);
-                                }
-                                else {
-                                    List<String> list = new ArrayList<>();
-                                    list.add(techName);
-                                    plugin.getData().set("shop.classes." + p.getUniqueId().toString(), list);
-                                }
-                                economy.getBalance().addBalance(p, -price, false);
-
-                                showMenu(p);
-                            }
-                        }
-
-                        e.setCancelled(true);
-                    }
-                }
-            }
-
-            e.setCancelled(true);
+    public void onInventoryClick(InventoryClickEvent event) {
+        Inventory inventory = event.getInventory();
+        if (!inventory.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Classes")) {
+            return;
         }
+
+        if (event.getCurrentItem() == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        ItemStack item = event.getCurrentItem();
+        if (!item.hasItemMeta()) {
+            return;
+        }
+
+        ItemMeta im = item.getItemMeta();
+        if (!im.hasDisplayName()) {
+            return;
+        }
+
+        String name = im.getDisplayName();
+        Player buyer = (Player)event.getWhoClicked();
+        Classes classes = economy.getClasses();
+
+        /*
+         * MAIN MENU
+         */
+        if (name.equalsIgnoreCase(ChatColor.GREEN + "Main Menu")) {
+            economy.getMainMenu().showMenu(buyer);
+        }
+        else if (!name.contains(ChatColor.GREEN + "Crystals: " + ChatColor.GOLD) && item.getType() != Material.EMERALD) {
+            String kitId = plugin.menuSelectClass.getTechnicalClassName(name);
+            int price = plugin.getConfig().getInt("kit." + kitId + ".price");
+
+            if (economy.getBalance().canAfford(buyer, price)) {
+                classes.registerClass(buyer, kitId);
+                economy.getBalance().addBalance(buyer, -price, false);
+                showMenu(buyer);
+            }
+        }
+
+        event.setCancelled(true);
     }
 
     /**
      * Gets the item linking to the Main Menu
-     *
-     * @return (ItemStack)
      */
     public ItemStack getItemMainMenu() {
-        ItemStack is = new ItemStack(Material.ARROW, 1);
-        ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.GREEN + "Main Menu");
-        is.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
+        ItemStack item = new ItemStack(Material.ARROW, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(ChatColor.GREEN + "Main Menu");
+        item.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.main-menu"));
-        im.setLore(lore);
-        is.setItemMeta(im);
-        return is;
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
 }

@@ -3,7 +3,7 @@ package nl.sugcube.crystalquest.listeners;
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
-import nl.sugcube.crystalquest.game.Classes;
+import nl.sugcube.crystalquest.game.ClassUtils;
 import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -78,7 +78,7 @@ public class InventoryListener implements Listener {
                 else {
                     String techName = plugin.menuSelectClass.getTechnicalClassName(
                             event.getCurrentItem().getItemMeta().getDisplayName());
-                    if (Classes.hasPermission(player, techName)) {
+                    if (ClassUtils.hasPermission(player, techName)) {
                         plugin.inventoryManager.setPlayerClass(player, techName);
                         player.sendMessage(Broadcast.TAG + Broadcast.get("arena.chosen-class")
                                 .replace("%class%", event.getCurrentItem().getItemMeta().getDisplayName()));

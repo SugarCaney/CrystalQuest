@@ -80,7 +80,7 @@ kit:
     icon: bow
     lore: '&7&oRanged Blood'
     items:
-      - team_helmet
+      - team_helmet,1,[e unbreaking;10]
       - leather_chestplate
       - leather_leggings
       - leather_boots
@@ -93,7 +93,7 @@ kit:
     items:
       - chainmail_helmet
       - chainmail_chestplate
-      - team_leggings,[e unbreaking;10]
+      - team_leggings,1,[e unbreaking;10]
       - chainmail_boots
       - stone_sword,1,[e unbreaking;10]
       - shield,1,[d 317]
