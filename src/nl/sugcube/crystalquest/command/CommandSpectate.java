@@ -19,6 +19,8 @@ public class CommandSpectate extends CrystalQuestCommand {
                 "crystalquest.staff",
                 "crystalquest.spectate"
         );
+
+        addAutoCompleteMeta(0, AutoCompleteArgument.ARENA);
     }
 
     @Override
