@@ -28,7 +28,7 @@ public enum CrystalQuestTeam {
     WHITE("white", ChatColor.WHITE, DyeColor.WHITE, (short)0, Color.WHITE),
     BLACK("black", ChatColor.DARK_GRAY, DyeColor.BLACK, (short)15, Color.BLACK),
     BROWN("brown", ChatColor.GRAY, DyeColor.BROWN, (short)12, fromRGB(92, 50, 0)),
-    DARK_BLUE("darkblue", ChatColor.DARK_BLUE, DyeColor.BLUE, (short)11, Color.BLUE),
+    DARK_BLUE("darkblue", ChatColor.BLUE, DyeColor.BLUE, (short)11, Color.BLUE),
     DARK_GREEN("darkgreen", ChatColor.DARK_GREEN, DyeColor.GREEN, (short)13, fromRGB(14, 86, 9)),
     PURPLE("purple", ChatColor.DARK_PURPLE, DyeColor.PURPLE, (short)10, fromRGB(118, 30, 129));
 
