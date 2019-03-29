@@ -847,7 +847,7 @@ public class Arena {
      * Re-initializes scoreboard. Sends a "this-team-won" message
      *
      * @param onEnable
-     *         (boolean) If it's called in onEnable.
+     *         If it's called in onEnable.
      */
     public void resetArena(boolean onEnable) {
         if (!onEnable) {
@@ -988,6 +988,10 @@ public class Arena {
         }
 
         plugin.signHandler.updateSigns();
+
+        if (players.isEmpty()) {
+            resetArena(false);
+        }
     }
 
     /**
