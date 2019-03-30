@@ -225,5 +225,6 @@ public class Protection implements Listener {
                             plugin.protection.pos2.getZ()
                     )));
         }
+        e.setCancelled(true);
     }
 }
