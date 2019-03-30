@@ -55,7 +55,8 @@ public class Materials {
             Material.GOLDEN_HELMET,
             Material.CHAINMAIL_HELMET,
             Material.DIAMOND_HELMET,
-            Material.TURTLE_HELMET
+            Material.TURTLE_HELMET,
+            Material.CARVED_PUMPKIN
     ));
 
     /**
