@@ -42,7 +42,7 @@ public class CommandProtect extends CrystalQuestCommand {
             if (arguments[1].equalsIgnoreCase("remove")) {
                 arena.setProtection(null);
                 sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.protect-remove")
-                        .replace("%arena%", arguments[1]));
+                        .replace("%arena%", arguments[0]));
                 return;
             }
         }
@@ -51,7 +51,7 @@ public class CommandProtect extends CrystalQuestCommand {
         try {
             plugin.protection.protectArena(arena);
             sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.protect-succeed")
-                    .replace("%arena%", arguments[1]));
+                    .replace("%arena%", arguments[0]));
         }
         catch (Exception e) {
             e.printStackTrace();
