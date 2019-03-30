@@ -304,9 +304,9 @@ public class PlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
         if (plugin.getConfig().getBoolean("updates.check-for-updates")) {
             if (plugin.getConfig().getBoolean("updates.show-admin")) {
-                Update uc = new Update(69421, plugin.getDescription().getVersion());
-                if (uc.query()) {
-                    if (e.getPlayer().hasPermission("crystalquest.admin")) {
+                if (e.getPlayer().hasPermission("crystalquest.admin")) {
+                    Update uc = new Update(69421, plugin.getDescription().getVersion());
+                    if (uc.query()) {
                         e.getPlayer().sendMessage(Broadcast.TAG + "A new version of CrystalQuest is available!");
                         e.getPlayer().sendMessage(Broadcast.TAG + "Get it at the BukkitDev-page!");
                     }
