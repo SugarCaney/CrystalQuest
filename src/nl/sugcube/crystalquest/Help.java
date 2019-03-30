@@ -24,7 +24,7 @@ public class Help {
                     " " + Broadcast.get("help.minplayers"));
             s.sendMessage(Broadcast.HELP + "/cq maxplayers <arena> <amount>" + ChatColor.YELLOW +
                     " " + Broadcast.get("help.maxplayers"));
-            s.sendMessage(Broadcast.HELP + "/cq spawn <arena> [clear]" + ChatColor.YELLOW +
+            s.sendMessage(Broadcast.HELP + "/cq spawn <arena> [clear|undo]" + ChatColor.YELLOW +
                     " " + Broadcast.get("help.spawn"));
             s.sendMessage(Broadcast.HELP + "/cq teamspawn <arena> <team> [clear]" +
                     ChatColor.YELLOW + " " + Broadcast.get("help.teamspawn"));

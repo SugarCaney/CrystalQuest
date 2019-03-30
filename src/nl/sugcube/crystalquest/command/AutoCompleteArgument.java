@@ -66,6 +66,19 @@ public enum AutoCompleteArgument {
     },
 
     /**
+     * Clear or remove last keywords.
+     */
+    CLEAR_OR_REMOVE_LAST {
+        @Override
+        protected List<String> optionsBase(CrystalQuest plugin) {
+            return new ArrayList<String>() {{
+                add("clear");
+                add("undo");
+            }};
+        }
+    },
+
+    /**
      * Reset keyword.
      */
     RESET {
