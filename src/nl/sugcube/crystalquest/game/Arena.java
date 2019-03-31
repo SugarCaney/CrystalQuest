@@ -967,7 +967,11 @@ public class Arena {
 
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
         if (p.isOnline()) {
-            p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            try {
+                p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            }
+            catch (IllegalStateException ignored) {
+            }
         }
 
         playerTeams.remove(p.getUniqueId());
