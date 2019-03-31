@@ -41,7 +41,7 @@ public class Curse extends ItemExecutor {
                 plugin.economy.getLevel(player, "debuff", "upgrade"),
                 false
         );
-        int duration = (int)(20 * 8 + random.nextInt(5) * multiplier);
+        int duration = (int)(8 + random.nextInt(5) * multiplier);
 
         // Curse a team.
         for (Player target : Teams.getPlayersFromTeam(arena, targetTeam)) {

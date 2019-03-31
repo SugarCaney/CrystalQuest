@@ -120,24 +120,26 @@ public class GameLoop implements Runnable {
 
             // Remove items from inventory.
             for (ItemStack is : player.getInventory().getContents()) {
-                if (is != null) {
-                    if (is.getType() == Material.GLASS_BOTTLE) {
-                        player.getInventory().remove(is);
-                    }
-                    if (is.hasItemMeta()) {
-                        if (is.getItemMeta().hasDisplayName()) {
-                            if (is.getItemMeta().getDisplayName()
-                                    .equalsIgnoreCase(Broadcast.get("items.crystal-shard"))) {
-                                player.getInventory().remove(is);
-                            }
-                            else if (is.getItemMeta().getDisplayName()
-                                    .equalsIgnoreCase(Broadcast.get("items.small-crystal"))) {
-                                player.getInventory().remove(is);
-                            }
-                            else if (is.getItemMeta().getDisplayName()
-                                    .equalsIgnoreCase(Broadcast.get("items.shiny-crystal"))) {
-                                player.getInventory().remove(is);
-                            }
+                if (is == null) {
+                    continue;
+                }
+
+                if (is.getType() == Material.GLASS_BOTTLE) {
+                    player.getInventory().remove(is);
+                }
+                if (is.hasItemMeta()) {
+                    if (is.getItemMeta().hasDisplayName()) {
+                        if (is.getItemMeta().getDisplayName()
+                                .equalsIgnoreCase(Broadcast.get("items.crystal-shard"))) {
+                            player.getInventory().remove(is);
+                        }
+                        else if (is.getItemMeta().getDisplayName()
+                                .equalsIgnoreCase(Broadcast.get("items.small-crystal"))) {
+                            player.getInventory().remove(is);
+                        }
+                        else if (is.getItemMeta().getDisplayName()
+                                .equalsIgnoreCase(Broadcast.get("items.shiny-crystal"))) {
+                            player.getInventory().remove(is);
                         }
                     }
                 }
