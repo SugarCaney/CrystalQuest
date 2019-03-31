@@ -56,7 +56,7 @@ public class ProjectileListener implements Listener {
         }
 
         len.getWorld().playSound(len.getLocation(), Sound.ENTITY_BLAZE_DEATH, 20F, 20F);
-        shooter.damage(9999999);
+        len.damage(9999999);
         if (len instanceof HumanEntity) {
             ItemStack offhand = ((HumanEntity)len).getInventory().getItemInOffHand();
             if (offhand == null || offhand.getType() != Material.TOTEM_OF_UNDYING) {
