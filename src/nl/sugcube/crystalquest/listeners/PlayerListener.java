@@ -602,4 +602,12 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
         }
     }
+
+    @EventHandler
+    public void onPlayerKicked(PlayerKickEvent event) {
+        Player player = event.getPlayer();
+        if (plugin.getArenaManager().isInGame(player)) {
+            plugin.getArenaManager().getArena(player.getUniqueId()).removePlayer(player);
+        }
+    }
 }
