@@ -59,7 +59,7 @@ public class ProjectileListener implements Listener {
         len.damage(9999999);
         if (len instanceof HumanEntity) {
             ItemStack offhand = ((HumanEntity)len).getInventory().getItemInOffHand();
-            if (offhand == null || offhand.getType() != Material.TOTEM_OF_UNDYING) {
+            if (offhand != null && offhand.getType() != Material.TOTEM_OF_UNDYING) {
                 return;
             }
         }
