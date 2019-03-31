@@ -158,9 +158,9 @@ public class Arena {
     private List<Creeper> gameCreepers = new ArrayList<>();
 
     /**
-     * List of all smart bombs that have been spawned in the arena.
+     * All smart bombs that have been spawned in the arena mapped to their targets.
      */
-    private List<Silverfish> gameSmartBombs = new ArrayList<>();
+    private Map<Silverfish, LivingEntity> gameSmartBombs = new HashMap<>();
 
     /**
      * List of all crystals that have been spawned in the arenas.
@@ -380,12 +380,12 @@ public class Arena {
     }
 
     /**
-     * Gets the smart bombs which are spawned in-game
+     * Gets the smart bombs which are spawned in-game mapped to their targets.
      *
-     * @return List containing all the smart bombs in-game.
+     * @return All the smart bombs in-game mapped to their targets.
      * @see Arena#gameSmartBombs
      */
-    public List<Silverfish> getGameSmartBombs() {
+    public Map<Silverfish, LivingEntity> getGameSmartBombs() {
         return gameSmartBombs;
     }
 

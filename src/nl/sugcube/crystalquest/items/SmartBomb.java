@@ -47,7 +47,7 @@ public class SmartBomb extends ItemExecutor {
         player.playSound(targetLocation, Sound.ENTITY_TNT_PRIMED, 10L, 10L);
 
         // Register creeper
-        arena.getGameSmartBombs().add(bomb);
+        arena.getGameSmartBombs().put(bomb, victim);
 
         return true;
     }

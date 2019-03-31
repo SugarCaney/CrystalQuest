@@ -184,7 +184,7 @@ public class EntityListener implements Listener {
         if (e.getDamager() instanceof Silverfish) {
             Silverfish silverfish = (Silverfish)e.getDamager();
             for (Arena a : plugin.arenaManager.getArenas()) {
-                if (!a.getGameSmartBombs().contains(silverfish)) {
+                if (!a.getGameSmartBombs().containsKey(silverfish)) {
                     continue;
                 }
 

@@ -11,12 +11,15 @@ import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Silverfish;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -190,6 +193,11 @@ public class GameLoop implements Runnable {
                     is.setItemMeta(meta);
                 }
             }
+        }
+
+        // Reset all smart-bomb targets.
+        for (Map.Entry<Silverfish, LivingEntity> entry : arena.getGameSmartBombs().entrySet()) {
+            entry.getKey().setTarget(entry.getValue());
         }
 
         arena.setTimeLeft(arena.getTimeLeft() - 1);
