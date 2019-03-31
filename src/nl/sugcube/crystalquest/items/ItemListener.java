@@ -20,6 +20,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -29,6 +30,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @author SugarCaney
@@ -372,6 +374,28 @@ public class ItemListener implements Listener {
         else {
             event.setCancelled(true);
             event.getItem().remove();
+        }
+    }
+
+    @EventHandler
+    public void onSmartBombReTarget(EntityTargetLivingEntityEvent event) {
+        if (!(event.getTarget() instanceof Silverfish)) {
+            return;
+        }
+
+        Silverfish smartBomb = (Silverfish)event.getTarget();
+        Arena arena = plugin.arenaManager.arenas.stream()
+                .filter(a -> a.getGameSmartBombs().containsKey(smartBomb))
+                .findFirst()
+                .orElse(null);
+        if (arena == null) {
+            return;
+        }
+
+        LivingEntity expectedTarget = arena.getGameSmartBombs().get(smartBomb);
+        UUID currentTarget = event.getTarget().getUniqueId();
+        if (!expectedTarget.getUniqueId().equals(currentTarget)) {
+            event.setCancelled(true);
         }
     }
 }
