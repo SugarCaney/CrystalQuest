@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Random;
 
@@ -54,8 +55,14 @@ public class ProjectileListener implements Listener {
             return;
         }
 
-        len.setHealth(0);
         len.getWorld().playSound(len.getLocation(), Sound.ENTITY_BLAZE_DEATH, 20F, 20F);
+        shooter.damage(9999999);
+        if (len instanceof HumanEntity) {
+            ItemStack offhand = ((HumanEntity)len).getInventory().getItemInOffHand();
+            if (offhand == null || offhand.getType() != Material.TOTEM_OF_UNDYING) {
+                return;
+            }
+        }
 
         Random ran = new Random();
         double chance = Multipliers.getMultiplier("blood",
