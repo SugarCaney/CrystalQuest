@@ -3,8 +3,11 @@ package nl.sugcube.crystalquest.command;
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 /**
  * @author SugarCaney
@@ -48,6 +51,22 @@ public class CommandCrystalSpawn extends CrystalQuestCommand {
                 }
                 catch (Exception e) {
                     sender.sendMessage(Broadcast.get("commands.crystalspawn-removeall-error"));
+                }
+            }
+            else if (arguments[1].equalsIgnoreCase("undo")) {
+                try {
+                    List<Location> spawns = arena.getCrystalSpawns();
+                    if (spawns.isEmpty()) {
+                        sender.sendMessage(Broadcast.get("commands.crystalspawn-undo-empty"));
+                    }
+                    else {
+                        spawns.remove(spawns.size() - 1);
+                        sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.crystalspawn-undo")
+                                .replace("%amount%", Integer.toString(spawns.size())));
+                    }
+                }
+                catch (Exception e) {
+                    sender.sendMessage(Broadcast.get("commands.crystalspawn-undo-error"));
                 }
             }
         }

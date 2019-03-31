@@ -28,9 +28,9 @@ public class Help {
                     " " + Broadcast.get("help.spawn"));
             s.sendMessage(Broadcast.HELP + "/cq teamspawn <arena> <team> [clear]" +
                     ChatColor.YELLOW + " " + Broadcast.get("help.teamspawn"));
-            s.sendMessage(Broadcast.HELP + "/cq crystalspawn <arena> [clear]" + ChatColor.YELLOW +
+            s.sendMessage(Broadcast.HELP + "/cq crystalspawn <arena> [clear|undo]" + ChatColor.YELLOW +
                     " " + Broadcast.get("help.crystalspawn"));
-            s.sendMessage(Broadcast.HELP + "/cq itemspawn <arena> [clear]" + ChatColor.YELLOW +
+            s.sendMessage(Broadcast.HELP + "/cq itemspawn <arena> [clear|undo]" + ChatColor.YELLOW +
                     " " + Broadcast.get("help.itemspawn"));
             s.sendMessage(Broadcast.HELP + "/cq doublejump <arena>" + ChatColor.YELLOW + " " + Broadcast.get("help.doublejump"));
             s.sendMessage(Broadcast.HELP + "/cq check <arena>" + ChatColor.YELLOW + " " + Broadcast.get("help.check"));
