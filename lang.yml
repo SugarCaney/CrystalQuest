@@ -1,3 +1,6 @@
+general:
+  tag: "&7[&dCrystalQuest&7]: &e"
+  tag-help: "&7[&dCQ-?&7]: "
 sign:
   succesful: "&7%sign%&e is succesfully created!"
   invalid: "&4Invalid Sign"

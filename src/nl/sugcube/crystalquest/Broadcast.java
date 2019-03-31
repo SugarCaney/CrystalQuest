@@ -18,6 +18,9 @@ public class Broadcast {
 
     public Broadcast(CrystalQuest instance) {
         plugin = instance;
+
+        TAG = get("general.tag");
+        HELP = get("general.tag-help");
     }
 
     public static void showAbout(CommandSender sender) {
