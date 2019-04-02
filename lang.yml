@@ -84,7 +84,7 @@ arena:
   second: "second"
   seconds: "seconds"
   started: "The quest has started! Good luck!"
-  using-class: "You are using the %class% class."
+  using-class: "You are using the %class%&e class."
   own-crystals: "&7You can't smash your %colour%own team's &7crystals"
   random-class: "You have chosen a random class!"
   chosen-class: "You have chosen the %class%&e class!"
