@@ -518,7 +518,7 @@ public class ItemHandler {
      * Adds the HealthPotion-item to the items-list
      */
     public void addHealthPotion() {
-        PotionEffect effect = new PotionEffect(PotionEffectType.HEAL, 4, 4);
+        PotionEffect effect = new PotionEffect(PotionEffectType.HEAL, 5, 3);
         ItemStack is = new ItemStack(Material.SPLASH_POTION, 1);
         PotionMeta im = (PotionMeta)is.getItemMeta();
         im.addCustomEffect(effect, true);

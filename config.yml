@@ -114,7 +114,7 @@ kit:
     ability:
       - water_healing
     items:
-      - trident,1,[e loyalty;2;unbreaking;10]
+      - trident,1,[e loyalty;3;unbreaking;10]
       - team_leggings,1,[e protection;1;unbreaking;10]
       - team_boots,1,[e depth_strider;2;protection;1;unbreaking;10]
   fishtfight:

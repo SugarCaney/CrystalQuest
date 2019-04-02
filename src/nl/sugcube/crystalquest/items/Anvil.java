@@ -24,7 +24,8 @@ public class Anvil extends ItemExecutor {
 
     @Override
     boolean execute(CrystalQuest plugin, Player player, ItemStack itemStack) {
-        for (int j = 0; j < ANVIL_AMOUNT; j++) {
+        int totalAnvils = ANVIL_AMOUNT + RANDOM.nextInt(20);
+        for (int j = 0; j < totalAnvils; j++) {
             Location location = player.getLocation();
 
             location.setX(RADIUS - (RANDOM.nextInt(RADIUS * 2)) + location.getX());
