@@ -69,9 +69,9 @@ kit:
     lore: '&7&oThe default class%nl%&f&7&oUses sword and bow.'
     items:
       - team_helmet,1,[e unbreaking;10]
-      - team_chestplate
-      - team_leggings
-      - team_boots
+      - team_chestplate,1,[e unbreaking;10]
+      - team_leggings,1,[e unbreaking;10]
+      - team_boots,1,[e unbreaking;10]
       - wooden_sword;Crystal Smasher,1,[e unbreaking;10]
       - bow,1,[e infinity;1;unbreaking;10]
       - arrow,1
