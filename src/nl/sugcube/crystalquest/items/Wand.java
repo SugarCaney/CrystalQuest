@@ -107,8 +107,9 @@ public class Wand implements Listener {
                         double plX = pl.getLocation().getX();
                         double plZ = pl.getLocation().getZ();
 
-                        if (plX > pX - 6 && plX < pX + 6) {
-                            if (plZ > pZ - 6 && plZ < pZ + 6) {
+                        int effectRange = 4;
+                        if (plX > pX - effectRange && plX < pX + effectRange) {
+                            if (plZ > pZ - effectRange && plZ < pZ + effectRange) {
                                 pl.setFireTicks(100);
                                 pl.playEffect(pl.getLocation(), Effect.MOBSPAWNER_FLAMES, null);
                                 pl.playSound(pl.getLocation(), Sound.ENTITY_BLAZE_DEATH, 1F, 1F);
@@ -207,9 +208,10 @@ public class Wand implements Listener {
                 double plX = pl.getLocation().getX();
                 double plZ = pl.getLocation().getZ();
 
-                if (plX > pX - 12 && plX < pX + 12) {
-                    if (plZ > pZ - 12 && plZ < pZ + 12) {
-                        pl.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 150, 10));
+                int effectRadius = 8;
+                if (plX > pX - effectRadius && plX < pX + effectRadius) {
+                    if (plZ > pZ - effectRadius && plZ < pZ + effectRadius) {
+                        pl.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 100, 10));
                         pl.playEffect(pl.getLocation(), Effect.EXTINGUISH, null);
                     }
                 }
@@ -235,10 +237,11 @@ public class Wand implements Listener {
                         double plX = pl.getLocation().getX();
                         double plZ = pl.getLocation().getZ();
 
-                        if (plX > pX - 5 && plX < pX + 5) {
-                            if (plZ > pZ - 5 && plZ < pZ + 5) {
-                                pl.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 150, 0));
-                                pl.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 150, 0));
+                        int effectRadius = 4;
+                        if (plX > pX - effectRadius && plX < pX + effectRadius) {
+                            if (plZ > pZ - effectRadius && plZ < pZ + effectRadius) {
+                                pl.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 100, 0));
+                                pl.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 100, 0));
                                 pl.getWorld().playEffect(pl.getLocation(), Effect.SMOKE, 16);
                                 pl.playSound(pl.getLocation(), Sound.ENTITY_WITHER_HURT, 1F, 1F);
                             }
