@@ -5,6 +5,7 @@ import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.ArenaManager;
 import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import nl.sugcube.crystalquest.sba.SMethods;
+import nl.sugcube.crystalquest.util.Materials;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -34,9 +35,11 @@ public class LoadData {
         plugin.signHandler.getSigns().clear();
         for (String s : plugin.getData().getStringList("signs")) {
             Location loc = SMethods.toLocation(s);
-            if (loc.getBlock().getType() == Material.WALL_SIGN || loc.getBlock().getType() == Material.SIGN) {
+            Material blockType = loc.getBlock().getType();
+            if (Materials.isWallSign(blockType) || Materials.isSignPost(blockType)) {
                 plugin.signHandler.getSigns().add(loc);
             }
+            
         }
         plugin.signHandler.updateSigns();
     }

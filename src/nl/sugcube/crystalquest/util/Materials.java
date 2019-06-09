@@ -102,6 +102,30 @@ public class Materials {
     ));
 
     /**
+     * A list of all materials that are sign posts.
+     */
+    public static List<Material> SIGNS = Collections.unmodifiableList(Arrays.asList(
+            Material.OAK_SIGN,
+            Material.SPRUCE_SIGN,
+            Material.BIRCH_SIGN,
+            Material.JUNGLE_SIGN,
+            Material.ACACIA_SIGN,
+            Material.DARK_OAK_SIGN
+    ));
+
+    /**
+     * A list of all materials that are wall signs.
+     */
+    public static List<Material> WALL_SIGNS = Collections.unmodifiableList(Arrays.asList(
+            Material.OAK_WALL_SIGN,
+            Material.SPRUCE_WALL_SIGN,
+            Material.BIRCH_WALL_SIGN,
+            Material.JUNGLE_WALL_SIGN,
+            Material.ACACIA_WALL_SIGN,
+            Material.DARK_OAK_WALL_SIGN
+    ));
+
+    /**
      * Get the wool block material that is tied to a damage value (in legacy code).
      *
      * @param damageValue
@@ -135,6 +159,24 @@ public class Materials {
      */
     public static boolean isSkull(Material material) {
         return SKULLS.contains(material);
+    }
+
+    /**
+     * Checks if the given material is a sign post.
+     *
+     * @return {@code true} when the given material is a sign post, {@code false} otherwise.
+     */
+    public static boolean isSignPost(Material material) {
+        return SIGNS.contains(material);
+    }
+
+    /**
+     * Checks if the given material is a wall sign.
+     *
+     * @return {@code true} when the given material is a wall sign, {@code false} otherwise.
+     */
+    public static boolean isWallSign(Material material) {
+        return WALL_SIGNS.contains(material);
     }
 
     private Materials() {

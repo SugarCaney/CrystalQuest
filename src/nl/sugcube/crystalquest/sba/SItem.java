@@ -175,7 +175,7 @@ public final class SItem {
             case "burningfurnace":
                 return Material.FURNACE;
             case "signpost":
-                return Material.SIGN;
+                return Material.LEGACY_SIGN;
             case "woodendoorblock":
                 return Material.OAK_DOOR;
             case "ladder":
@@ -185,7 +185,7 @@ public final class SItem {
             case "cobblestonestairs":
                 return Material.COBBLESTONE_STAIRS;
             case "wallsign":
-                return Material.WALL_SIGN;
+                return Material.LEGACY_WALL_SIGN;
             case "lever":
                 return Material.LEVER;
             case "stonepressureplate":
@@ -506,7 +506,7 @@ public final class SItem {
             case "goldenapple":
                 return Material.GOLDEN_APPLE;
             case "sign":
-                return Material.SIGN;
+                return Material.LEGACY_SIGN;
             case "woodendoor":
                 return Material.OAK_DOOR;
             case "bucket":

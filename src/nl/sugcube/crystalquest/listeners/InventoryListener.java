@@ -34,7 +34,7 @@ public class InventoryListener implements Listener {
             return;
         }
 
-        String inventoryName = event.getInventory().getName();
+        String inventoryName = event.getView().getTitle();
         if (inventoryName.contains("Pick Team: ")) {
             pickTeam(event);
         }
@@ -102,7 +102,7 @@ public class InventoryListener implements Listener {
             Player player = (Player)event.getWhoClicked();
             player.closeInventory();
 
-            String arenaName = event.getInventory().getName().replace("Pick Team: ", "");
+            String arenaName = event.getView().getTitle().replace("Pick Team: ", "");
             Arena arena = plugin.arenaManager.getArena(arenaName);
             String displayName = "";
             CrystalQuestTeam team = null;

@@ -5,6 +5,7 @@ import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import nl.sugcube.crystalquest.sba.SMethods;
+import nl.sugcube.crystalquest.util.Materials;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -31,7 +32,8 @@ public class SignListener implements Listener {
 
     @EventHandler
     public void onSignBreak(BlockBreakEvent e) {
-        if (e.getBlock().getType() == Material.WALL_SIGN || e.getBlock().getType() == Material.SIGN) {
+        Material blockType = e.getBlock().getType();
+        if (Materials.isWallSign(blockType) || Materials.isSignPost(blockType)) {
             Sign sign = (Sign)e.getBlock().getState();
             plugin.signHandler.getSigns().remove(sign);
         }
@@ -143,7 +145,8 @@ public class SignListener implements Listener {
         //Checks Right mouse button
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             //Checks if sign.
-            if (e.getClickedBlock().getType() == Material.WALL_SIGN || e.getClickedBlock().getType() == Material.SIGN) {
+            Material blockType = e.getClickedBlock().getType();
+            if (Materials.isWallSign(blockType) || Materials.isSignPost(blockType)) {
                 //Checks if the sign contains [CrystalQuest]
                 Sign s = (Sign)e.getClickedBlock().getState();
                 if (s.getLine(0).contains("CrystalQuest")) {
