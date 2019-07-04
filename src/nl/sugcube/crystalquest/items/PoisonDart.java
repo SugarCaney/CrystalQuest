@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TippedArrow;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -23,7 +22,7 @@ public class PoisonDart extends ItemExecutor {
 
     @Override
     boolean execute(CrystalQuest plugin, Player player, ItemStack itemStack) {
-        TippedArrow arrow = player.launchProjectile(TippedArrow.class);
+        Arrow arrow = player.launchProjectile(Arrow.class);
         arrow.addCustomEffect(POISON, true);
         arrow.setVelocity(arrow.getVelocity().multiply(0.6));
         arrow.setPickupStatus(Arrow.PickupStatus.CREATIVE_ONLY);
