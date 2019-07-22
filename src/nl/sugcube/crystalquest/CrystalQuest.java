@@ -259,9 +259,9 @@ public class CrystalQuest extends JavaPlugin {
 		/*
 		 * Saves data
 		 */
-        SaveData.saveArenas();        //ARENAS
-        SaveData.saveSigns();         //SIGNS
-        SaveData.saveLobbySpawn();    //LOBBYSPAWN
+        SaveData.saveArenas();
+        SaveData.saveSigns();
+        SaveData.saveLobbySpawn();
 
         /*
          * Release database resources.
