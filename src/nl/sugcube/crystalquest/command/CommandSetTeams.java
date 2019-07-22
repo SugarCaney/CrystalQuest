@@ -61,8 +61,6 @@ public class CommandSetTeams extends CrystalQuestCommand {
                 }
 
                 arena.setTeams(teams);
-
-                System.out.println(arena.getTeams());
             }
             catch (IllegalArgumentException iae) {
                 sender.sendMessage(Broadcast.get("commands.invalid-teams"));
