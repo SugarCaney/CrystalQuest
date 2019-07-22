@@ -88,7 +88,7 @@ public class Help {
         }
         if (s.hasPermission("crystalquest.setcount") || s.hasPermission("crystalquest.staff")||
                 s.hasPermission("crystalquest.admin")) {
-        	s.sendMessage(Broadcast.HELP + "/cq setcount <item-key>" + ChatColor.YELLOW + " " + Broadcast.get("help.item"));
+        	s.sendMessage(Broadcast.HELP + "/cq setcount <item-key>" + ChatColor.YELLOW + " " + Broadcast.get("help.setcount"));
         }
         if (s.hasPermission("crystalquest.admin")) {
             s.sendMessage(Broadcast.HELP + "/cq reload" + ChatColor.YELLOW + " " + Broadcast.get("help.reload"));
