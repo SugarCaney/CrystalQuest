@@ -14,10 +14,7 @@ import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -36,10 +33,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author SugarCaney
@@ -407,22 +401,28 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player) {
-            Player p = (Player)e.getEntity();
-            if (plugin.arenaManager.isInGame(p)) {
-                if (!plugin.arenaManager.getArena(p.getUniqueId()).isInGame() || plugin.arenaManager.getArena(p.getUniqueId()).isEndGame()) {
-                    e.setCancelled(true);
-                }
-                else {
-                    if (e.getCause() == DamageCause.FALL) {
-                        e.setCancelled(true);
-                    }
-                    else if (e.getCause() == DamageCause.LIGHTNING) {
-                        p.setFireTicks(80);
-                    }
-                }
-            }
+    public void onEntityDamage(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        Player p = (Player)event.getEntity();
+        if (!plugin.arenaManager.isInGame(p)) {
+            return;
+        }
+
+        // Cancel all damage after the game.
+        if (!plugin.arenaManager.getArena(p.getUniqueId()).isInGame() || plugin.arenaManager.getArena(p.getUniqueId()).isEndGame()) {
+            event.setCancelled(true);
+        }
+
+        // Disable fall damage.
+        if (event.getCause() == DamageCause.FALL) {
+            event.setCancelled(true);
+        }
+        // Set players on fire who are struck by lightning.
+        else if (event.getCause() == DamageCause.LIGHTNING) {
+            p.setFireTicks(80);
         }
     }
 
@@ -483,14 +483,29 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
-        if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
-            Player target = (Player)e.getDamager();
-            if (plugin.arenaManager.isInGame((Player)e.getDamager())) {
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        Player player = (Player)event.getEntity();
+        if (!plugin.getArenaManager().isInGame(player)) {
+            return;
+        }
+
+        // Disable combat in the end game.
+        // TODO: Check if even necessary, as all player damage is blocked by another event handler.
+        if (event.getDamager() instanceof Player) {
+            Player target = (Player)event.getDamager();
+            if (plugin.arenaManager.isInGame((Player)event.getDamager())) {
                 if (plugin.getArenaManager().getArena(target.getUniqueId()).isEndGame()) {
-                    e.setCancelled(true);
+                    event.setCancelled(true);
                 }
             }
+        }
+        // Disable firework damage.
+        if (event.getDamager() instanceof Firework) {
+            event.setCancelled(true);
         }
     }
 
