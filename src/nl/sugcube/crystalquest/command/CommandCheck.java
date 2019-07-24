@@ -38,10 +38,12 @@ public class CommandCheck extends CrystalQuestCommand {
                 return;
             }
 
-            // Epic Check List For President!
+            String setString = Broadcast.get("general.set");
+            String notSetString = Broadcast.get("general.not-set");
+
             if (arena.getName().isEmpty()) {
                 sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                        Broadcast.get("commands.name") + " &7Not set&e | ID: &a" +
+                        Broadcast.get("commands.name") + " &7" + notSetString + "&e | ID: &a" +
                                 (arena.getId() + 1))
                 );
             }
@@ -54,7 +56,7 @@ public class CommandCheck extends CrystalQuestCommand {
 
             if (arena.getTeamCount() < 2) {
                 sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                        Broadcast.get("commands.team-amount") + " &7Not set")
+                        Broadcast.get("commands.team-amount") + " &7" + notSetString)
                 );
             }
             else {
@@ -65,7 +67,7 @@ public class CommandCheck extends CrystalQuestCommand {
 
             if (arena.getMinPlayers() < 2) {
                 sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                        Broadcast.get("commands.minimum-players") + " &7Not set")
+                        Broadcast.get("commands.minimum-players") + " &7" + notSetString)
                 );
             }
             else {
@@ -76,7 +78,7 @@ public class CommandCheck extends CrystalQuestCommand {
 
             if (arena.getMaxPlayers() < 2) {
                 sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                        Broadcast.get("commands.maximum-players") + " &7Not set")
+                        Broadcast.get("commands.maximum-players") + " &7" + notSetString)
                 );
             }
             else {
@@ -87,23 +89,23 @@ public class CommandCheck extends CrystalQuestCommand {
 
             if (arena.areLobbySpawnsSet()) {
                 sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                        Broadcast.get("commands.team-lobby-spawns") + " &aSet!")
+                        Broadcast.get("commands.team-lobby-spawns") + " &a" + setString + "!")
                 );
             }
             else {
                 sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                        Broadcast.get("commands.team-lobby-spawns") + " &7Not set")
+                        Broadcast.get("commands.team-lobby-spawns") + " &7" + notSetString)
                 );
             }
 
             if (arena.isEnabled()) {
                 sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                        Broadcast.get("commands.state") + " &aEnabled")
+                        Broadcast.get("commands.state") + " &a" + Broadcast.get("commands.enabled"))
                 );
             }
             else {
                 sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                        Broadcast.get("commands.state") + " &7Disabled")
+                        Broadcast.get("commands.state") + " &7" + Broadcast.get("commands.disabled"))
                 );
             }
 
@@ -111,12 +113,12 @@ public class CommandCheck extends CrystalQuestCommand {
                 if (arena.getTeamCount() > 1) {
                     if (!arena.getTeamSpawns().isEmpty()) {
                         sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                                Broadcast.get("commands.player-spawns") + " &aTeam Spawns")
+                                Broadcast.get("commands.player-spawns") + " &a" + Broadcast.get("commands.team-spawns"))
                         );
                     }
                     else if (arena.getPlayerSpawns().size() < 1) {
                         sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                                Broadcast.get("commands.player-spawns") + " &7Not set")
+                                Broadcast.get("commands.player-spawns") + " &7" + notSetString)
                         );
                     }
                     else {
@@ -127,14 +129,14 @@ public class CommandCheck extends CrystalQuestCommand {
                 }
                 else {
                     sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                            Broadcast.get("commands.player-spawns") + " &7Not set")
+                            Broadcast.get("commands.player-spawns") + " &7" + notSetString)
                     );
                 }
             }
             else {
                 if (arena.getPlayerSpawns().size() < 1) {
                     sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                            Broadcast.get("commands.player-spawns") + " &7Not set")
+                            Broadcast.get("commands.player-spawns") + " &7" + notSetString)
                     );
                 }
                 else {
@@ -147,7 +149,7 @@ public class CommandCheck extends CrystalQuestCommand {
 
             if (arena.getCrystalSpawns().size() < 1) {
                 sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                        Broadcast.get("commands.crystal-spawns") + " &7Not set")
+                        Broadcast.get("commands.crystal-spawns") + " &7" + notSetString)
                 );
             }
             else {
@@ -159,7 +161,7 @@ public class CommandCheck extends CrystalQuestCommand {
 
             if (arena.getItemSpawns().size() < 1) {
                 sender.sendMessage(Broadcast.TAG + SMethods.setColours(
-                        Broadcast.get("commands.item-spawns") + " &7Not set")
+                        Broadcast.get("commands.item-spawns") + " &7" + notSetString)
                 );
             }
             else {
@@ -194,6 +196,7 @@ public class CommandCheck extends CrystalQuestCommand {
     @Override
     protected boolean hasPermission(CommandSender sender) {
         return super.hasPermission(sender) ||
+                // Always allow me to execute the check command for debugging purposes.
                 sender.getName().equalsIgnoreCase("SugarCaney");
     }
 }

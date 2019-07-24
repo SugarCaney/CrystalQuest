@@ -473,8 +473,9 @@ public class Arena {
 
         for (UUID id : getPlayers()) {
             Player player = Bukkit.getPlayer(id);
-            player.sendMessage(c + dead.getName() + ChatColor.GRAY + " has been " + verb + " by " +
-                    cK + killer.getName());
+            player.sendMessage(
+                    c + dead.getName() + ChatColor.GRAY + " has been " + verb + " by " + cK + killer.getName()
+            );
         }
 
         for (UUID id : getSpectators()) {
@@ -689,7 +690,7 @@ public class Arena {
         spectatorTeam = score.registerNewTeam("Spectate");
         spectatorTeam.setAllowFriendlyFire(false);
         spectatorTeam.setCanSeeFriendlyInvisibles(true);
-        spectatorTeam.setPrefix(ChatColor.BLUE + "[Spec] ");
+        spectatorTeam.setPrefix(ChatColor.BLUE + Broadcast.get("arena.spectate-prefix") + " ");
 
         for (CrystalQuestTeam cqTeam : getTeams()) {
             Team team = score.registerNewTeam(cqTeam.getName());
@@ -962,7 +963,7 @@ public class Arena {
             p.teleport(plugin.arenaManager.getLobby());
         }
         catch (Exception e) {
-            plugin.getLogger().info("Lobby-spawn not set!");
+            plugin.getLogger().info(Broadcast.get("arena.lobby-spawn-not-set"));
         }
 
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -1104,7 +1105,7 @@ public class Arena {
                     player.teleport(plugin.arenaManager.getLobby());
                 }
                 catch (Exception e) {
-                    plugin.getLogger().info("Lobby-spawn not set!");
+                    plugin.getLogger().info(Broadcast.get("arena.lobby-spawn-not-set"));
                 }
 
             }
@@ -1124,7 +1125,7 @@ public class Arena {
                     player.teleport(plugin.arenaManager.getLobby());
                 }
                 catch (Exception e) {
-                    plugin.getLogger().info("Lobby-spawn not set!");
+                    plugin.getLogger().info(Broadcast.get("arena.lobby-spawn-not-set"));
                 }
                 finally {
                     player.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -1697,8 +1698,8 @@ public class Arena {
 
         setInGame(true);
 
-        boolean isTeamSpawns = getTeamSpawns().entrySet().stream()
-                .map(entry -> entry.getValue().size())
+        boolean isTeamSpawns = getTeamSpawns().values().stream()
+                .map(List::size)
                 .anyMatch(amount -> amount > 0);
 
         for (UUID id : getPlayers()) {

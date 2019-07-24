@@ -1,7 +1,7 @@
 package nl.sugcube.crystalquest.items;
 
+import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -39,7 +39,7 @@ public class CurseListener implements Listener, Runnable {
                 if (ent instanceof Player) {
                     Player player = (Player)ent;
                     if (player.isOnline()) {
-                        player.sendMessage(ChatColor.GRAY + "The curse has been lifted.");
+                        player.sendMessage(Broadcast.get("item-use.curse-lifted"));
                     }
                 }
             }

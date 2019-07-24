@@ -129,9 +129,12 @@ public class Economy {
      *         The player to show the menu to.
      */
     public ItemStack getItemBalance(Player player) {
+        String balanceString = Broadcast.get("shop.balance-crystal");
+        int balance = getBalance().getBalance(player, false);
+
         ItemStack is = new ItemStack(Material.EMERALD, 1);
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.GREEN + "Crystals: " + ChatColor.GOLD + ChatColor.BOLD + getBalance().getBalance(player, false));
+        im.setDisplayName(balanceString.replace("%amount%", Integer.toString(balance)));
         List<String> lore = new ArrayList<String>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.spend-lore1"));
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.spend-lore2"));

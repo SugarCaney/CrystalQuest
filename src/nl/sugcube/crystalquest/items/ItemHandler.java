@@ -168,7 +168,7 @@ public class ItemHandler {
      * Takes rarities into account.
      */
     public String getRandomItemKey() {
-        double total = rarityLookup.values().stream().reduce(0.0, (a, d) -> a + d);
+        double total = rarityLookup.values().stream().reduce(0.0, Double::sum);
         double targetPointer = ran.nextDouble() * total;
 
         double passed = 0.0;

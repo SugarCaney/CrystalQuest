@@ -1,5 +1,6 @@
 package nl.sugcube.crystalquest.economy;
 
+import nl.sugcube.crystalquest.Broadcast;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -68,8 +69,10 @@ public class ShopCrystals implements Listener {
     public void showMenu(Player player) {
         player.closeInventory();
 
+        String shopString = Broadcast.get("shop.shop");
+        String crystalsString = Broadcast.get("shop.crystals");
         Inventory inv = Bukkit.createInventory(null, 54,
-                ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Crystals"
+                shopString + ":" + ChatColor.GOLD + " " + crystalsString
         );
 
         updateMenu(player, inv);
@@ -81,8 +84,11 @@ public class ShopCrystals implements Listener {
      */
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        String shopString = Broadcast.get("shop.shop");
+        String crystalsString = Broadcast.get("shop.crystals");
+
         Inventory inventory = event.getInventory();
-        if (!inventory.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Crystals")) {
+        if (!inventory.getName().equalsIgnoreCase(shopString + ":" + ChatColor.GOLD + " " + crystalsString)) {
             return;
         }
 
@@ -104,24 +110,26 @@ public class ShopCrystals implements Listener {
         String name = im.getDisplayName();
         Player buyer = (Player)event.getWhoClicked();
 
+        String buyString = PREFIX + Broadcast.get("shop.buy").toUpperCase() + " ";
+
         // Main Menu.
-        if (name.equalsIgnoreCase(ChatColor.GREEN + "Main Menu")) {
+        if (name.equalsIgnoreCase(ChatColor.GREEN + Broadcast.get("menu.main"))) {
             economy.getMainMenu().showMenu((Player)event.getWhoClicked());
         }
         // Buy XP.
-        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.GREEN + "Xp-Bonus")) {
+        else if (name.equalsIgnoreCase(buyString + ChatColor.GREEN + Broadcast.get("shop.xp-bonus"))) {
             buyClass(buyer, ShopUpgrade.CRYSTALS_XP, event.getInventory());
         }
         // Buy smash.
-        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Smash-Bonus")) {
+        else if (name.equalsIgnoreCase(buyString + ChatColor.LIGHT_PURPLE + Broadcast.get("shop.smash-bonus"))) {
             buyClass(buyer, ShopUpgrade.CRYSTALS_SMASH, event.getInventory());
         }
         // Buy win.
-        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.YELLOW + "Win-Cash")) {
+        else if (name.equalsIgnoreCase(buyString + ChatColor.YELLOW + Broadcast.get("shop.win-cash"))) {
             buyClass(buyer, ShopUpgrade.CRYSTALS_WIN, event.getInventory());
         }
         // buy blood.
-        else if (name.equalsIgnoreCase(PREFIX + "BUY " + ChatColor.RED + "Blood Diamonds")) {
+        else if (name.equalsIgnoreCase(buyString + ChatColor.RED + Broadcast.get("shop.blood-diamonds"))) {
             buyClass(buyer, ShopUpgrade.CRYSTALS_BLOOD, event.getInventory());
         }
 
@@ -164,17 +172,21 @@ public class ShopCrystals implements Listener {
 
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_BLOOD);
         if (level < 5) {
-            meta.setDisplayName(PREFIX + "BUY " + ChatColor.RED + "Blood Diamonds");
+            meta.setDisplayName(PREFIX + Broadcast.get("shop.buy").toUpperCase() + " " + ChatColor.RED + Broadcast.get("shop.blood-diamonds"));
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Double chance: " + ChatColor.GREEN + "+20%");
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.UPGRADE_TO + ": " + ChatColor.GREEN +
+                    Broadcast.get("shop.level") + " " + (level + 1)
+            );
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.double-chance") + ": " + ChatColor.GREEN + "+20%");
             lore.add("");
-            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            lore.add(ChatColor.RED + Broadcast.PRICE + ": " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
             meta.setLore(lore);
         }
         else {
-            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.RED + "Blood Diamonds");
+            meta.setDisplayName(PREFIX_RED + Broadcast.get("shop.max").toUpperCase() + " " +
+                    ChatColor.RED + Broadcast.get("shop.blood-diamonds")
+            );
         }
 
         item.setItemMeta(meta);
@@ -190,17 +202,19 @@ public class ShopCrystals implements Listener {
 
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_WIN);
         if (level < 5) {
-            meta.setDisplayName(PREFIX + "BUY " + ChatColor.YELLOW + "Win-Cash");
+            meta.setDisplayName(PREFIX + Broadcast.get("shop.buy").toUpperCase() + " " + ChatColor.YELLOW + Broadcast.get("shop.win-cash"));
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Cash on win: " + ChatColor.GREEN + "+10%");
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.UPGRADE_TO + ": " + ChatColor.GREEN +
+                    Broadcast.get("shop.level") + " " + (level + 1)
+            );
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("cash-on-win") + ": " + ChatColor.GREEN + "+10%");
             lore.add("");
-            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            lore.add(ChatColor.RED + Broadcast.PRICE + ": " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
             meta.setLore(lore);
         }
         else {
-            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.YELLOW + "Win-Cash");
+            meta.setDisplayName(PREFIX_RED + Broadcast.get("shop.max").toUpperCase() + " " + ChatColor.YELLOW + Broadcast.get("shop.win-cash"));
         }
 
         item.setItemMeta(meta);
@@ -216,17 +230,19 @@ public class ShopCrystals implements Listener {
 
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_SMASH);
         if (level < 5) {
-            meta.setDisplayName(PREFIX + "BUY " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
+            meta.setDisplayName(PREFIX + Broadcast.get("shop.buy").toUpperCase() + " " + ChatColor.LIGHT_PURPLE + Broadcast.get("shop.smash-bonus"));
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Double chance: " + ChatColor.GREEN + "+10%");
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.UPGRADE_TO + ": " + ChatColor.GREEN +
+                    Broadcast.get("shop.level") + " " + (level + 1)
+            );
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.double-chance") + ": " + ChatColor.GREEN + "+10%");
             lore.add("");
-            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            lore.add(ChatColor.RED + Broadcast.PRICE + ": " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
             meta.setLore(lore);
         }
         else {
-            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.LIGHT_PURPLE + "Smash-Bonus");
+            meta.setDisplayName(PREFIX_RED + Broadcast.get("shop.max").toUpperCase() + " " + ChatColor.LIGHT_PURPLE + Broadcast.get("shop.smash-bonus"));
         }
 
         item.setItemMeta(meta);
@@ -242,17 +258,19 @@ public class ShopCrystals implements Listener {
 
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_XP);
         if (level < 5) {
-            meta.setDisplayName(PREFIX + "BUY " + ChatColor.GREEN + "Xp-Bonus");
+            meta.setDisplayName(PREFIX + Broadcast.get("shop.buy").toUpperCase() + " " + ChatColor.GREEN + Broadcast.get("shop.xp-bonus"));
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade to: " + ChatColor.GREEN + "Lvl " + (level + 1));
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Crystals: " + ChatColor.GREEN + "+1");
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.UPGRADE_TO + ": " + ChatColor.GREEN +
+                    Broadcast.get("shop.level") + " " + (level + 1)
+            );
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.crystals") + ": " + ChatColor.GREEN + "+1");
             lore.add("");
-            lore.add(ChatColor.RED + "Price: " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
+            lore.add(ChatColor.RED + Broadcast.PRICE + ": " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
             meta.setLore(lore);
         }
         else {
-            meta.setDisplayName(PREFIX_RED + "MAX " + ChatColor.GREEN + "Xp-Bonus");
+            meta.setDisplayName(PREFIX_RED + Broadcast.get("shop.max").toUpperCase() + " " + ChatColor.GREEN + Broadcast.get("shop.xp-bonus"));
         }
 
         item.setItemMeta(meta);
@@ -265,19 +283,20 @@ public class ShopCrystals implements Listener {
     public ItemStack getItemStatusKill(Player player) {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.RED + "Blood Diamonds");
+        meta.setDisplayName(ChatColor.RED + Broadcast.get("shop.blood-diamonds"));
 
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_BLOOD);
         String multiplier = "" + Multipliers.getMultiplier("blood", level, true);
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Chance double cash: " + ChatColor.GREEN +
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.current-level") + ": " +
+                ChatColor.GREEN + Broadcast.get("shop.level") + " " + level);
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.double-chance") + ": " + ChatColor.GREEN +
                 multiplier.replace(".0", "") + "%");
         lore.add("");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Increase the chance of getting");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "double crystals (balance) when you");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "kill someone");
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.blood-diamonds-lore-1"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.blood-diamonds-lore-2"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.blood-diamonds-lore-3"));
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
@@ -289,18 +308,19 @@ public class ShopCrystals implements Listener {
     public ItemStack getItemStatusWin(Player player) {
         ItemStack item = new ItemStack(Material.GOLD_INGOT, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.YELLOW + "Win-Cash");
+        meta.setDisplayName(ChatColor.YELLOW + Broadcast.get("shop.win-cash"));
 
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_WIN);
         String multiplier = "" + Multipliers.getMultiplier("win", level, true);
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Win-Cash multiplier: " + ChatColor.GREEN +
-                multiplier.substring(0, 3) + "%");
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.current-level") + ": " +
+                ChatColor.GREEN + Broadcast.get("shop.level") + " " + level);
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.win-cash-multiplier") + ": " +
+                ChatColor.GREEN + multiplier.substring(0, 3) + "%");
         lore.add("");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Increase the amount of crystals");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "you get when you win a quest.");
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.win-cash-lore-1"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.win-cash-lore-2"));
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
@@ -312,19 +332,20 @@ public class ShopCrystals implements Listener {
     public ItemStack getItemStatusSmash(Player player) {
         ItemStack item = new ItemStack(Material.NETHER_STAR, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.LIGHT_PURPLE + "Smash-Bonus");
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE + Broadcast.get("shop.smash-bonus"));
 
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_SMASH);
         String multiplier = "" + Multipliers.getMultiplier("smash", level, true);
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Chance double crystals: " + ChatColor.GREEN +
-                multiplier.replace(".0", "") + "%");
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.current-level") + ": " +
+                ChatColor.GREEN + Broadcast.get("shop.level") + " " + level);
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.double-chance") + ": " +
+                ChatColor.GREEN + multiplier.replace(".0", "") + "%");
         lore.add("");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Increase the chance of");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "doubling the crystals you");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "get when you smash a crystal.");
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.smash-bonus-lore-1"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.smash-bonus-lore-2"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.smash-bonus-lore-3"));
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
@@ -336,18 +357,19 @@ public class ShopCrystals implements Listener {
     public ItemStack getItemStatusExp(Player player) {
         ItemStack item = new ItemStack(Material.EXPERIENCE_BOTTLE, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GREEN + "Xp-Bonus");
+        meta.setDisplayName(ChatColor.GREEN + Broadcast.get("shop.xp-bonus"));
 
         int level = economy.getUpgrades().getLevel(player, ShopUpgrade.CRYSTALS_XP);
         String multiplier = "" + Multipliers.getMultiplier("xp", level, false);
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Current level: " + ChatColor.GREEN + "Lvl " + level);
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Crystals per XP-Level: " + ChatColor.GREEN +
-                multiplier.replace(".0", ""));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.current-level") + ": " +
+                ChatColor.GREEN + Broadcast.get("shop.level") + " " + level);
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.crystals-per-level") + ": " +
+                ChatColor.GREEN + multiplier.replace(".0", ""));
         lore.add("");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Increase the amount of crystals");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "you get when you reach 1 LVL.");
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.xp-bonus-lore-1"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.xp-bonus-lore-2"));
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
@@ -359,10 +381,10 @@ public class ShopCrystals implements Listener {
     public ItemStack getItemMainMenu() {
         ItemStack is = new ItemStack(Material.ARROW, 1);
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName(ChatColor.GREEN + "Main Menu");
+        im.setDisplayName(ChatColor.GREEN + Broadcast.get("menu.main"));
         is.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Go back to the Main Menu!");
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.main-menu"));
         im.setLore(lore);
         is.setItemMeta(im);
         return is;

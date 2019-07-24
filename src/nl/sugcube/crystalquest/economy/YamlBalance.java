@@ -2,8 +2,6 @@ package nl.sugcube.crystalquest.economy;
 
 import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
-
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -31,8 +29,8 @@ public class YamlBalance implements Balance {
         balance += amount;
         plugin.getData().set("shop.balance." + p.getUniqueId().toString(), balance);
         if (showMessage) {
-            p.sendMessage(Broadcast.TAG + ChatColor.GRAY + amount + " Crystals " + ChatColor.YELLOW + "have been" +
-                    "added to your account!");
+            String messageString = String.format(Broadcast.get("shop.added-to-account"), amount);
+            p.sendMessage(Broadcast.TAG + messageString);
         }
         plugin.saveData();
     }

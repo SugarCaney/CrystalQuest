@@ -70,28 +70,28 @@ public class DeathMessages implements Listener {
                 try {
                     if (!fired && cause != null) {
                         if (cause == DamageCause.DROWNING) {
-                            a.sendDeathMessage(p, " drowned");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.drowned"));
                         }
                         else if (cause == DamageCause.ENTITY_EXPLOSION || cause == DamageCause.BLOCK_EXPLOSION) {
-                            a.sendDeathMessage(p, " exploded");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.exploded"));
                         }
                         else if (cause == DamageCause.CONTACT) {
-                            a.sendDeathMessage(p, " has been pricked to death");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.pricked"));
                         }
                         else if (cause == DamageCause.FIRE || cause == DamageCause.FIRE_TICK) {
-                            a.sendDeathMessage(p, " burnt away");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.burnt-away"));
                         }
                         else if (cause == DamageCause.LAVA) {
-                            a.sendDeathMessage(p, " became obsidian");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.lava"));
                         }
                         else if (cause == DamageCause.LIGHTNING) {
-                            a.sendDeathMessage(p, " got electrocuted");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.lightning"));
                         }
                         else if (cause == DamageCause.MAGIC) {
-                            a.sendDeathMessage(p, " disappeared");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.magic"));
                         }
                         else if (cause == DamageCause.FALLING_BLOCK) {
-                            a.sendDeathMessage(p, " has been squashed by an anvil");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.anvil"));
                         }
                         else if (cause == DamageCause.PROJECTILE) {
                             if (damageEvent.getEntity() instanceof Player) {
@@ -148,7 +148,7 @@ public class DeathMessages implements Listener {
                             }
                         }
                         else if (cause == DamageCause.SUFFOCATION) {
-                            a.sendDeathMessage(p, " suffocated");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.suffocation"));
                         }
                         else if (cause == DamageCause.THORNS) {
                             if (damageEvent.getEntity() instanceof Player && len != null) {
@@ -158,10 +158,10 @@ public class DeathMessages implements Listener {
                             }
                         }
                         else if (cause == DamageCause.VOID) {
-                            a.sendDeathMessage(p, " fell out of the world");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.void"));
                         }
                         else if (cause == DamageCause.WITHER) {
-                            a.sendDeathMessage(p, " withered away");
+                            a.sendDeathMessage(p, " " + Broadcast.get("death.withered"));
                         }
                         else if (cause == DamageCause.ENTITY_ATTACK) {
                             if (len instanceof Player) {
@@ -213,10 +213,10 @@ public class DeathMessages implements Listener {
                                 }
                             }
                             else if (len instanceof Rabbit) {
-                                a.sendDeathMessage(p, " has been slain by The Killer Rabbit");
+                                a.sendDeathMessage(p, " " + Broadcast.get("death.rabbit"));
                             }
                             else {
-                                a.sendDeathMessage(p, " has been slain");
+                                a.sendDeathMessage(p, " " + Broadcast.get("death.slain"));
                             }
                         }
                     }

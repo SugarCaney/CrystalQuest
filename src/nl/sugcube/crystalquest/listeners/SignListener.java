@@ -47,28 +47,28 @@ public class SignListener implements Listener {
             if (player.hasPermission("crystalquest.admin")) {
                 if (e.getLine(1).isEmpty() && e.getLine(3).isEmpty() && (e.getLine(2).equalsIgnoreCase("class") || e.getLine(2).isEmpty())) {
                     e.setLine(0, "CrystalQuest");
-                    e.setLine(2, ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Pick a Class");
-                    player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", "Class-sign"));
+                    e.setLine(2, ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + Broadcast.get("sign.pick-class"));
+                    player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", Broadcast.get("sign.class-sign")));
                 }
                 else if (e.getLine(1).isEmpty() && e.getLine(3).isEmpty() && e.getLine(2).equalsIgnoreCase("random")) {
                     e.setLine(0, "CrystalQuest");
-                    e.setLine(2, ChatColor.GREEN + "" + ChatColor.BOLD + "Random Arena");
-                    player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", "Random Arena-sign"));
+                    e.setLine(2, ChatColor.GREEN + "" + ChatColor.BOLD + Broadcast.get("sign.random"));
+                    player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", Broadcast.get("sign.random-sign")));
                 }
                 else if (e.getLine(1).isEmpty() && e.getLine(3).isEmpty() && e.getLine(2).equalsIgnoreCase("shop")) {
                     e.setLine(0, "CrystalQuest");
-                    e.setLine(2, ChatColor.YELLOW + "" + ChatColor.BOLD + "Open Shop");
-                    player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", "Shop-sign"));
+                    e.setLine(2, ChatColor.YELLOW + "" + ChatColor.BOLD + Broadcast.get("sign.open-shop"));
+                    player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", Broadcast.get("sign.shop-sign")));
                 }
                 else if (e.getLine(1).isEmpty() && e.getLine(3).isEmpty() && e.getLine(2).equalsIgnoreCase("lobby")) {
                     e.setLine(0, "CrystalQuest");
-                    e.setLine(2, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Lobby");
-                    player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", "Lobby-sign"));
+                    e.setLine(2, ChatColor.DARK_RED + "" + ChatColor.BOLD + Broadcast.get("sign.lobby-sign-word"));
+                    player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", Broadcast.get("sign.lobby-sign")));
                 }
                 else if (e.getLine(1).isEmpty() && e.getLine(3).isEmpty() && e.getLine(2).equalsIgnoreCase("spectate")) {
                     e.setLine(0, "CrystalQuest");
-                    e.setLine(2, ChatColor.AQUA + "" + ChatColor.BOLD + "Spectate");
-                    player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", "Spectate-sign"));
+                    e.setLine(2, ChatColor.AQUA + "" + ChatColor.BOLD + Broadcast.get("sign.spectate-sign"));
+                    player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", Broadcast.get("sign.spectate-sign")));
                 }
                 else {
                     try {
@@ -76,26 +76,26 @@ public class SignListener implements Listener {
 
                         if (a.isEnabled()) {
                             if (a.isCounting()) {
-                                e.setLine(3, ChatColor.YELLOW + "Starting");
+                                e.setLine(3, ChatColor.YELLOW + Broadcast.get("arena.starting"));
                                 e.setLine(2, a.getPlayers().size() + "/" + a.getMaxPlayers() + " | " +
                                         a.getCountdown() + "s");
                                 e.setLine(1, ChatColor.ITALIC + a.getName());
                                 e.setLine(0, ChatColor.GREEN + "" + ChatColor.BOLD + "CQ-Join");
                             }
                             else if (a.isInGame()) {
-                                e.setLine(3, ChatColor.DARK_RED + "In Game");
+                                e.setLine(3, ChatColor.DARK_RED + Broadcast.get("arena.in-game"));
                                 e.setLine(2, SMethods.toTime(a.getTimeLeft()) + " left");
                                 e.setLine(1, ChatColor.ITALIC + a.getName());
                                 e.setLine(0, ChatColor.AQUA + "" + ChatColor.BOLD + "CQ-Spectate");
                             }
                             else if (a.isEndGame()) {
-                                e.setLine(3, ChatColor.DARK_PURPLE + "Restarting");
+                                e.setLine(3, ChatColor.DARK_PURPLE + Broadcast.get("arena.restarting-status"));
                                 e.setLine(2, "");
                                 e.setLine(1, ChatColor.ITALIC + a.getName());
                                 e.setLine(0, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Unjoinable");
                             }
                             else {
-                                e.setLine(3, ChatColor.GREEN + "Lobby");
+                                e.setLine(3, ChatColor.GREEN + Broadcast.get("arena.in-lobby"));
                                 e.setLine(2, a.getPlayers().size() + "/" + a.getMaxPlayers());
                                 e.setLine(1, ChatColor.ITALIC + a.getName());
                                 e.setLine(0, ChatColor.GREEN + "" + ChatColor.BOLD + "CQ-Join");
@@ -105,7 +105,7 @@ public class SignListener implements Listener {
                         else {
                             e.setLine(0, "");
                             e.setLine(1, ChatColor.ITALIC + a.getName());
-                            e.setLine(2, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Disabled");
+                            e.setLine(2, ChatColor.DARK_RED + "" + ChatColor.BOLD + Broadcast.get("commands.disabled"));
                             e.setLine(3, "");
                         }
 
@@ -118,7 +118,7 @@ public class SignListener implements Listener {
 
                         plugin.signHandler.getSigns().add(s.getLocation());
 
-                        player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", "Arena-sign"));
+                        player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", Broadcast.get("sign.arena-sign")));
                     }
                     catch (Exception ex) {
                         e.setLine(0, Broadcast.get("sign.invalid"));
@@ -152,16 +152,16 @@ public class SignListener implements Listener {
                     /*
                      * Checks if the sign is a Class-pick sign and opens the class-choice menu if so.
 					 */
-                    if (s.getLine(2).equalsIgnoreCase(ChatColor.DARK_PURPLE + "Pick a Class") ||
-                            s.getLine(2).equalsIgnoreCase(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Pick a Class")) {
+                    if (s.getLine(2).equalsIgnoreCase(ChatColor.DARK_PURPLE + Broadcast.get("sign.pick-class")) ||
+                            s.getLine(2).equalsIgnoreCase(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + Broadcast.get("sign.pick-class"))) {
                         plugin.menuSelectClass.openMenu(e.getPlayer());
 
                     }
 					/*
 					 * Checks if the sign is a Spectate-sign and opens the spectate menu if so.
 					 */
-                    else if (s.getLine(2).equalsIgnoreCase(ChatColor.AQUA + "Spectate") ||
-                            s.getLine(2).equalsIgnoreCase(ChatColor.AQUA + "" + ChatColor.BOLD + "Spectate")) {
+                    else if (s.getLine(2).equalsIgnoreCase(ChatColor.AQUA + Broadcast.get("sign.spectate")) ||
+                            s.getLine(2).equalsIgnoreCase(ChatColor.AQUA + "" + ChatColor.BOLD + Broadcast.get("sign.spectate"))) {
                         if (e.getPlayer().hasPermission("crystalquest.admin") ||
                                 e.getPlayer().hasPermission("crystalquest.staff") ||
                                 e.getPlayer().hasPermission("crystalquest.spectate")) {
@@ -174,16 +174,16 @@ public class SignListener implements Listener {
 					/*
 					 * Checks if the sign is a Shop-sign and opens the shop menu if so.
 					 */
-                    else if (s.getLine(2).equalsIgnoreCase(ChatColor.YELLOW + "Open Shop") ||
-                            s.getLine(2).equalsIgnoreCase(ChatColor.YELLOW + "" + ChatColor.BOLD + "Open Shop")) {
+                    else if (s.getLine(2).equalsIgnoreCase(ChatColor.YELLOW + Broadcast.get("sign.open-shop")) ||
+                            s.getLine(2).equalsIgnoreCase(ChatColor.YELLOW + "" + ChatColor.BOLD + Broadcast.get("sign.open-shop"))) {
                         plugin.economy.getMainMenu().showMenu(e.getPlayer());
 
                     }
 					/*
 					 * Checks if the sign is a Lobby-sign and let you leave the game/teleport to lobby if so.
 					 */
-                    else if (s.getLine(2).equalsIgnoreCase(ChatColor.DARK_RED + "Lobby") ||
-                            s.getLine(2).equalsIgnoreCase(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Lobby")) {
+                    else if (s.getLine(2).equalsIgnoreCase(ChatColor.DARK_RED + Broadcast.get("sign.lobby-sign-word")) ||
+                            s.getLine(2).equalsIgnoreCase(ChatColor.DARK_RED + "" + ChatColor.BOLD + Broadcast.get("sign.lobby-sign-word"))) {
                         if (plugin.getArenaManager().isInGame(e.getPlayer())) {
                             plugin.arenaManager.getArena(e.getPlayer().getUniqueId()).removePlayer(e.getPlayer());
                             e.getPlayer().sendMessage(Broadcast.TAG + Broadcast.get("sign.left"));
@@ -197,8 +197,8 @@ public class SignListener implements Listener {
 					/*
 					 * Checks if the sign is a Random Arena-pick sign and picks a random arenas.
 					 */
-                    else if (s.getLine(2).equalsIgnoreCase(ChatColor.GREEN + "Random Arena") ||
-                            s.getLine(2).equalsIgnoreCase(ChatColor.GREEN + "" + ChatColor.BOLD + "Random Arena")) {
+                    else if (s.getLine(2).equalsIgnoreCase(ChatColor.GREEN + Broadcast.get("sign.random")) ||
+                            s.getLine(2).equalsIgnoreCase(ChatColor.GREEN + "" + ChatColor.BOLD + Broadcast.get("sign.random"))) {
                         Arena a = null;
                         Random ran = new Random();
                         boolean nothingAvaiable = true;

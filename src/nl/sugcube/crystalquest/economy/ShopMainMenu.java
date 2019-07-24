@@ -1,5 +1,6 @@
 package nl.sugcube.crystalquest.economy;
 
+import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.util.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,9 +37,7 @@ public class ShopMainMenu implements Listener {
     public void showMenu(Player player) {
         player.closeInventory();
 
-        Inventory inventory = Bukkit.createInventory(null, 9,
-                ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Menu"
-        );
+        Inventory inventory = Bukkit.createInventory(null, 9, getMenuTitle());
 
         ItemStack[] contents = inventory.getContents();
         contents[0] = getItemClass();
@@ -56,7 +55,7 @@ public class ShopMainMenu implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory inventory = event.getInventory();
-        if (!inventory.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Menu")) {
+        if (!inventory.getName().equalsIgnoreCase(getMenuTitle())) {
             return;
         }
 
@@ -76,13 +75,13 @@ public class ShopMainMenu implements Listener {
         }
 
         String name = meta.getDisplayName();
-        if (name.equalsIgnoreCase(ChatColor.GREEN + "Power-Up-Grades")) {
+        if (name.equalsIgnoreCase(ChatColor.GREEN + Broadcast.get("shop.power-up-grades"))) {
             economy.getPowerupMenu().showMenu((Player)event.getWhoClicked());
         }
-        else if (name.equalsIgnoreCase(ChatColor.AQUA + "More Crystals")) {
+        else if (name.equalsIgnoreCase(ChatColor.AQUA + Broadcast.get("shop.more-crystals"))) {
             economy.getCrystalMenu().showMenu((Player)event.getWhoClicked());
         }
-        else if (name.equalsIgnoreCase(ChatColor.GOLD + "Buy Classes")) {
+        else if (name.equalsIgnoreCase(ChatColor.GOLD + Broadcast.get("shop.buy-classes"))) {
             economy.getClassesMenu().showMenu((Player)event.getWhoClicked());
         }
     }
@@ -93,11 +92,11 @@ public class ShopMainMenu implements Listener {
     public ItemStack getItemCrystals() {
         ItemStack item = new ItemStack(Material.DIAMOND, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.AQUA + "More Crystals");
+        meta.setDisplayName(ChatColor.AQUA + Broadcast.get("shop.more-crystals"));
         item.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Gimme money!");
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.more-crystals-lore"));
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
@@ -109,10 +108,10 @@ public class ShopMainMenu implements Listener {
     public ItemStack getItemPowerUp() {
         ItemStack item = new ItemStack(Material.SLIME_BALL, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GREEN + "Power-Up-Grades");
+        meta.setDisplayName(ChatColor.GREEN + Broadcast.get("shop.power-up-grades"));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Upgrade your Power-Ups");
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.power-up-grades-lore"));
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
@@ -125,12 +124,16 @@ public class ShopMainMenu implements Listener {
         ItemStack item = new ItemStack(Material.GOLDEN_SWORD, 1);
         Items.hideAllFlags(item);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + "Buy Classes");
+        meta.setDisplayName(ChatColor.GOLD + Broadcast.get("shop.buy-classes"));
 
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Buy extra classes to play with!");
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.buy-classes-lore"));
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
+    }
+
+    private String getMenuTitle() {
+        return Broadcast.get("shop.shop") + ":" + ChatColor.GOLD + " " + Broadcast.get("menu.menu");
     }
 }

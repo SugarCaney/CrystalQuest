@@ -34,17 +34,22 @@ public class InventoryListener implements Listener {
             return;
         }
 
+        String pickTeamString = Broadcast.get("team.pick");
+        String pickClassString = Broadcast.get("menu.pick-class");
+        String spectateString = Broadcast.get("menu.spectate-arena");
+        String shopString = Broadcast.get("shop.shop");
+
         String inventoryName = event.getInventory().getName();
-        if (inventoryName.contains("Pick Team: ")) {
+        if (inventoryName.contains(pickTeamString)) {
             pickTeam(event);
         }
-        else if ("Pick a Class".equals(inventoryName)) {
+        else if (pickClassString.equals(inventoryName)) {
             pickClass(event);
         }
-        else if (inventoryName.equalsIgnoreCase("Spectate an arenas")) {
+        else if (inventoryName.equalsIgnoreCase(spectateString)) {
             spectate(event);
         }
-        else if (inventoryName.contains(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:")) {
+        else if (inventoryName.contains(shopString + ":")) {
             event.setCancelled(true);
         }
     }
@@ -57,8 +62,9 @@ public class InventoryListener implements Listener {
 
         if (event.getCurrentItem().hasItemMeta()) {
             if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
+                String spectateString = Broadcast.get("menu.spectate");
                 Arena a = plugin.arenaManager.getArena(event.getCurrentItem().getItemMeta().getDisplayName()
-                        .replace(ChatColor.AQUA + "Spectate ", ""));
+                        .replace(ChatColor.AQUA + spectateString + " ", ""));
                 a.addPlayer((Player)event.getWhoClicked(), CrystalQuestTeam.SPECTATOR, true);
             }
         }
@@ -72,7 +78,8 @@ public class InventoryListener implements Listener {
 
         if (event.getCurrentItem().hasItemMeta()) {
             if (event.getCurrentItem().getItemMeta().hasDisplayName()) {
-                if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("Random Class")) {
+                String randomClassString = Broadcast.get("menu.random-class");
+                if (event.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(randomClassString)) {
                     plugin.inventoryManager.playerClass.remove(player.getUniqueId());
                     player.sendMessage(Broadcast.TAG + Broadcast.get("arena.random-class"));
                 }
@@ -102,7 +109,8 @@ public class InventoryListener implements Listener {
             Player player = (Player)event.getWhoClicked();
             player.closeInventory();
 
-            String arenaName = event.getInventory().getName().replace("Pick Team: ", "");
+            String pickTeamString = Broadcast.get("team.pick");
+            String arenaName = event.getInventory().getName().replace(pickTeamString, "");
             Arena arena = plugin.arenaManager.getArena(arenaName);
             String displayName = "";
             CrystalQuestTeam team = null;
@@ -113,7 +121,8 @@ public class InventoryListener implements Listener {
                 }
             }
 
-            if (displayName.contains("Random Team")) {
+            String randomTeamString = Broadcast.get("team.random");
+            if (displayName.contains(randomTeamString)) {
                 try {
                     if (arena.getSmallestTeams().size() > 0) {
                         boolean isNotOk = true;
@@ -130,7 +139,8 @@ public class InventoryListener implements Listener {
                 }
             }
             else {
-                team = CrystalQuestTeam.valueOfName(displayName.replace("Join ", ""));
+                String joinString = Broadcast.get("menu.join");
+                team = CrystalQuestTeam.valueOfName(displayName.replace(joinString, ""));
             }
 
             if (plugin.arenaManager.isInGame(player)) {

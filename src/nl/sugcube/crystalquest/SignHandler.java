@@ -48,27 +48,27 @@ public class SignHandler {
                 ChatColor color = null;
                 if (a.isEnabled()) {
                     if (a.isCounting()) {
-                        s.setLine(3, ChatColor.YELLOW + "Starting");
+                        s.setLine(3, ChatColor.YELLOW + Broadcast.get("arena.starting"));
                         s.setLine(2, a.getPlayers().size() + "/" + a.getMaxPlayers() + " | " +
                                 a.getCountdown() + "s");
                         s.setLine(1, ChatColor.ITALIC + a.getName());
                         s.setLine(0, ChatColor.GREEN + "" + ChatColor.BOLD + "CQ-Join");
                     }
                     else if (a.isInGame() && !a.isEndGame()) {
-                        s.setLine(3, ChatColor.DARK_RED + "In Game");
-                        s.setLine(2, SMethods.toTime(a.getTimeLeft()) + " left");
+                        s.setLine(3, ChatColor.DARK_RED + Broadcast.get("arena.in-game"));
+                        s.setLine(2, SMethods.toTime(a.getTimeLeft()) + " " + Broadcast.get("arena.left"));
                         s.setLine(1, ChatColor.ITALIC + a.getName());
                         s.setLine(0, ChatColor.AQUA + "" + ChatColor.BOLD + "CQ-Spectate");
                     }
                     else if (a.isEndGame()) {
                         color = ChatColor.DARK_PURPLE;
-                        s.setLine(3, ChatColor.DARK_PURPLE + "Restarting");
+                        s.setLine(3, ChatColor.DARK_PURPLE + Broadcast.get("arena.restarting-status"));
                         s.setLine(2, "");
                         s.setLine(1, ChatColor.ITALIC + a.getName());
                         s.setLine(0, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Unjoinable");
                     }
                     else {
-                        s.setLine(3, ChatColor.GREEN + "Lobby");
+                        s.setLine(3, ChatColor.GREEN + Broadcast.get("arena.in-lobby"));
                         s.setLine(2, a.getPlayers().size() + "/" + a.getMaxPlayers());
                         s.setLine(1, ChatColor.ITALIC + a.getName());
                         s.setLine(0, ChatColor.GREEN + "" + ChatColor.BOLD + "CQ-Join");
@@ -78,7 +78,7 @@ public class SignHandler {
                 else {
                     s.setLine(0, "");
                     s.setLine(1, ChatColor.ITALIC + a.getName());
-                    s.setLine(2, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Disabled");
+                    s.setLine(2, ChatColor.DARK_RED + "" + ChatColor.BOLD + Broadcast.get("commands.disabled"));
                     s.setLine(3, "");
                 }
                 s.update();

@@ -100,8 +100,10 @@ public class ShopClasses implements Listener {
     public void showMenu(Player player) {
         player.closeInventory();
 
+        String shopString = Broadcast.get("shop.shop");
+        String classesString = Broadcast.get("shop.classes");
         Inventory inventory = Bukkit.createInventory(null, 54,
-                ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Classes"
+                shopString + ":" + ChatColor.GOLD + " " + classesString
         );
 
         updateMenu(player, inventory);
@@ -113,8 +115,11 @@ public class ShopClasses implements Listener {
      */
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        String shopString = Broadcast.get("shop.shop");
+        String classesString = Broadcast.get("shop.classes");
+
         Inventory inventory = event.getInventory();
-        if (!inventory.getName().equalsIgnoreCase(ChatColor.LIGHT_PURPLE + "CrystalQuest Shop:" + ChatColor.GOLD + " Classes")) {
+        if (!inventory.getName().equalsIgnoreCase(shopString + ":" + ChatColor.GOLD + " " + classesString)) {
             return;
         }
 
@@ -137,13 +142,16 @@ public class ShopClasses implements Listener {
         Player buyer = (Player)event.getWhoClicked();
         Classes classes = economy.getClasses();
 
+        String balanceCrystal = Broadcast.get("shop.balance-crystal");
+        String prefix = balanceCrystal.split("[ :]]")[0];
+
         /*
          * MAIN MENU
          */
-        if (name.equalsIgnoreCase(ChatColor.GREEN + "Main Menu")) {
+        if (name.equalsIgnoreCase(ChatColor.GREEN + Broadcast.get("menu.main"))) {
             economy.getMainMenu().showMenu(buyer);
         }
-        else if (!name.contains(ChatColor.GREEN + "Crystals: " + ChatColor.GOLD) && item.getType() != Material.EMERALD) {
+        else if (!name.contains(prefix) && item.getType() != Material.EMERALD) {
             String kitId = plugin.menuSelectClass.getTechnicalClassName(name);
             int price = plugin.getConfig().getInt("kit." + kitId + ".price");
 
@@ -163,7 +171,7 @@ public class ShopClasses implements Listener {
     public ItemStack getItemMainMenu() {
         ItemStack item = new ItemStack(Material.ARROW, 1);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GREEN + "Main Menu");
+        meta.setDisplayName(ChatColor.GREEN + Broadcast.get("menu.main"));
         item.addUnsafeEnchantment(Enchantment.SILK_TOUCH, 1);
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.main-menu"));

@@ -301,8 +301,8 @@ public class PlayerListener implements Listener {
                 if (e.getPlayer().hasPermission("crystalquest.admin")) {
                     Update uc = new Update(69421, plugin.getDescription().getVersion());
                     if (uc.query()) {
-                        e.getPlayer().sendMessage(Broadcast.TAG + "A new version of CrystalQuest is available!");
-                        e.getPlayer().sendMessage(Broadcast.TAG + "Get it at the BukkitDev-page!");
+                        e.getPlayer().sendMessage(Broadcast.TAG + Broadcast.get("general.update-available"));
+                        e.getPlayer().sendMessage(Broadcast.TAG + Broadcast.get("general.update-get"));
                     }
                 }
             }
@@ -363,7 +363,7 @@ public class PlayerListener implements Listener {
                                 event.getMessage());
                     }
                     else {
-                        event.setMessage(ChatColor.BLUE + "[Spec] " + event.getMessage());
+                        event.setMessage(ChatColor.BLUE + Broadcast.get("arena.spectate-prefix") + " " + event.getMessage());
                     }
                 }
             }
