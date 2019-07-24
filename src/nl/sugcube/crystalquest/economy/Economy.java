@@ -136,8 +136,8 @@ public class Economy {
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(balanceString.replace("%amount%", Integer.toString(balance)));
         List<String> lore = new ArrayList<String>();
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.spend-lore1"));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.spend-lore2"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.spend-lore-1"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.spend-lore-2"));
         im.setLore(lore);
         is.setItemMeta(im);
         return is;

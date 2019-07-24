@@ -1562,7 +1562,7 @@ public class Arena {
 
         if (plugin.arenaManager.getArena(name) == null) {
             this.name = name;
-            this.teamMenu = Bukkit.createInventory(null, 9, "Pick Team: " + this.getName());
+            this.teamMenu = Bukkit.createInventory(null, 9, Broadcast.get("team.pick") + ": " + this.getName());
             plugin.menuPickTeam.updateMenu(this);
             plugin.signHandler.updateSigns();
             return true;

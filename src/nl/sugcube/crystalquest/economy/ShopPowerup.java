@@ -184,7 +184,7 @@ public class ShopPowerup implements Listener {
             meta.setDisplayName(PREFIX + getBuyString() + " " + ChatColor.DARK_GREEN + Broadcast.get("shop.creepers"));
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + " " + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.bonus-chance") + ": " + ChatColor.GREEN + "+12.5%");
             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.extra-gems-drop") + ": " + ChatColor.GREEN + "+1");
             lore.add("");
@@ -211,7 +211,7 @@ public class ShopPowerup implements Listener {
             meta.setDisplayName(PREFIX + getBuyString() + " " + ChatColor.RESET + Broadcast.get("shop.wolfie") + " " + ChatColor.RED + "♥");
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + " " + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
 
             if (level + 1 == 1 || level + 1 == 2 || level + 1 == 4) {
                 lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.resistance-level") + ": " + ChatColor.GREEN + "+1");
@@ -245,7 +245,7 @@ public class ShopPowerup implements Listener {
             meta.setDisplayName(PREFIX + getBuyString() + " " + ChatColor.AQUA + Broadcast.get("shop.weaponry"));
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + " " + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.bonus-chance") + ": " + ChatColor.GREEN + "+10%");
             lore.add("");
             lore.add(ChatColor.RED + Broadcast.get("shop.price") + ": " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
@@ -271,7 +271,7 @@ public class ShopPowerup implements Listener {
             meta.setDisplayName(PREFIX + getBuyString() + " " + ChatColor.YELLOW + Broadcast.get("shop.explosives"));
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + " " + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.bonus-size") + ": " + ChatColor.GREEN + "+10%");
             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.lightning-explosion") + ": " + ChatColor.GREEN + "+0.5");
             lore.add("");
@@ -298,7 +298,7 @@ public class ShopPowerup implements Listener {
             meta.setDisplayName(PREFIX + getBuyString() + " " + ChatColor.RED + Broadcast.get("shop.debuffs"));
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + " " + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.bonus-length") + ": " + ChatColor.GREEN + "+10%");
             lore.add("");
             lore.add(ChatColor.RED + Broadcast.get("shop.price") + ": " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
@@ -324,7 +324,7 @@ public class ShopPowerup implements Listener {
             meta.setDisplayName(PREFIX + getBuyString() + " " + ChatColor.LIGHT_PURPLE + Broadcast.get("shop.buffs"));
 
             List<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.upgrade-to") + " " + ChatColor.GREEN + Broadcast.get("shop.level") + " " + (level + 1));
             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.bonus-length") + ": " + ChatColor.GREEN + "+10%");
             lore.add("");
             lore.add(ChatColor.RED + Broadcast.get("shop.price") + ": " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
@@ -378,13 +378,13 @@ public class ShopPowerup implements Listener {
         lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.chance-charged-creeper") + ": " + ChatColor.GREEN +
                 multiplier.replace(".0", "") + "%");
         multiplier = "" + Multipliers.getMultiplier("creepergem", level, false);
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.crystals-on-death") + ": " + ChatColor.GREEN +
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.gems-on-death") + ": " + ChatColor.GREEN +
                 multiplier.replace(".0", ""));
         lore.add("");
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop-creeper-lore-1"));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop-creeper-lore-2"));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop-creeper-lore-3"));
-        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop-creeper-lore-4"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.creeper-lore-1"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.creeper-lore-2"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.creeper-lore-3"));
+        lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.creeper-lore-4"));
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;

@@ -67,7 +67,7 @@ public class SignListener implements Listener {
                 }
                 else if (e.getLine(1).isEmpty() && e.getLine(3).isEmpty() && e.getLine(2).equalsIgnoreCase("spectate")) {
                     e.setLine(0, "CrystalQuest");
-                    e.setLine(2, ChatColor.AQUA + "" + ChatColor.BOLD + Broadcast.get("sign.spectate-sign"));
+                    e.setLine(2, ChatColor.AQUA + "" + ChatColor.BOLD + Broadcast.get("sign.spectate"));
                     player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", Broadcast.get("sign.spectate-sign")));
                 }
                 else {

@@ -109,7 +109,7 @@ public class InventoryListener implements Listener {
             Player player = (Player)event.getWhoClicked();
             player.closeInventory();
 
-            String pickTeamString = Broadcast.get("team.pick");
+            String pickTeamString = Broadcast.get("team.pick") + ": ";
             String arenaName = event.getInventory().getName().replace(pickTeamString, "");
             Arena arena = plugin.arenaManager.getArena(arenaName);
             String displayName = "";

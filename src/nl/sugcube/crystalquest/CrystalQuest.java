@@ -16,7 +16,6 @@ import nl.sugcube.crystalquest.items.ItemHandler;
 import nl.sugcube.crystalquest.items.ItemListener;
 import nl.sugcube.crystalquest.items.Wand;
 import nl.sugcube.crystalquest.listeners.*;
-import nl.sugcube.crystalquest.uuid.UUIDConvert;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -130,9 +129,8 @@ public class CrystalQuest extends JavaPlugin {
          * SPECIAL FOR THE 1.7.5/1.8 UPDATE:
 		 * CHANGING FROM PLAYER NAMES TO UUIDs
 		 */
-        UUIDConvert.convert(getData(), this.getLogger());
-        this.saveData();
-        this.reloadData();
+		Broadcast.plugin = this;
+        Broadcast.setMessages();
 
         arenaManager = new ArenaManager(this);
         menuPickTeam = new PickTeam(this);
@@ -141,7 +139,6 @@ public class CrystalQuest extends JavaPlugin {
         menuSelectClass = new SelectClass(this);
         menuSpectate = new SpectateArena(this);
         commandExecutor = new CrystalQuestCommandManager(this);
-        broadcast = new Broadcast(this);
         saveData = new SaveData(this);
         loadData = new LoadData(this);
         signHandler = new SignHandler(this, arenaManager);
@@ -232,7 +229,6 @@ public class CrystalQuest extends JavaPlugin {
 
         LoadData.loadSigns();        //Load the lobby-signs
 
-        Broadcast.setMessages();
         itemHandler.addAllItems();
 
         // Finally done enabling :)

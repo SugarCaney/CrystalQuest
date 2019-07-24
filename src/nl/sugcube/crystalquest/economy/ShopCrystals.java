@@ -208,7 +208,7 @@ public class ShopCrystals implements Listener {
             lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.UPGRADE_TO + ": " + ChatColor.GREEN +
                     Broadcast.get("shop.level") + " " + (level + 1)
             );
-            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("cash-on-win") + ": " + ChatColor.GREEN + "+10%");
+            lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + Broadcast.get("shop.cash-on-win") + ": " + ChatColor.GREEN + "+10%");
             lore.add("");
             lore.add(ChatColor.RED + Broadcast.PRICE + ": " + ChatColor.GOLD + economy.getUpgradeCosts(level + 1));
             meta.setLore(lore);

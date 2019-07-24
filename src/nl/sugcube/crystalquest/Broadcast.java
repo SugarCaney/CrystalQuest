@@ -18,13 +18,6 @@ public class Broadcast {
     public static String PRICE;
     public static String UPGRADE_TO;
 
-    public Broadcast(CrystalQuest instance) {
-        plugin = instance;
-
-        TAG = get("general.tag");
-        HELP = get("general.tag-help");
-    }
-
     public static void showAbout(CommandSender sender) {
         Update uc = new Update(69421, plugin.getDescription().getVersion());
         String update = "";
@@ -42,6 +35,8 @@ public class Broadcast {
     }
 
     public static void setMessages() {
+        TAG = get("general.tag");
+        HELP = get("general.tag-help");
         NO_PERMISSION = get("broadcast.no-permission");
         ONLY_IN_GAME = get("broadcast.only-in-game");
         PRICE = get("shop.price");
