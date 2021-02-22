@@ -1,7 +1,7 @@
 name: CrystalQuest
 main: nl.sugcube.crystalquest.CrystalQuest
-version: 1.4
-api-version: 1.13
+version: 1.5
+api-version: 1.14
 authors: [SugarCaney]
 website: www.twitter.com/CaneyDearie
 softdepend: [Multiverse-Core]
