@@ -72,30 +72,33 @@ public class CrystalQuest extends JavaPlugin {
         /*
          * Load config.yml and data.yml
 		 */
+        getLogger().info("Loading configuration...");
         File file = new File(getDataFolder() + File.separator + "config.yml");
         if (!file.exists()) {
             try {
                 getConfig().options().copyDefaults(true);
                 saveConfig();
-                this.getLogger().info("Generated config.yml succesfully!");
+                getLogger().info("Generated config.yml succesfully!");
             }
             catch (Exception e) {
-                this.getLogger().info("Failed to generate config.yml!");
+                getLogger().info("Failed to generate config.yml!");
             }
         }
 
+        getLogger().info("Loading data file...");
         File df = new File(getDataFolder() + File.separator + "data.yml");
         if (!df.exists()) {
             try {
                 reloadData();
                 saveData();
-                this.getLogger().info("Generated data.yml succesfully!");
+                getLogger().info("Generated data.yml succesfully!");
             }
             catch (Exception e) {
-                this.getLogger().info("Failed to generate data.yml!");
+                getLogger().info("Failed to generate data.yml!");
             }
         }
 
+        getLogger().info("Loading language file...");
         File lf = new File(getDataFolder() + File.separator + "lang.yml");
         if (!lf.exists()) {
             try {
@@ -111,6 +114,7 @@ public class CrystalQuest extends JavaPlugin {
         /*
          * Establishing database connection
          */
+        getLogger().info("Establishing database connection...");
         if (getConfig().getBoolean("mysql.enabled")) {
             database = new Database(
                     getConfig().getString("mysql.username"),
@@ -129,6 +133,7 @@ public class CrystalQuest extends JavaPlugin {
          * SPECIAL FOR THE 1.7.5/1.8 UPDATE:
 		 * CHANGING FROM PLAYER NAMES TO UUIDs
 		 */
+        getLogger().info("Configurating state...");
 		Broadcast.plugin = this;
         Broadcast.setMessages();
 
@@ -188,6 +193,7 @@ public class CrystalQuest extends JavaPlugin {
 		 * Starting the game-loops
 		 * Initialize all arenas
 		 */
+        getLogger().info("Setting up areans...");
         arenaManager.registerGameLoop();
         arenaManager.registerCrystalSpawningSequence();
         arenaManager.registerItemSpawningSequence();
@@ -209,7 +215,8 @@ public class CrystalQuest extends JavaPlugin {
 		/*
 		 * Check for updates
 		 */
-        if (this.getConfig().getBoolean("updates.check-for-updates")) {
+        if (getConfig().getBoolean("updates.check-for-updates")) {
+            getLogger().info("Checking for updates...");
             Update uc = new Update(69421, this.getDescription().getVersion());
             if (uc.query()) {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "[CrystalQuest] <> A new version of CrystalQuest is " +
@@ -223,6 +230,7 @@ public class CrystalQuest extends JavaPlugin {
 		/*
 		 * Resets all arenas and makes sure everything is ready to go.
 		 */
+        getLogger().info("Resetting areans...");
         for (Arena a : arenaManager.getArenas()) {
             a.resetArena(true);
         }
@@ -232,7 +240,7 @@ public class CrystalQuest extends JavaPlugin {
         itemHandler.addAllItems();
 
         // Finally done enabling :)
-        this.getLogger().info("CrystalQuest v" + pdfFile.getVersion() + " has been enabled!");
+        getLogger().info("CrystalQuest v" + pdfFile.getVersion() + " has been enabled!");
     }
 
     public void onDisable() {
