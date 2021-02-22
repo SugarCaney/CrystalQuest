@@ -1,6 +1,6 @@
 CrystalQuest Version 1.3
 ====================================================
-A PvP-stylish minigame made by MrSugarCaney
+A PvP-stylish minigame made by SugarCaney
 
 A minigame where every Crystal counts!
 

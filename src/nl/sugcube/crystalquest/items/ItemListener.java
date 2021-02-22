@@ -139,7 +139,7 @@ public class ItemListener implements Listener {
                         ItemStack offhand = p.getInventory().getItemInOffHand();
                         if (offhand == null || offhand.getType() != Material.TOTEM_OF_UNDYING) {
                             DeathMessages.fired = true;
-                            a.sendDeathMessage(p, " stood on a landmine");
+                            a.sendDeathMessage(p, " " + Broadcast.get("item-use.landmine-hit"));
                         }
                         p.damage(9999999);
 

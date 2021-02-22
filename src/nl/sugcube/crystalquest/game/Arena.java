@@ -473,8 +473,9 @@ public class Arena {
 
         for (UUID id : getPlayers()) {
             Player player = Bukkit.getPlayer(id);
-            player.sendMessage(c + dead.getName() + ChatColor.GRAY + " has been " + verb + " by " +
-                    cK + killer.getName());
+            player.sendMessage(
+                    c + dead.getName() + ChatColor.GRAY + " has been " + verb + " by " + cK + killer.getName()
+            );
         }
 
         for (UUID id : getSpectators()) {
@@ -689,7 +690,7 @@ public class Arena {
         spectatorTeam = score.registerNewTeam("Spectate");
         spectatorTeam.setAllowFriendlyFire(false);
         spectatorTeam.setCanSeeFriendlyInvisibles(true);
-        spectatorTeam.setPrefix(ChatColor.BLUE + "[Spec] ");
+        spectatorTeam.setPrefix(ChatColor.BLUE + Broadcast.get("arena.spectate-prefix") + " ");
 
         for (CrystalQuestTeam cqTeam : getTeams()) {
             Team team = score.registerNewTeam(cqTeam.getName());
@@ -962,7 +963,7 @@ public class Arena {
             p.teleport(plugin.arenaManager.getLobby());
         }
         catch (Exception e) {
-            plugin.getLogger().info("Lobby-spawn not set!");
+            plugin.getLogger().info(Broadcast.get("arena.lobby-spawn-not-set"));
         }
 
         p.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -1013,82 +1014,84 @@ public class Arena {
     public boolean addPlayer(Player p, CrystalQuestTeam team, boolean spectate) {
         PlayerJoinArenaEvent event = new PlayerJoinArenaEvent(p, this, spectate);
         Bukkit.getPluginManager().callEvent(event);
-        if (!event.isCancelled()) {
-            Arena arena = plugin.getArenaManager().getArena(p.getUniqueId());
-            if (!isFull() || (arena != null && arena.getSpectators().contains(p.getUniqueId()))) {
-                if (isEnabled()) {
-                    try {
-                        if (!spectate) {
-                            playerTeams.put(p.getUniqueId(), team);
-                        }
+        if (event.isCancelled()) {
+            return false;
+        }
 
-                        if (!spectate) {
-                            players.add(p.getUniqueId());
-                            getTeamObject(team).addPlayer(p);
-                        }
-                        p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
-                        p.setScoreboard(this.score);
-                        plugin.inventoryManager.setInGameInventory(p);
+        Arena arena = plugin.getArenaManager().getArena(p.getUniqueId());
+        if (isFull() && (arena == null || !arena.getSpectators().contains(p.getUniqueId()))) {
+            p.sendMessage(Broadcast.get("arena.full"));
+            return false;
+        }
 
-                        if (spectate) {
-                            preSpecGamemodes.put(p.getUniqueId(), p.getGameMode());
-                            p.setGameMode(GameMode.SPECTATOR);
-                            p.setAllowFlight(true);
-                            getSpectators().add(p.getUniqueId());
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 127));
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE, 127));
-                            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, 127));
-                            p.sendMessage(Broadcast.TAG + Broadcast.get("arena.spectate")
-                                    .replace("%arena%", this.getName()));
-                            spectatorTeam.addPlayer(p);
-                        }
+        if (!isEnabled()) {
+            p.sendMessage(Broadcast.get("arena.disabled"));
+            return false;
+        }
 
-                        if (!spectate) {
-                            Location lobby = getLobbySpawn(team);
-                            if (lobby == null) {
-                                p.teleport(lobbySpawns.values().iterator().next());
-                            }
-                            else {
-                                p.teleport(lobby);
-                            }
-                        }
-                        else {
-                            if (getPlayerSpawns().size() > 0) {
-                                p.teleport(getPlayerSpawns().get(0));
-                            }
-                            else {
-                                p.teleport(getTeamSpawns().values().iterator().next().get(0));
-                            }
-                        }
+        if (!spectate) {
+            playerTeams.put(p.getUniqueId(), team);
+        }
 
-                        plugin.menuPickTeam.updateMenu(this);
+        if (!spectate) {
+            players.add(p.getUniqueId());
+            getTeamObject(team).addPlayer(p);
+        }
+        p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        p.setScoreboard(this.score);
+        plugin.inventoryManager.setInGameInventory(p);
 
-                        if (!spectate) {
-                            for (UUID id : getPlayers()) {
-                                Player player = Bukkit.getPlayer(id);
-                                player.sendMessage(Broadcast.TAG + Broadcast.get("arena.join")
-                                        .replace("%player%", team.getChatColour() + p.getName())
-                                        .replace("%count%", "(" + getPlayers().size() + "/" + getMaxPlayers() + ")"));
-                            }
-                        }
+        if (spectate) {
+            preSpecGamemodes.put(p.getUniqueId(), p.getGameMode());
+            p.setGameMode(GameMode.SPECTATOR);
+            p.setAllowFlight(true);
+            getSpectators().add(p.getUniqueId());
+            p.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 127));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE, 127));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, Integer.MAX_VALUE, 127));
+            p.sendMessage(Broadcast.TAG + Broadcast.get("arena.spectate")
+                    .replace("%arena%", this.getName()));
+            spectatorTeam.addPlayer(p);
+        }
 
-                        plugin.signHandler.updateSigns();
-                        return true;
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                }
-                else {
-                    p.sendMessage(Broadcast.get("arena.disabled"));
-                }
+        // Adding spectator.
+        if (spectate) {
+            if (getPlayerSpawns().size() > 0) {
+                p.teleport(getPlayerSpawns().get(0));
             }
             else {
-                p.sendMessage(Broadcast.get("arena.full"));
+                // All teams are present in the map, even if they don't have spawn
+                // locations. Make sure you select one with a spawn location.
+                getTeamSpawns().values().stream()
+                        .filter(list -> !list.isEmpty())
+                        .findFirst()
+                        .ifPresent(spawnLocations -> p.teleport(spawnLocations.get(0)));
             }
         }
-        return false;
+        // Adding player.
+        else {
+            Location lobby = getLobbySpawn(team);
+            if (lobby == null) {
+                p.teleport(lobbySpawns.values().iterator().next());
+            }
+            else {
+                p.teleport(lobby);
+            }
+        }
+
+        plugin.menuPickTeam.updateMenu(this);
+
+        if (!spectate) {
+            for (UUID id : getPlayers()) {
+                Player player = Bukkit.getPlayer(id);
+                player.sendMessage(Broadcast.TAG + Broadcast.get("arena.join")
+                        .replace("%player%", team.getChatColour() + p.getName())
+                        .replace("%count%", "(" + getPlayers().size() + "/" + getMaxPlayers() + ")"));
+            }
+        }
+
+        plugin.signHandler.updateSigns();
+        return true;
     }
 
     /**
@@ -1104,7 +1107,7 @@ public class Arena {
                     player.teleport(plugin.arenaManager.getLobby());
                 }
                 catch (Exception e) {
-                    plugin.getLogger().info("Lobby-spawn not set!");
+                    plugin.getLogger().info(Broadcast.get("arena.lobby-spawn-not-set"));
                 }
 
             }
@@ -1124,7 +1127,7 @@ public class Arena {
                     player.teleport(plugin.arenaManager.getLobby());
                 }
                 catch (Exception e) {
-                    plugin.getLogger().info("Lobby-spawn not set!");
+                    plugin.getLogger().info(Broadcast.get("arena.lobby-spawn-not-set"));
                 }
                 finally {
                     player.removePotionEffect(PotionEffectType.INVISIBILITY);
@@ -1561,7 +1564,7 @@ public class Arena {
 
         if (plugin.arenaManager.getArena(name) == null) {
             this.name = name;
-            this.teamMenu = Bukkit.createInventory(null, 9, "Pick Team: " + this.getName());
+            this.teamMenu = Bukkit.createInventory(null, 9, Broadcast.get("team.pick") + ": " + this.getName());
             plugin.menuPickTeam.updateMenu(this);
             plugin.signHandler.updateSigns();
             return true;
@@ -1697,8 +1700,8 @@ public class Arena {
 
         setInGame(true);
 
-        boolean isTeamSpawns = getTeamSpawns().entrySet().stream()
-                .map(entry -> entry.getValue().size())
+        boolean isTeamSpawns = getTeamSpawns().values().stream()
+                .map(List::size)
                 .anyMatch(amount -> amount > 0);
 
         for (UUID id : getPlayers()) {

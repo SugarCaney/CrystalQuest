@@ -32,14 +32,13 @@ public class LoadData {
      * Loads the lobby-signs
      */
     public static void loadSigns() {
-        plugin.signHandler.getSigns().clear();
+        plugin.signHandler.getSignLocations().clear();
         for (String s : plugin.getData().getStringList("signs")) {
             Location loc = SMethods.toLocation(s);
             Material blockType = loc.getBlock().getType();
             if (Materials.isWallSign(blockType) || Materials.isSignPost(blockType)) {
-                plugin.signHandler.getSigns().add(loc);
+                plugin.signHandler.getSignLocations().add(loc);
             }
-            
         }
         plugin.signHandler.updateSigns();
     }

@@ -22,7 +22,7 @@ public class PickTeam {
 
     public PickTeam(CrystalQuest instance) {
         plugin = instance;
-        this.menu = Bukkit.createInventory(null, 9, "Pick Team");
+        this.menu = Bukkit.createInventory(null, 9, Broadcast.get("team.pick"));
     }
 
     /**

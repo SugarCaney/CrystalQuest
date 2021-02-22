@@ -68,7 +68,6 @@ public final class SItem {
             case "bedrock":
                 return Material.BEDROCK;
             case "water":
-                return Material.WATER;
             case "stationarywater":
                 return Material.WATER;
             case "lava":
@@ -103,6 +102,7 @@ public final class SItem {
             case "noteblock":
                 return Material.NOTE_BLOCK;
             case "bedblock":
+            case "bed":
                 return Material.RED_BED;
             case "poweredrail":
                 return Material.POWERED_RAIL;
@@ -119,11 +119,10 @@ public final class SItem {
             case "piston":
                 return Material.PISTON;
             case "pistonextension":
+            case "pistonmovingpiece":
                 return Material.PISTON_HEAD;
             case "wool":
                 return Material.WHITE_WOOL;
-            case "pistonmovingpiece":
-                return Material.PISTON_HEAD;
             case "dandelion":
                 return Material.DANDELION;
             case "rose":
@@ -138,8 +137,11 @@ public final class SItem {
                 return Material.IRON_BLOCK;
             case "doubleslab":
             case "slab":
+            case "woodenslab":
+            case "woodendoubleslab":
                 return Material.OAK_SLAB;
             case "brickblock":
+            case "brick":
                 return Material.BRICK;
             case "tnt":
                 return Material.TNT;
@@ -168,6 +170,7 @@ public final class SItem {
             case "craftingtable":
                 return Material.CRAFTING_TABLE;
             case "crops":
+            case "wheat":
                 return Material.WHEAT;
             case "farmland":
                 return Material.FARMLAND;
@@ -175,8 +178,10 @@ public final class SItem {
             case "burningfurnace":
                 return Material.FURNACE;
             case "signpost":
+            case "sign":
                 return Material.LEGACY_SIGN;
             case "woodendoorblock":
+            case "woodendoor":
                 return Material.OAK_DOOR;
             case "ladder":
                 return Material.LADDER;
@@ -191,15 +196,14 @@ public final class SItem {
             case "stonepressureplate":
                 return Material.STONE_PRESSURE_PLATE;
             case "irondoorblock":
+            case "irondoor":
                 return Material.IRON_DOOR;
             case "woodenpressureplate":
                 return Material.OAK_PRESSURE_PLATE;
             case "redstoneore":
-                return Material.REDSTONE_ORE;
             case "glowingredstoneore":
                 return Material.REDSTONE_ORE;
             case "redstonetorchoff":
-                return Material.REDSTONE_TORCH;
             case "redstonetorch":
                 return Material.REDSTONE_TORCH;
             case "stonebutton":
@@ -215,6 +219,7 @@ public final class SItem {
             case "clayblock":
                 return Material.CLAY;
             case "sugarcaneblock":
+            case "sugarcane":
                 return Material.SUGAR_CANE;
             case "jukebox":
                 return Material.JUKEBOX;
@@ -233,9 +238,11 @@ public final class SItem {
             case "jackolantern":
                 return Material.JACK_O_LANTERN;
             case "cakeblock":
+            case "cake":
                 return Material.CAKE;
             case "repeateroff":
             case "repeateron":
+            case "repeater":
                 return Material.REPEATER;
             case "trapdoor":
                 return Material.OAK_TRAPDOOR;
@@ -252,6 +259,7 @@ public final class SItem {
             case "thinglass":
                 return Material.GLASS_PANE;
             case "melonblock":
+            case "melon":
                 return Material.MELON;
             case "melonstem":
                 return Material.MELON_STEM;
@@ -280,8 +288,10 @@ public final class SItem {
             case "enchantmenttable":
                 return Material.ENCHANTING_TABLE;
             case "brewingstandblock":
+            case "brewingstand":
                 return Material.BREWING_STAND;
             case "cauldronblock":
+            case "cauldron":
                 return Material.CAULDRON;
             case "endportal":
                 return Material.END_PORTAL;
@@ -294,10 +304,6 @@ public final class SItem {
             case "redstonelamp":
             case "redstonelampon":
                 return Material.REDSTONE_LAMP;
-            case "woodendoubleslab":
-                return Material.OAK_SLAB;
-            case "woodenslab":
-                return Material.OAK_SLAB;
             case "cocoablock":
                 return Material.COCOA;
             case "sandstonestairs":
@@ -325,6 +331,7 @@ public final class SItem {
             case "cobblestonewall":
                 return Material.COBBLESTONE_WALL;
             case "flowerpotblock":
+            case "flowerpot":
                 return Material.FLOWER_POT;
             case "carrotcrops":
                 return Material.CARROT;
@@ -333,6 +340,7 @@ public final class SItem {
             case "woodenbutton":
                 return Material.OAK_BUTTON;
             case "headblock":
+            case "head":
                 return Material.PLAYER_HEAD;
             case "anvil":
                 return Material.ANVIL;
@@ -344,6 +352,7 @@ public final class SItem {
                 return Material.HEAVY_WEIGHTED_PRESSURE_PLATE;
             case "comparatoroff":
             case "comparatoron":
+            case "comparator":
                 return Material.COMPARATOR;
             case "daylightdetector":
                 return Material.DAYLIGHT_DETECTOR;
@@ -451,8 +460,6 @@ public final class SItem {
                 return Material.GOLDEN_HOE;
             case "seeds":
                 return Material.WHEAT_SEEDS;
-            case "wheat":
-                return Material.WHEAT;
             case "bread":
                 return Material.BREAD;
             case "leatherhelmet":
@@ -488,11 +495,10 @@ public final class SItem {
             case "diamondboots":
                 return Material.DIAMOND_BOOTS;
             case "goldenhelmet":
+            case "goldenleggings":
                 return Material.GOLDEN_HELMET;
             case "goldenchestplate":
                 return Material.GOLDEN_CHESTPLATE;
-            case "goldenleggings":
-                return Material.GOLDEN_HELMET;
             case "goldenboots":
                 return Material.GOLDEN_BOOTS;
             case "flint":
@@ -519,8 +525,6 @@ public final class SItem {
                 return Material.MINECART;
             case "saddle":
                 return Material.SADDLE;
-            case "irondoor":
-                return Material.IRON_DOOR;
             case "redstone":
                 return Material.REDSTONE;
             case "snowball":
@@ -531,12 +535,8 @@ public final class SItem {
                 return Material.LEATHER;
             case "milkbucket":
                 return Material.MILK_BUCKET;
-            case "brick":
-                return Material.BRICK;
             case "clay":
                 return Material.CLAY_BALL;
-            case "sugarcane":
-                return Material.SUGAR_CANE;
             case "paper":
                 return Material.PAPER;
             case "book":
@@ -567,20 +567,13 @@ public final class SItem {
                 return Material.BONE;
             case "sugar":
                 return Material.SUGAR;
-            case "cake":
-                return Material.CAKE;
-            case "bed":
-                return Material.RED_BED;
-            case "repeater":
-                return Material.REPEATER;
             case "cookie":
                 return Material.COOKIE;
             case "map":
+            case "emptymap":
                 return Material.MAP;
             case "shears":
                 return Material.SHEARS;
-            case "melon":
-                return Material.MELON;
             case "pumpkinseeds":
                 return Material.PUMPKIN_SEEDS;
             case "melonseeds":
@@ -617,10 +610,6 @@ public final class SItem {
                 return Material.BLAZE_POWDER;
             case "magmacream":
                 return Material.MAGMA_CREAM;
-            case "brewingstand":
-                return Material.BREWING_STAND;
-            case "cauldron":
-                return Material.CAULDRON;
             case "eyeofender":
                 return Material.ENDER_EYE;
             case "speckledmelon":
@@ -639,8 +628,6 @@ public final class SItem {
                 return Material.EMERALD;
             case "itemframe":
                 return Material.ITEM_FRAME;
-            case "flowerpot":
-                return Material.FLOWER_POT;
             case "carrot":
                 return Material.CARROTS;
             case "potato":
@@ -649,12 +636,8 @@ public final class SItem {
                 return Material.BAKED_POTATO;
             case "poisonouspotato":
                 return Material.POISONOUS_POTATO;
-            case "emptymap":
-                return Material.MAP;
             case "goldencarrot":
                 return Material.GOLDEN_CARROT;
-            case "head":
-                return Material.PLAYER_HEAD;
             case "carrotstick":
                 return Material.CARROT_ON_A_STICK;
             case "netherstar":
@@ -667,8 +650,6 @@ public final class SItem {
                 return Material.FIREWORK_STAR;
             case "enchantedbook":
                 return Material.ENCHANTED_BOOK;
-            case "comparator":
-                return Material.COMPARATOR;
             case "netherbrick":
                 return Material.NETHER_BRICKS;
             case "netherquartz":
@@ -676,7 +657,6 @@ public final class SItem {
             case "tntcart":
                 return Material.TNT_MINECART;
             case "hopperminecart":
-                return Material.HOPPER_MINECART;
             case "ironhorsearmour":
                 return Material.HOPPER_MINECART;
             case "goldenhorsearmour":

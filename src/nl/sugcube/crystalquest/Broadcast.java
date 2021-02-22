@@ -15,13 +15,8 @@ public class Broadcast {
     public static String HOWDEY = "Howdey!";
     public static String NO_PERMISSION;
     public static String ONLY_IN_GAME;
-
-    public Broadcast(CrystalQuest instance) {
-        plugin = instance;
-
-        TAG = get("general.tag");
-        HELP = get("general.tag-help");
-    }
+    public static String PRICE;
+    public static String UPGRADE_TO;
 
     public static void showAbout(CommandSender sender) {
         Update uc = new Update(69421, plugin.getDescription().getVersion());
@@ -34,14 +29,18 @@ public class Broadcast {
             update = "(Up-to-date)";
         }
 
-        sender.sendMessage(TAG + "Plugin made by " + ChatColor.GREEN + plugin.getDescription().getAuthors().toString());
-        sender.sendMessage(TAG + "Current version: " + plugin.getDescription().getVersion() + " " + update);
-        sender.sendMessage(TAG + "Use " + ChatColor.LIGHT_PURPLE + "/cq help " + ChatColor.YELLOW + "to get a list of commands.");
+        sender.sendMessage(TAG + Broadcast.get("general.plugin-made") + " " + ChatColor.GREEN + plugin.getDescription().getAuthors().toString());
+        sender.sendMessage(TAG + Broadcast.get("general.plugin-version") + " " + plugin.getDescription().getVersion() + " " + update);
+        sender.sendMessage(TAG + Broadcast.get("general.plugin-help"));
     }
 
     public static void setMessages() {
-        NO_PERMISSION = SMethods.setColours(plugin.getLang().getString("broadcast.no-permission"));
-        ONLY_IN_GAME = SMethods.setColours(plugin.getLang().getString("broadcast.only-in-game"));
+        TAG = get("general.tag");
+        HELP = get("general.tag-help");
+        NO_PERMISSION = get("broadcast.no-permission");
+        ONLY_IN_GAME = get("broadcast.only-in-game");
+        PRICE = get("shop.price");
+        UPGRADE_TO = get("shop.upgrade-to");
     }
 
     public static String get(String s) {

@@ -1,5 +1,6 @@
 package nl.sugcube.crystalquest.inventorymenu;
 
+import nl.sugcube.crystalquest.Broadcast;
 import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.ArenaManager;
@@ -45,7 +46,7 @@ public class SpectateArena {
         int arenas = am.getArenas().size();
 
         if (menu == null) {
-            menu = Bukkit.createInventory(null, 9, "Spectate an arenas");
+            menu = Bukkit.createInventory(null, 9, Broadcast.get("menu.spectate-arena"));
         }
 
         if (arenas > menu.getSize()) {
@@ -58,11 +59,11 @@ public class SpectateArena {
 
             if (menu != null) {
                 if (menu.getSize() < arenas) {
-                    menu = Bukkit.createInventory(null, invSize, "Spectate an arenas");
+                    menu = Bukkit.createInventory(null, invSize, Broadcast.get("menu.spectate-arena"));
                 }
             }
             else {
-                menu = Bukkit.createInventory(null, invSize, "Spectate an arenas");
+                menu = Bukkit.createInventory(null, invSize, Broadcast.get("menu.spectate-arena"));
             }
         }
 
@@ -87,25 +88,25 @@ public class SpectateArena {
 
         if (a.isEndGame()) {
             is = new ItemStack(Material.MAGENTA_WOOL, 1);
-            status = ChatColor.DARK_PURPLE + "Restarting";
+            status = ChatColor.DARK_PURPLE + Broadcast.get("arena.restarting-status");
         }
         else if (a.isInGame()) {
             is = new ItemStack(Material.RED_WOOL, 1);
-            status = ChatColor.DARK_RED + "In Game";
+            status = ChatColor.DARK_RED + Broadcast.get("arena.in-game");
         }
         else if (a.isCounting()) {
             is = new ItemStack(Material.ORANGE_WOOL, 1);
-            status = ChatColor.GOLD + "Starting";
+            status = ChatColor.GOLD + Broadcast.get("arena.starting");
         }
         else {
             is = new ItemStack(Material.LIME_WOOL, 1);
-            status = ChatColor.GREEN + "In Lobby";
+            status = ChatColor.GREEN + Broadcast.get("arena.in-lobby");
         }
 
-        String displayName = ChatColor.AQUA + "Spectate " + a.getName();
+        String displayName = ChatColor.AQUA + Broadcast.get("menu.spectate") + " " + a.getName();
         List<String> lore = new ArrayList<>();
-        lore.add(ChatColor.YELLOW + "Currently " + status);
-        lore.add(ChatColor.YELLOW + "Players: " + a.getPlayers().size() + "/" + a.getMaxPlayers());
+        lore.add(ChatColor.YELLOW + Broadcast.get("menu.currently") + " " + status);
+        lore.add(ChatColor.YELLOW + Broadcast.get("menu.players") + ": " + a.getPlayers().size() + "/" + a.getMaxPlayers());
 
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(displayName);

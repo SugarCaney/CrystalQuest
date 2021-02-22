@@ -99,12 +99,12 @@ public class SelectClass {
             }
         }
 
-        Inventory inv = Bukkit.createInventory(player, inventorySize, "Pick a Class");
+        Inventory inv = Bukkit.createInventory(player, inventorySize, Broadcast.get("menu.pick-class"));
 
         //Adds the random-class
         ItemStack randomItem = new ItemStack(Material.REDSTONE, 1);
         ItemMeta randomMeta = randomItem.getItemMeta();
-        randomMeta.setDisplayName("Random Class");
+        randomMeta.setDisplayName(Broadcast.get("menu.random-class"));
         randomItem.setItemMeta(randomMeta);
         inv.addItem(randomItem);
 

@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 /**
  * @author SugarCaney
@@ -46,8 +47,9 @@ public class CommandSetTeams extends CrystalQuestCommand {
                 return;
             }
 
+            Collection<CrystalQuestTeam> teams;
             try {
-                Collection<CrystalQuestTeam> teams = new ArrayList<>();
+                teams = new ArrayList<>();
                 teams.add(CrystalQuestTeam.valueOfName(arguments[1]));
                 teams.add(CrystalQuestTeam.valueOfName(arguments[2]));
 
@@ -67,9 +69,10 @@ public class CommandSetTeams extends CrystalQuestCommand {
                 return;
             }
 
+            String addedTeams = teams.stream().map(CrystalQuestTeam::getName).collect(Collectors.joining(", "));
             sender.sendMessage(Broadcast.TAG + Broadcast.get("commands.setteams-set")
                     .replace("%arena%", arguments[0])
-                    .replace("%amount%", arguments[1]));
+                    .replace("%amount%", addedTeams));
             arena.resetArena(false);
         }
         catch (Exception e) {
