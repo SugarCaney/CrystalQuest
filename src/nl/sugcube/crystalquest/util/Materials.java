@@ -124,11 +124,9 @@ public class Materials {
     ));
 
     /**
-     * Set of all materials that represent a sign, including legacy materials.
+     * Set of all legacy signs (pre 1.14).
      */
-    public static Set<Material> SIGNS = Collections.unmodifiableSet(EnumSet.of(
-            Material.SIGN,
-            Material.WALL_SIGN,
+    public static Set<Material> LEGACY_SIGNS = Collections.unmodifiableSet(EnumSet.of(
             Material.LEGACY_SIGN_POST,
             Material.LEGACY_SIGN,
             Material.LEGACY_WALL_SIGN
@@ -176,7 +174,7 @@ public class Materials {
      * @return {@code true} when the given material is a sign, {@code false} otherwise.
      */
     public static boolean isSign(Material material) {
-        return SIGNS.contains(material);
+        return isSignPost(material) || isWallSign(material) || LEGACY_SIGNS.contains(material);
     }
 
     /**

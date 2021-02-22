@@ -511,10 +511,6 @@ public final class SItem {
                 return Material.PAINTING;
             case "goldenapple":
                 return Material.GOLDEN_APPLE;
-            case "sign":
-                return Material.LEGACY_SIGN;
-            case "woodendoor":
-                return Material.OAK_DOOR;
             case "bucket":
                 return Material.BUCKET;
             case "waterbucket":
