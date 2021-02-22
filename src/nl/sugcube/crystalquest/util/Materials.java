@@ -2,9 +2,7 @@ package nl.sugcube.crystalquest.util;
 
 import org.bukkit.Material;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author SugarCaney
@@ -102,6 +100,17 @@ public class Materials {
     ));
 
     /**
+     * Set of all materials that represent a sign, including legacy materials.
+     */
+    public static Set<Material> SIGNS = Collections.unmodifiableSet(EnumSet.of(
+            Material.SIGN,
+            Material.WALL_SIGN,
+            Material.LEGACY_SIGN_POST,
+            Material.LEGACY_SIGN,
+            Material.LEGACY_WALL_SIGN
+    ));
+
+    /**
      * Get the wool block material that is tied to a damage value (in legacy code).
      *
      * @param damageValue
@@ -135,6 +144,15 @@ public class Materials {
      */
     public static boolean isSkull(Material material) {
         return SKULLS.contains(material);
+    }
+
+    /**
+     * Checks if the given material is a sign.
+     *
+     * @return {@code true} when the given material is a sign, {@code false} otherwise.
+     */
+    public static boolean isSign(Material material) {
+        return SIGNS.contains(material);
     }
 
     private Materials() {

@@ -19,7 +19,7 @@ public class SignHandler {
     public static CrystalQuest plugin;
     public static ArenaManager am;
 
-    private List<Location> signs = new ArrayList<Location>();
+    private final List<Location> signs = new ArrayList<>();
 
     public SignHandler(CrystalQuest instance, ArenaManager manager) {
         plugin = instance;
@@ -96,7 +96,7 @@ public class SignHandler {
      *
      * @return (SignList) All Lobby-signs
      */
-    public List<Location> getSigns() {
+    public List<Location> getSignLocations() {
         return this.signs;
     }
 

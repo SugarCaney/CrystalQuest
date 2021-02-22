@@ -37,7 +37,7 @@ public class CommandSetName extends CrystalQuestCommand {
             boolean bool = arena.setName(arguments[1]);
 
             if (bool) {
-                for (Location loc : plugin.signHandler.getSigns()) {
+                for (Location loc : plugin.signHandler.getSignLocations()) {
                     Sign s = (Sign)loc.getBlock().getState();
                     if (s.getLine(1).equalsIgnoreCase(oldname)) {
                         s.setLine(1, arena.getName());

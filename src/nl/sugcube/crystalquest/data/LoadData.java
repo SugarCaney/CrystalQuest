@@ -31,11 +31,11 @@ public class LoadData {
      * Loads the lobby-signs
      */
     public static void loadSigns() {
-        plugin.signHandler.getSigns().clear();
+        plugin.signHandler.getSignLocations().clear();
         for (String s : plugin.getData().getStringList("signs")) {
             Location loc = SMethods.toLocation(s);
             if (loc.getBlock().getType() == Material.WALL_SIGN || loc.getBlock().getType() == Material.SIGN) {
-                plugin.signHandler.getSigns().add(loc);
+                plugin.signHandler.getSignLocations().add(loc);
             }
         }
         plugin.signHandler.updateSigns();

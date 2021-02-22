@@ -5,6 +5,7 @@ import nl.sugcube.crystalquest.CrystalQuest;
 import nl.sugcube.crystalquest.game.Arena;
 import nl.sugcube.crystalquest.game.CrystalQuestTeam;
 import nl.sugcube.crystalquest.sba.SMethods;
+import nl.sugcube.crystalquest.util.Materials;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -31,9 +32,9 @@ public class SignListener implements Listener {
 
     @EventHandler
     public void onSignBreak(BlockBreakEvent e) {
-        if (e.getBlock().getType() == Material.WALL_SIGN || e.getBlock().getType() == Material.SIGN) {
+        if (Materials.isSign(e.getBlock().getType())) {
             Sign sign = (Sign)e.getBlock().getState();
-            plugin.signHandler.getSigns().remove(sign);
+            plugin.signHandler.getSignLocations().remove(sign.getLocation());
         }
     }
 
@@ -116,7 +117,7 @@ public class SignListener implements Listener {
                         s.setLine(3, e.getLine(3));
                         s.update();
 
-                        plugin.signHandler.getSigns().add(s.getLocation());
+                        plugin.signHandler.getSignLocations().add(s.getLocation());
 
                         player.sendMessage(Broadcast.TAG + Broadcast.get("sign.succesful").replace("%sign%", Broadcast.get("sign.arena-sign")));
                     }
@@ -248,8 +249,8 @@ public class SignListener implements Listener {
 				 * only if the arenas is joinable.
 				 */
                 else if (s.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "" + ChatColor.BOLD + "CQ-Join")) {
-                    if (!plugin.signHandler.getSigns().contains(s.getLocation())) {
-                        plugin.signHandler.getSigns().add(s.getLocation());
+                    if (!plugin.signHandler.getSignLocations().contains(s.getLocation())) {
+                        plugin.signHandler.getSignLocations().add(s.getLocation());
                         e.getPlayer().sendMessage(Broadcast.TAG + Broadcast.get("sign.registered"));
                     }
                     else {
@@ -276,8 +277,8 @@ public class SignListener implements Listener {
 				 * Lets the player spectate when the arenas is full.
 				 */
                 else if (s.getLine(0).equalsIgnoreCase(ChatColor.AQUA + "" + ChatColor.BOLD + "CQ-Spectate")) {
-                    if (!plugin.signHandler.getSigns().contains(s.getLocation())) {
-                        plugin.signHandler.getSigns().add(s.getLocation());
+                    if (!plugin.signHandler.getSignLocations().contains(s.getLocation())) {
+                        plugin.signHandler.getSignLocations().add(s.getLocation());
                         e.getPlayer().sendMessage(Broadcast.TAG + Broadcast.get("sign.registered"));
                     }
                     else {
